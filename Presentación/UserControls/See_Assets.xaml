@@ -321,7 +321,7 @@
                         <DataGridTextColumn Header="Memoria RAM" Binding="{Binding MemoriaRAM}" Width="1*" ElementStyle="{StaticResource CenterGridCellStyle}"/>
                         <DataGridTextColumn Header="Dirección IP" Binding="{Binding DireccionIP_Estatica}" Width="1.2*" ElementStyle="{StaticResource CenterGridCellStyle}"/>
 
-                        <DataGridTextColumn Header="Costo (USD)" Binding="{Binding Costo, StringFormat='{}{0:C}'}" Width="1*" ElementStyle="{StaticResource CenterGridCellStyle}"/>
+                        <DataGridTextColumn Header="Costo (COD)" Binding="{Binding Costo, StringFormat='{}{0:C}'}" Width="1*" ElementStyle="{StaticResource CenterGridCellStyle}"/>
                         <DataGridTextColumn Header="Fecha Adquisición" Binding="{Binding FechaAdquisicion, StringFormat='{}{0:dd/MM/yyyy}'}" Width="1.2*" ElementStyle="{StaticResource CenterGridCellStyle}"/>
                     </DataGrid.Columns>
                 </DataGrid>

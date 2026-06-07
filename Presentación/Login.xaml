@@ -11,237 +11,124 @@
         AllowsTransparency="True" 
         Background="Transparent">
 
-    <Border x:Name="MainWindowBorder" Background="#060621" CornerRadius="18" MouseLeftButtonDown="Window_MouseLeftButtonDown">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3.5*"/>
-                <ColumnDefinition Width="6.5*"/>
-            </Grid.ColumnDefinitions>
+    <Window.Resources>
+        <SolidColorBrush x:Key="CardBgColor" Color="#F20A0E29"/>
+        <SolidColorBrush x:Key="InputBgColor" Color="#12163B"/>
+        <SolidColorBrush x:Key="InputFocusBgColor" Color="#161B40"/>
+        <SolidColorBrush x:Key="InputBorderColor" Color="#1F2456"/>
+        <SolidColorBrush x:Key="PrimaryTextColor" Color="#A5A9CC"/>
+        <SolidColorBrush x:Key="SecondaryTextColor" Color="#757B96"/>
+        <SolidColorBrush x:Key="TabTextSelectedColor" Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="TabTextUnselectedColor" Color="#757B96"/>
 
-            <Button x:Name="BtnThemeToggle"
-                    HorizontalAlignment="Left" 
-                    VerticalAlignment="Top" 
-                    Margin="15,15,0,0" 
-                    Grid.Column="0"
-                    Width="32" Height="32"
-                    Background="Transparent" 
-                    BorderThickness="0"
-                    Cursor="Hand"
-                    Click="ThemeToggle_Click"
-                    Panel.ZIndex="10">
-                <Button.Template>
-                    <ControlTemplate TargetType="Button">
-                        <Border x:Name="ThemeBtnBorder" Background="Transparent" CornerRadius="16">
-                            <Path x:Name="ThemeIcon" 
-                                  Data="M12,2A10,10 0 1,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4Z" 
-                                  Fill="#A0A0B8" Width="18" Height="18" Stretch="Uniform" 
-                                  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Style TargetType="TabControl">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+        </Style>
+
+        <Style TargetType="TabItem">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{DynamicResource TabTextUnselectedColor}"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="0,0,20,10"/>
+            <Setter Property="Padding" Value="0,0,0,4"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Border x:Name="TabBorder" 
+                                Background="{TemplateBinding Background}" 
+                                BorderBrush="Transparent" 
+                                BorderThickness="0,0,0,3" 
+                                Padding="{TemplateBinding Padding}" 
+                                Margin="{TemplateBinding Margin}">
+                            <ContentPresenter ContentSource="Header" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Foreground" Value="{DynamicResource TabTextSelectedColor}"/>
+                                <Setter TargetName="TabBorder" Property="BorderBrush" Value="#2F80ED"/>
+                            </Trigger>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="ThemeBtnBorder" Property="Background" Value="#151538"/>
+                                <Setter Property="Foreground" Value="{DynamicResource PrimaryTextColor}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
-                </Button.Template>
-            </Button>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
 
-            <Button Content="✕" 
-                    HorizontalAlignment="Right" 
-                    VerticalAlignment="Top" 
-                    Margin="0,15,15,0" 
-                    Grid.Column="1"
-                    Width="25" Height="25"
-                    Foreground="White" 
-                    FontSize="14" 
-                    Cursor="Hand"
-                    Click="CloseButton_Click"
-                    Panel.ZIndex="10">
-                <Button.Resources>
-                    <Style TargetType="Button">
-                        <Setter Property="BorderThickness" Value="0"/>
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="Button">
-                                    <Border x:Name="BtnBorder" 
-                                            Background="#888888" 
-                                            BorderBrush="#888888" 
-                                            BorderThickness="1.5" 
-                                            CornerRadius="8">
-                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                    </Border>
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter TargetName="BtnBorder" Property="Background" Value="#E89A24"/>
-                                            <Setter TargetName="BtnBorder" Property="BorderBrush" Value="White"/>
-                                        </Trigger>
-                                        <Trigger Property="IsPressed" Value="True">
-                                            <Setter TargetName="BtnBorder" Property="Background" Value="#E89A24"/>
-                                        </Trigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </Button.Resources>
-            </Button>
+    <Border x:Name="MainWindowBorder" Background="Transparent" CornerRadius="24" MouseLeftButtonDown="Window_MouseLeftButtonDown">
 
-            <StackPanel Grid.Column="0" Margin="35,0,25,0" VerticalAlignment="Center">
+        <Grid>
+            <Border x:Name="RightImageBorder" CornerRadius="24">
+                <Border.Background>
+                    <ImageBrush ImageSource="/Assets/a3.png" Stretch="UniformToFill"/>
+                </Border.Background>
+            </Border>
 
-                <TextBlock x:Name="LblTitle"
-                           Text="Bienvenido a&#x0a;IDIT" 
-                           Foreground="White" 
-                           FontSize="32" 
-                           FontWeight="Bold" 
-                           Margin="0,0,0,35" 
-                           LineHeight="38"/>
+            <Border Background="#20000000" CornerRadius="24"/>
 
-                <TextBlock x:Name="LblUser" Text="Usuario" Foreground="White" FontSize="16" Margin="0,0,0,8"/>
-                <TextBox Height="38" Background="White" FontSize="14" Margin="0,0,0,20">
-                    <TextBox.Resources>
-                        <Style TargetType="TextBox">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="TextBox">
-                                        <Border x:Name="TextBorder" Background="{TemplateBinding Background}" BorderBrush="#CCCCCC" BorderThickness="1.5" CornerRadius="8">
-                                            <Grid>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="35"/>
-                                                    <ColumnDefinition Width="*"/>
-                                                </Grid.ColumnDefinitions>
-                                                <Path x:Name="UserIcon" Data="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z" Fill="#888888" Width="16" Height="16" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0"/>
-                                                <ScrollViewer x:Name="PART_ContentHost" Grid.Column="1" VerticalAlignment="Center" Margin="5,0,10,0"/>
-                                            </Grid>
-                                        </Border>
-                                        <ControlTemplate.Triggers>
-                                            <Trigger Property="IsFocused" Value="True">
-                                                <Setter TargetName="TextBorder" Property="BorderBrush" Value="#E89A24"/>
-                                                <Setter TargetName="TextBorder" Property="BorderThickness" Value="2"/>
-                                                <Setter TargetName="UserIcon" Property="Fill" Value="#E89A24"/>
-                                            </Trigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </TextBox.Resources>
-                </TextBox>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="5.5*"/>
+                    <ColumnDefinition Width="4.5*"/>
+                </Grid.ColumnDefinitions>
 
-                <TextBlock x:Name="LblPassword" Text="Contraseña" Foreground="White" FontSize="16" Margin="0,0,0,8"/>
-                <Grid Margin="0,0,0,15">
-                    <PasswordBox x:Name="TxtPassword" Height="38" Background="White" FontSize="14">
-                        <PasswordBox.Resources>
-                            <Style TargetType="PasswordBox">
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="PasswordBox">
-                                            <Border x:Name="PasswordBorder" Background="{TemplateBinding Background}" BorderBrush="#CCCCCC" BorderThickness="1.5" CornerRadius="8">
-                                                <Grid>
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="35"/>
-                                                        <ColumnDefinition Width="*"/>
-                                                        <ColumnDefinition Width="40"/>
-                                                    </Grid.ColumnDefinitions>
-                                                    <Path x:Name="LockIcon" Data="M12,17A2,2 0 0,0 14,15C14,13.89 13.11,13 12,13A2,2 0 0,0 10,15A2,2 0 0,0 12,17M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V10C4,8.89 4.89,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z" Fill="#888888" Width="16" Height="16" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0"/>
-                                                    <ScrollViewer x:Name="PART_ContentHost" Grid.Column="1" VerticalAlignment="Center" Margin="5,0,5,0"/>
-                                                </Grid>
-                                            </Border>
-                                            <ControlTemplate.Triggers>
-                                                <Trigger Property="IsFocused" Value="True">
-                                                    <Setter TargetName="PasswordBorder" Property="BorderBrush" Value="#E89A24"/>
-                                                    <Setter TargetName="PasswordBorder" Property="BorderThickness" Value="2"/>
-                                                    <Setter TargetName="LockIcon" Property="Fill" Value="#E89A24"/>
-                                                </Trigger>
-                                            </ControlTemplate.Triggers>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </PasswordBox.Resources>
-                    </PasswordBox>
-
-                    <TextBox x:Name="TxtPasswordRevealed" Height="38" Background="White" FontSize="14" Visibility="Collapsed">
-                        <TextBox.Resources>
-                            <Style TargetType="TextBox">
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="TextBox">
-                                            <Border x:Name="TextBorder" Background="{TemplateBinding Background}" BorderBrush="#CCCCCC" BorderThickness="1.5" CornerRadius="8">
-                                                <Grid>
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="35"/>
-                                                        <ColumnDefinition Width="*"/>
-                                                        <ColumnDefinition Width="40"/>
-                                                    </Grid.ColumnDefinitions>
-                                                    <Path x:Name="LockIconOpen" Data="M12,17A2,2 0 0,0 14,15C14,13.89 13.11,13 12,13A2,2 0 0,0 10,15A2,2 0 0,0 12,17M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V10C4,8.89 4.89,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z" Fill="#E89A24" Width="16" Height="16" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0"/>
-                                                    <ScrollViewer x:Name="PART_ContentHost" Grid.Column="1" VerticalAlignment="Center" Margin="5,0,5,0"/>
-                                                </Grid>
-                                            </Border>
-                                            <ControlTemplate.Triggers>
-                                                <Trigger Property="IsFocused" Value="True">
-                                                    <Setter TargetName="TextBorder" Property="BorderBrush" Value="#E89A24"/>
-                                                    <Setter TargetName="TextBorder" Property="BorderThickness" Value="2"/>
-                                                </Trigger>
-                                            </ControlTemplate.Triggers>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </TextBox.Resources>
-                    </TextBox>
-
-                    <Button x:Name="BtnTogglePassword" Width="30" Height="30" Background="Transparent" BorderThickness="0" Cursor="Hand" HorizontalAlignment="Right" Margin="0,0,5,0" Click="BtnTogglePassword_Click">
-                        <Path x:Name="EyeIcon" Data="M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z" Fill="#A0A0B8" Stretch="Uniform" Width="20"/>
-                    </Button>
-                </Grid>
-
-                <TextBlock x:Name="LblTerms" Text="Acepta los terminos y condiciones." Foreground="White" FontSize="12" HorizontalAlignment="Center" Margin="0,0,0,8"/>
-
-                <CheckBox x:Name="ChkTerms" HorizontalAlignment="Center" Margin="0,0,0,35" Cursor="Hand">
-                    <CheckBox.Template>
-                        <ControlTemplate TargetType="CheckBox">
-                            <Border x:Name="CustomBorder" 
-                                    Width="18" Height="18" 
-                                    Background="Transparent" 
-                                    BorderBrush="#888888" 
-                                    BorderThickness="1.2" 
-                                    CornerRadius="4">
-                                <Path x:Name="CheckMark" 
-                                      Data="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z" 
-                                      Fill="#E89A24" 
-                                      Stretch="Uniform" 
-                                      Width="11" Height="11" 
-                                      Opacity="0"
-                                      HorizontalAlignment="Center" 
-                                      VerticalAlignment="Center"/>
+                <Button x:Name="BtnThemeToggle"
+                        HorizontalAlignment="Left" 
+                        VerticalAlignment="Top" 
+                        Margin="25,25,0,0" 
+                        Width="36" Height="36"
+                        Background="Transparent" 
+                        BorderThickness="0"
+                        Cursor="Hand"
+                        Click="ThemeToggle_Click"
+                        Panel.ZIndex="10">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="ThemeBtnBorder" Background="{DynamicResource InputBgColor}" CornerRadius="18">
+                                <Path x:Name="ThemeIcon" 
+                                      Data="M12,2A10,10 0 1,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4Z" 
+                                      Fill="{DynamicResource PrimaryTextColor}" Width="18" Height="18" Stretch="Uniform" 
+                                      HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="CustomBorder" Property="BorderBrush" Value="#E89A24"/>
-                                </Trigger>
-                                <Trigger Property="IsChecked" Value="True">
-                                    <Setter TargetName="CheckMark" Property="Opacity" Value="1"/>
+                                    <Setter TargetName="ThemeBtnBorder" Property="Background" Value="{DynamicResource InputFocusBgColor}"/>
+                                    <Setter TargetName="ThemeIcon" Property="Fill" Value="{DynamicResource TabTextSelectedColor}"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
-                    </CheckBox.Template>
-                </CheckBox>
+                    </Button.Template>
+                </Button>
 
-                <Button Content="Iniciar Sesión" Foreground="#060621" FontSize="16" FontWeight="SemiBold" Height="45" BorderThickness="0" Cursor="Hand">
+                <Button Content="✕" 
+                        HorizontalAlignment="Right" 
+                        VerticalAlignment="Top" 
+                        Margin="0,25,25,0" 
+                        Grid.Column="1"
+                        Width="28" Height="28"
+                        Foreground="White" 
+                        FontSize="13" 
+                        Cursor="Hand"
+                        Click="CloseButton_Click"
+                        Panel.ZIndex="10">
                     <Button.Resources>
                         <Style TargetType="Button">
+                            <Setter Property="BorderThickness" Value="0"/>
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="Button">
-                                        <Border x:Name="ButtonBorder" Background="#E89A24" CornerRadius="10">
+                                        <Border x:Name="BtnBorder" Background="#66000000" CornerRadius="14">
                                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                         </Border>
                                         <ControlTemplate.Triggers>
                                             <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter TargetName="ButtonBorder" Property="Background" Value="#FFB33B"/>
-                                            </Trigger>
-                                            <Trigger Property="IsPressed" Value="True">
-                                                <Setter TargetName="ButtonBorder" Property="Background" Value="#C47E1B"/>
+                                                <Setter TargetName="BtnBorder" Property="Background" Value="#ED4F4F"/>
                                             </Trigger>
                                         </ControlTemplate.Triggers>
                                     </ControlTemplate>
@@ -251,17 +138,386 @@
                     </Button.Resources>
                 </Button>
 
-            </StackPanel>
+                <Border x:Name="FormCardBorder" 
+                        Grid.Column="0" 
+                        Background="{DynamicResource CardBgColor}" 
+                        CornerRadius="20" 
+                        Margin="45,35,15,35" 
+                        Padding="35,25,35,25"
+                        VerticalAlignment="Center">
 
-            <Grid Grid.Column="1" Margin="10,44,10,10">
-                <Border x:Name="RightImageBorder" CornerRadius="30" ClipToBounds="True" Background="#060621" Margin="-13,0,10,0">
-                    <Image Source="pack://application:,,,/Assets/image_login_1.png" 
-                           Stretch="UniformToFill"
-                           HorizontalAlignment="Left"
-                           VerticalAlignment="Center" Height="596" Width="720" Margin="-139,0,0,0"/>
+                    <TabControl>
+
+                        <TabItem Header="Login">
+                            <StackPanel Margin="0,10,0,0">
+
+                                <TextBlock x:Name="LblTitle" 
+                                           Text="¡Hola! Qué bueno verte otra vez." 
+                                           Foreground="{DynamicResource SecondaryTextColor}" 
+                                           FontSize="14" 
+                                           Margin="0,0,0,20"/>
+
+                                <TextBlock x:Name="LblUser" Text="Nombre de usuario" Foreground="{DynamicResource PrimaryTextColor}" FontSize="13" FontWeight="Medium" Margin="0,0,0,6"/>
+                                <TextBox x:Name="Username" Height="40" Background="{DynamicResource InputBgColor}" Foreground="{DynamicResource TabTextSelectedColor}" FontSize="14" Margin="0,0,0,18">
+                                    <TextBox.Resources>
+                                        <Style TargetType="TextBox">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="TextBox">
+                                                        <Border x:Name="TextBorder" Background="{TemplateBinding Background}" BorderBrush="{DynamicResource InputBorderColor}" BorderThickness="1.5" CornerRadius="10">
+                                                            <Grid>
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="40"/>
+                                                                    <ColumnDefinition Width="*"/>
+                                                                </Grid.ColumnDefinitions>
+                                                                <Path x:Name="UserIcon" Data="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z" Fill="{DynamicResource SecondaryTextColor}" Width="15" Height="15" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0"/>
+                                                                <ScrollViewer x:Name="PART_ContentHost" Grid.Column="1" VerticalAlignment="Center" Margin="5,0,15,0"/>
+                                                            </Grid>
+                                                        </Border>
+                                                        <ControlTemplate.Triggers>
+                                                            <Trigger Property="IsFocused" Value="True">
+                                                                <Setter TargetName="TextBorder" Property="Background" Value="{DynamicResource InputFocusBgColor}"/>
+                                                                <Setter TargetName="TextBorder" Property="BorderBrush" Value="#f49825"/>
+                                                                <Setter TargetName="UserIcon" Property="Fill" Value="#f49825"/>
+                                                            </Trigger>
+                                                        </ControlTemplate.Triggers>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </TextBox.Resources>
+                                </TextBox>
+
+                                <TextBlock x:Name="LblPassword" Text="Contraseña" Foreground="{DynamicResource PrimaryTextColor}" FontSize="13" FontWeight="Medium" Margin="0,0,0,6"/>
+
+                                <Grid Margin="0,0,0,20">
+                                    <PasswordBox x:Name="TxtPassword" Height="40" Background="{DynamicResource InputBgColor}" Foreground="{DynamicResource TabTextSelectedColor}" FontSize="14">
+                                        <PasswordBox.Resources>
+                                            <Style TargetType="PasswordBox">
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="PasswordBox">
+                                                            <Border x:Name="PasswordBorder" Background="{TemplateBinding Background}" BorderBrush="{DynamicResource InputBorderColor}" BorderThickness="1.5" CornerRadius="10">
+                                                                <Grid>
+                                                                    <Grid.ColumnDefinitions>
+                                                                        <ColumnDefinition Width="40"/>
+                                                                        <ColumnDefinition Width="*"/>
+                                                                        <ColumnDefinition Width="40"/>
+                                                                    </Grid.ColumnDefinitions>
+                                                                    <Path x:Name="LockIcon" Data="M12,17A2,2 0 0,0 14,15C14,13.89 13.11,13 12,13A2,2 0 0,0 10,15A2,2 0 0,0 12,17M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V10C4,8.89 4.89,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z" Fill="{DynamicResource SecondaryTextColor}" Width="15" Height="15" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0"/>
+                                                                    <ScrollViewer x:Name="PART_ContentHost" Grid.Column="1" VerticalAlignment="Center" Margin="5,0,5,0"/>
+                                                                </Grid>
+                                                            </Border>
+                                                            <ControlTemplate.Triggers>
+                                                                <Trigger Property="IsFocused" Value="True">
+                                                                    <Setter TargetName="PasswordBorder" Property="Background" Value="{DynamicResource InputFocusBgColor}"/>
+                                                                    <Setter TargetName="PasswordBorder" Property="BorderBrush" Value="#2F80ED"/>
+                                                                    <Setter TargetName="LockIcon" Property="Fill" Value="#2F80ED"/>
+                                                                </Trigger>
+                                                            </ControlTemplate.Triggers>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </PasswordBox.Resources>
+                                    </PasswordBox>
+
+                                    <TextBox x:Name="TxtPasswordRevealed" Height="40" Background="{DynamicResource InputBgColor}" Foreground="{DynamicResource TabTextSelectedColor}" FontSize="14" Visibility="Collapsed">
+                                        <TextBox.Resources>
+                                            <Style TargetType="TextBox">
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="TextBox">
+                                                            <Border x:Name="TextBorder" Background="{TemplateBinding Background}" BorderBrush="{DynamicResource InputBorderColor}" BorderThickness="1.5" CornerRadius="10">
+                                                                <Grid>
+                                                                    <Grid.ColumnDefinitions>
+                                                                        <ColumnDefinition Width="40"/>
+                                                                        <ColumnDefinition Width="*"/>
+                                                                        <ColumnDefinition Width="40"/>
+                                                                    </Grid.ColumnDefinitions>
+                                                                    <Path x:Name="LockIconOpen" Data="M12,17A2,2 0 0,0 14,15C14,13.89 13.11,13 12,13A2,2 0 0,0 10,15A2,2 0 0,0 12,17M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V10C4,8.89 4.89,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z" Fill="#2F80ED" Width="15" Height="15" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0"/>
+                                                                    <ScrollViewer x:Name="PART_ContentHost" Grid.Column="1" VerticalAlignment="Center" Margin="5,0,5,0"/>
+                                                                </Grid>
+                                                            </Border>
+                                                            <ControlTemplate.Triggers>
+                                                                <Trigger Property="IsFocused" Value="True">
+                                                                    <Setter TargetName="TextBorder" Property="Background" Value="{DynamicResource InputFocusBgColor}"/>
+                                                                    <Setter TargetName="TextBorder" Property="BorderBrush" Value="#2F80ED"/>
+                                                                </Trigger>
+                                                            </ControlTemplate.Triggers>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </TextBox.Resources>
+                                    </TextBox>
+
+                                    <Button x:Name="BtnTogglePassword" Width="32" Height="32" Background="Transparent" BorderThickness="0" Cursor="Hand" HorizontalAlignment="Right" Margin="0,0,6,0" Click="BtnTogglePassword_Click">
+                                        <Path x:Name="EyeIcon" Data="M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z" Fill="{DynamicResource SecondaryTextColor}" Stretch="Uniform" Width="16"/>
+                                    </Button>
+                                </Grid>
+
+                                <StackPanel Margin="0,0,0,25">
+                                    <TextBlock x:Name="LblTerms" Text="Acepto los términos y condiciones." Foreground="{DynamicResource SecondaryTextColor}" FontSize="13" Margin="0,0,0,8" Width="213"/>
+                                    <CheckBox x:Name="ChkTerms" Cursor="Hand">
+                                        <CheckBox.Template>
+                                            <ControlTemplate TargetType="{x:Type CheckBox}">
+                                                <Border x:Name="CustomBorder" Width="18" Height="18" Background="{DynamicResource InputBgColor}" BorderBrush="{DynamicResource InputBorderColor}" BorderThickness="1.5" CornerRadius="5">
+                                                    <Path x:Name="CheckMark" Data="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z" Fill="White" Stretch="Uniform" Width="10" Height="10" Opacity="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter TargetName="CustomBorder" Property="BorderBrush" Value="#2F80ED"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsChecked" Value="True">
+                                                        <Setter TargetName="CustomBorder" Property="Background" Value="#2F80ED"/>
+                                                        <Setter TargetName="CustomBorder" Property="BorderBrush" Value="#2F80ED"/>
+                                                        <Setter TargetName="CheckMark" Property="Opacity" Value="1"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </CheckBox.Template>
+                                    </CheckBox>
+                                </StackPanel>
+
+                                <Button x:Name="LoginServices" Content="Iniciar sesión" Foreground="White" FontSize="15" FontWeight="SemiBold" Height="42" BorderThickness="0" Cursor="Hand">
+                                    <Button.Resources>
+                                        <Style TargetType="Button">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Border x:Name="ButtonBorder" Background="#2F80ED" CornerRadius="10">
+                                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                        </Border>
+                                                        <ControlTemplate.Triggers>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter TargetName="ButtonBorder" Property="Background" Value="#4B93FF"/>
+                                                            </Trigger>
+                                                            <Trigger Property="IsPressed" Value="True">
+                                                                <Setter TargetName="ButtonBorder" Property="Background" Value="#1B60C4"/>
+                                                            </Trigger>
+                                                        </ControlTemplate.Triggers>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </Button.Resources>
+                                </Button>
+
+                            </StackPanel>
+                        </TabItem>
+
+                        <TabItem Header="Sign In">
+                            <StackPanel Margin="0,5,0,0">
+
+                                <TextBlock x:Name="LblRegisterFullName" Text="Nombre completo" Foreground="{DynamicResource PrimaryTextColor}" FontSize="12" FontWeight="Medium" Margin="0,0,0,4"/>
+                                <TextBox x:Name="TxtRegisterFullName" Height="36" Background="{DynamicResource InputBgColor}" Foreground="{DynamicResource TabTextSelectedColor}" FontSize="13" Margin="0,0,0,10">
+                                    <TextBox.Resources>
+                                        <Style TargetType="TextBox">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="TextBox">
+                                                        <Border x:Name="TextBorder" Background="{TemplateBinding Background}" BorderBrush="{DynamicResource InputBorderColor}" BorderThickness="1.5" CornerRadius="8">
+                                                            <Grid>
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="35"/>
+                                                                    <ColumnDefinition Width="*"/>
+                                                                </Grid.ColumnDefinitions>
+                                                                <Path Data="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z" Fill="{DynamicResource SecondaryTextColor}" Width="14" Height="14" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                <ScrollViewer x:Name="PART_ContentHost" Grid.Column="1" VerticalAlignment="Center" Margin="5,0,10,0"/>
+                                                            </Grid>
+                                                        </Border>
+                                                        <ControlTemplate.Triggers>
+                                                            <Trigger Property="IsFocused" Value="True">
+                                                                <Setter TargetName="TextBorder" Property="BorderBrush" Value="#2F80ED"/>
+                                                                <Setter TargetName="TextBorder" Property="Background" Value="{DynamicResource InputFocusBgColor}"/>
+                                                            </Trigger>
+                                                        </ControlTemplate.Triggers>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </TextBox.Resources>
+                                </TextBox>
+
+                                <TextBlock x:Name="LblRegisterID" Text="Cédula de identidad" Foreground="{DynamicResource PrimaryTextColor}" FontSize="12" FontWeight="Medium" Margin="0,0,0,4"/>
+                                <TextBox x:Name="TxtRegisterID" Height="36" Background="{DynamicResource InputBgColor}" Foreground="{DynamicResource TabTextSelectedColor}" FontSize="13" Margin="0,0,0,10">
+                                    <TextBox.Resources>
+                                        <Style TargetType="TextBox">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="TextBox">
+                                                        <Border x:Name="TextBorder" Background="{TemplateBinding Background}" BorderBrush="{DynamicResource InputBorderColor}" BorderThickness="1.5" CornerRadius="8">
+                                                            <Grid>
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="35"/>
+                                                                    <ColumnDefinition Width="*"/>
+                                                                </Grid.ColumnDefinitions>
+                                                                <Path Data="M20,4H4A2,2 0 0,0 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V6A2,2 0 0,0 20,4M20,18H4V6H20V18M6,10H12V12H6V10M6,14H14V16H6V14M16,10H18V16H16V10Z" Fill="{DynamicResource SecondaryTextColor}" Width="14" Height="14" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                <ScrollViewer x:Name="PART_ContentHost" Grid.Column="1" VerticalAlignment="Center" Margin="5,0,10,0"/>
+                                                            </Grid>
+                                                        </Border>
+                                                        <ControlTemplate.Triggers>
+                                                            <Trigger Property="IsFocused" Value="True">
+                                                                <Setter TargetName="TextBorder" Property="BorderBrush" Value="#2F80ED"/>
+                                                                <Setter TargetName="TextBorder" Property="Background" Value="{DynamicResource InputFocusBgColor}"/>
+                                                            </Trigger>
+                                                        </ControlTemplate.Triggers>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </TextBox.Resources>
+                                </TextBox>
+
+                                <TextBlock x:Name="LblRegisterEmail" Text="Correo electrónico" Foreground="{DynamicResource PrimaryTextColor}" FontSize="12" FontWeight="Medium" Margin="0,0,0,4"/>
+                                <TextBox x:Name="TxtRegisterEmail" Height="36" Background="{DynamicResource InputBgColor}" Foreground="{DynamicResource TabTextSelectedColor}" FontSize="13" Margin="0,0,0,10">
+                                    <TextBox.Resources>
+                                        <Style TargetType="TextBox">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="TextBox">
+                                                        <Border x:Name="TextBorder" Background="{TemplateBinding Background}" BorderBrush="{DynamicResource InputBorderColor}" BorderThickness="1.5" CornerRadius="8">
+                                                            <Grid>
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="35"/>
+                                                                    <ColumnDefinition Width="*"/>
+                                                                </Grid.ColumnDefinitions>
+                                                                <Path Data="M20,4H4C2.89,4 2,4.89 2,6V18C2,19.1 2.89,20 4,20H20C21.1,20 22,19.1 22,18V6C22,4.89 21.1,4 20,4M20,8L12,13L4,8V6L12,11L20,6V8Z" Fill="{DynamicResource SecondaryTextColor}" Width="14" Height="14" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                <ScrollViewer x:Name="PART_ContentHost" Grid.Column="1" VerticalAlignment="Center" Margin="5,0,10,0"/>
+                                                            </Grid>
+                                                        </Border>
+                                                        <ControlTemplate.Triggers>
+                                                            <Trigger Property="IsFocused" Value="True">
+                                                                <Setter TargetName="TextBorder" Property="BorderBrush" Value="#2F80ED"/>
+                                                                <Setter TargetName="TextBorder" Property="Background" Value="{DynamicResource InputFocusBgColor}"/>
+                                                            </Trigger>
+                                                        </ControlTemplate.Triggers>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </TextBox.Resources>
+                                </TextBox>
+
+                                <TextBlock x:Name="LblRegisterUser" Text="Nombre de usuario" Foreground="{DynamicResource PrimaryTextColor}" FontSize="12" FontWeight="Medium" Margin="0,0,0,4"/>
+                                <TextBox x:Name="TxtRegisterUser" Height="36" Background="{DynamicResource InputBgColor}" Foreground="{DynamicResource TabTextSelectedColor}" FontSize="13" Margin="0,0,0,10">
+                                    <TextBox.Resources>
+                                        <Style TargetType="TextBox">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="TextBox">
+                                                        <Border x:Name="TextBorder" Background="{TemplateBinding Background}" BorderBrush="{DynamicResource InputBorderColor}" BorderThickness="1.5" CornerRadius="8">
+                                                            <Grid>
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="35"/>
+                                                                    <ColumnDefinition Width="*"/>
+                                                                </Grid.ColumnDefinitions>
+                                                                <Path Data="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z" Fill="{DynamicResource SecondaryTextColor}" Width="14" Height="14" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                <ScrollViewer x:Name="PART_ContentHost" Grid.Column="1" VerticalAlignment="Center" Margin="5,0,10,0"/>
+                                                            </Grid>
+                                                        </Border>
+                                                        <ControlTemplate.Triggers>
+                                                            <Trigger Property="IsFocused" Value="True">
+                                                                <Setter TargetName="TextBorder" Property="BorderBrush" Value="#2F80ED"/>
+                                                                <Setter TargetName="TextBorder" Property="Background" Value="{DynamicResource InputFocusBgColor}"/>
+                                                            </Trigger>
+                                                        </ControlTemplate.Triggers>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </TextBox.Resources>
+                                </TextBox>
+
+                                <TextBlock x:Name="LblRegisterPassword" Text="Contraseña" Foreground="{DynamicResource PrimaryTextColor}" FontSize="12" FontWeight="Medium" Margin="0,0,0,4"/>
+                                <Grid Margin="0,0,0,15">
+                                    <PasswordBox x:Name="TxtRegisterPassword" Height="36" Background="{DynamicResource InputBgColor}" Foreground="{DynamicResource TabTextSelectedColor}" FontSize="13">
+                                        <PasswordBox.Resources>
+                                            <Style TargetType="PasswordBox">
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="PasswordBox">
+                                                            <Border x:Name="PasswordBorder" Background="{TemplateBinding Background}" BorderBrush="{DynamicResource InputBorderColor}" BorderThickness="1.5" CornerRadius="8">
+                                                                <Grid>
+                                                                    <Grid.ColumnDefinitions>
+                                                                        <ColumnDefinition Width="35"/>
+                                                                        <ColumnDefinition Width="*"/>
+                                                                        <ColumnDefinition Width="35"/>
+                                                                    </Grid.ColumnDefinitions>
+                                                                    <Path Data="M12,17A2,2 0 0,0 14,15C14,13.89 13.11,13 12,13A2,2 0 0,0 10,15A2,2 0 0,0 12,17M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V10C4,8.89 4.89,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z" Fill="{DynamicResource SecondaryTextColor}" Width="14" Height="14" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0"/>
+                                                                    <ScrollViewer x:Name="PART_ContentHost" Grid.Column="1" VerticalAlignment="Center" Margin="5,0,5,0"/>
+                                                                </Grid>
+                                                            </Border>
+                                                            <ControlTemplate.Triggers>
+                                                                <Trigger Property="IsFocused" Value="True">
+                                                                    <Setter TargetName="PasswordBorder" Property="BorderBrush" Value="#2F80ED"/>
+                                                                    <Setter TargetName="PasswordBorder" Property="Background" Value="{DynamicResource InputFocusBgColor}"/>
+                                                                </Trigger>
+                                                            </ControlTemplate.Triggers>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </PasswordBox.Resources>
+                                    </PasswordBox>
+                                </Grid>
+
+                                <StackPanel Margin="0,0,0,18">
+                                    <TextBlock x:Name="LblRegisterTerms" Text="Acepto los términos y condiciones." Foreground="{DynamicResource SecondaryTextColor}" FontSize="13" Margin="0,0,0,8"/>
+                                    <CheckBox x:Name="ChkRegisterTerms" Cursor="Hand" HorizontalAlignment="Left">
+                                        <CheckBox.Template>
+                                            <ControlTemplate TargetType="CheckBox">
+                                                <Border x:Name="CustomBorder" Width="18" Height="18" Background="{DynamicResource InputBgColor}" BorderBrush="{DynamicResource InputBorderColor}" BorderThickness="1.5" CornerRadius="5">
+                                                    <Path x:Name="CheckMark" Data="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z" Fill="White" Stretch="Uniform" Width="10" Height="10" Opacity="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter TargetName="CustomBorder" Property="BorderBrush" Value="#2F80ED"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsChecked" Value="True">
+                                                        <Setter TargetName="CustomBorder" Property="Background" Value="#2F80ED"/>
+                                                        <Setter TargetName="CustomBorder" Property="BorderBrush" Value="#2F80ED"/>
+                                                        <Setter TargetName="CheckMark" Property="Opacity" Value="1"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </CheckBox.Template>
+                                    </CheckBox>
+                                </StackPanel>
+
+                                <Button Content="Registrarse" Foreground="White" FontSize="15" FontWeight="SemiBold" Height="42" BorderThickness="0" Cursor="Hand">
+                                    <Button.Resources>
+                                        <Style TargetType="Button">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Border x:Name="ButtonBorder" Background="#2F80ED" CornerRadius="10">
+                                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                        </Border>
+                                                        <ControlTemplate.Triggers>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter TargetName="ButtonBorder" Property="Background" Value="#4B93FF"/>
+                                                            </Trigger>
+                                                            <Trigger Property="IsPressed" Value="True">
+                                                                <Setter TargetName="ButtonBorder" Property="Background" Value="#1B60C4"/>
+                                                            </Trigger>
+                                                        </ControlTemplate.Triggers>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </Button.Resources>
+                                </Button>
+
+                            </StackPanel>
+                        </TabItem>
+
+                    </TabControl>
+
                 </Border>
-            </Grid>
 
+            </Grid>
         </Grid>
     </Border>
 </Window>

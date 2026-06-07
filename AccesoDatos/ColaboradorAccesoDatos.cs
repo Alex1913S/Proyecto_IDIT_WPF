@@ -9,10 +9,10 @@ namespace AccesoDatos
     public class ColaboradorAccesoDatos : ConexionSql
     {
         public bool InsertarColaborador(
-    string documentoIdentidad, string nombres, string apellidos,
-    string correoCorporativo, int departamentoId, int ubicacionId,
-    DateTime fechaIngreso, string estado, int perfilId,
-    string usuarioApp, string passwordPlano, byte[] foto, string cargo)
+            string documentoIdentidad, string nombres, string apellidos,
+            string correoCorporativo, int departamentoId, int ubicacionId,
+            DateTime fechaIngreso, string estado, int perfilId,
+            string usuarioApp, string passwordPlano, byte[] foto, string cargo)
         {
             using (var conn = GetConnection())
             {
@@ -46,6 +46,7 @@ namespace AccesoDatos
                 }
             }
         }
+
         public DataTable ObtenerDepartamentos()
         {
             using (var conn = GetConnection())
@@ -100,56 +101,35 @@ namespace AccesoDatos
             }
         }
 
-        //public DataTable ListarColaboradores(string busqueda)
-        //{
-        //    DataTable tabla = new DataTable();
-        //    string query = "SELECT DocumentoIdentidad, (Nombres + ' ' + Apellidos) AS Nombre, Cargo, Estado FROM Core.Colaboradores";
-
-        //    if (!string.IsNullOrEmpty(busqueda))
-        //    {
-        //        query += " WHERE Nombres LIKE @busqueda OR Apellidos LIKE @busqueda OR DocumentoIdentidad LIKE @busqueda";
-        //    }
-
-        //    using (var conn = GetConnection())
-        //    {
-        //        conn.Open();
-        //        using (SqlCommand cmd = new SqlCommand(query, conn))
-        //        {
-        //            if (!string.IsNullOrEmpty(busqueda))
-        //            {
-        //                cmd.Parameters.AddWithValue("@busqueda", "%" + busqueda + "%");
-        //            }
-
-        //            using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
-        //            {
-        //                adapter.Fill(tabla);
-        //            }
-        //        }
-        //    }
-        //    return tabla;
-        //}
-
         public DataTable ListarColaboradores(string busqueda)
         {
             DataTable tabla = new DataTable();
-            string query = @"SELECT DocumentoIdentidad, 
-                            Nombres, 
-                            Apellidos, 
-                            (Nombres + ' ' + Apellidos) AS NombreCompleto, 
-                            CorreoCorporativo, 
-                            DepartamentoID, 
-                            UbicacionID, 
-                            FechaIngreso, 
-                            Estado, 
-                            PerfilID, 
-                            UsuarioApp, 
-                            Foto, 
-                            Cargo 
-                     FROM Core.Colaboradores";
+
+            // Se agregaron LEFT JOINs para traer los nombres reales de Perfiles, Departamentos y Ubicaciones
+            string query = @"SELECT C.DocumentoIdentidad, 
+                                    C.Nombres, 
+                                    C.Apellidos, 
+                                    (C.Nombres + ' ' + C.Apellidos) AS NombreCompleto, 
+                                    C.CorreoCorporativo, 
+                                    C.DepartamentoID, 
+                                    D.Nombre AS NombreDepartamento,
+                                    C.UbicacionID, 
+                                    U.NombreNomenclatura AS NombreUbicacion,
+                                    C.FechaIngreso, 
+                                    C.Estado, 
+                                    C.PerfilID, 
+                                    P.NombrePerfil, 
+                                    C.UsuarioApp, 
+                                    C.Foto, 
+                                    C.Cargo 
+                             FROM Core.Colaboradores C
+                             LEFT JOIN Core.Departamentos D ON C.DepartamentoID = D.DepartamentoID
+                             LEFT JOIN Core.Ubicaciones U ON C.UbicacionID = U.UbicacionID
+                             LEFT JOIN Seguridad.Perfiles P ON C.PerfilID = P.PerfilID";
 
             if (!string.IsNullOrEmpty(busqueda))
             {
-                query += " WHERE Nombres LIKE @busqueda OR Apellidos LIKE @busqueda OR DocumentoIdentidad LIKE @busqueda";
+                query += " WHERE C.Nombres LIKE @busqueda OR C.Apellidos LIKE @busqueda OR C.DocumentoIdentidad LIKE @busqueda";
             }
 
             using (var conn = GetConnection())

@@ -9,6 +9,10 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading; // Necesario para el DispatcherTimer de WPF
+using AccesoDatos;              // Carpetas importadas de tu otro proyecto
+using Dominio;                  // Carpetas importadas de tu otro proyecto
+using Microsoft.Data.SqlClient;
 
 namespace Presentación
 {
@@ -17,12 +21,143 @@ namespace Presentación
     /// </summary>
     public partial class Login : Window
     {
+        // Lógica del dominio traída de tu proyecto anterior
+        private readonly UsuarioDominio _dominio = new UsuarioDominio();
+        private DispatcherTimer timer1; // Reemplazo de WPF para el Timer de WinForms
+
+        private bool isPasswordVisible = false;
+        private bool _isDarkMode = true;
+
         public Login()
         {
             InitializeComponent();
+            this.Loaded += Login_Loaded; // Evento nativo de WPF al cargar la ventana
         }
 
-        // 1. Este método soluciona el error de la línea 14
+        private void Login_Loaded(object sender, RoutedEventArgs e)
+        {
+            // Asignación de focos y eventos de teclas adaptados a WPF
+            Username.Focus();
+            Username.KeyDown += Username_KeyDown;
+            TxtPassword.KeyDown += Password_KeyDown;
+            TxtPasswordRevealed.KeyDown += Password_KeyDown;
+            LoginServices.Click += LoginServices_Click;
+
+            // Configuración del Fade In inicial (Transparencia)
+            this.Opacity = 0.0;
+
+            timer1 = new DispatcherTimer();
+            timer1.Interval = TimeSpan.FromMilliseconds(30);
+            timer1.Tick += Timer1_Tick;
+
+            // NOTA: Si en tu XAML tienes un ProgressBar llamado "progressBar1", 
+            // puedes descomentar las líneas de abajo. Si no, déjalas comentadas para evitar errores.
+            /*
+            progressBar1.Value = 0;
+            progressBar1.Minimum = 0;
+            progressBar1.Maximum = 100;
+            */
+
+            timer1.Start();
+        }
+
+        private void Timer1_Tick(object sender, EventArgs e)
+        {
+            if (this.Opacity < 1)
+                this.Opacity += 0.2;
+
+            /* Lógica de barra de progreso (Descomentar si usas un ProgressBar en el XAML)
+            if (progressBar1.Value < 100)
+                progressBar1.Value++;
+
+            if (progressBar1.Value >= 100)
+            {
+                timer1.Stop();
+                progressBar1.Visibility = Visibility.Collapsed;
+            }
+            */
+
+            if (this.Opacity >= 1)
+            {
+                timer1.Stop();
+            }
+        }
+
+        // ================= LÓGICA DE CONEXIÓN Y AUTENTICACIÓN (FUSIONADA) =================
+        private void LoginServices_Click(object sender, RoutedEventArgs e)
+        {
+            string correo = Username.Text.Trim().ToLower();
+
+            // Detecta la contraseña tanto si está oculta como si está revelada por el Ojo
+            string passwordHash = isPasswordVisible ? TxtPasswordRevealed.Text.Trim() : TxtPassword.Password.Trim();
+
+            var resultado = _dominio.Login(correo, passwordHash);
+
+            if (resultado.Exitoso)
+            {
+                ConexionSql.VariablesGlobales.xEstIni = 1;
+
+                // Instancia tu ventana de Dashboard enviando los parámetros de la BD
+                Dashboard FrmMenu = new Dashboard(
+                    resultado.Nombres.Split(' ')[0],
+                    resultado.Apellidos.Split(' ')[0],
+                    resultado.Rol,
+                    resultado.Cargo,
+                    resultado.Foto
+                );
+
+                this.Hide();
+
+                // En WPF, ShowDialog detiene el hilo actual hasta que se cierra la ventana secundaria
+                FrmMenu.ShowDialog();
+
+                // Al regresar del Dashboard, limpia los controles y se vuelve a mostrar
+                this.Show();
+                Username.Clear();
+                TxtPassword.Clear();
+                TxtPasswordRevealed.Clear();
+                Username.Focus();
+            }
+            else
+            {
+                // Alerta adaptada a los cuadros de diálogo nativos de WPF
+                MessageBox.Show(resultado.Mensaje, "Acceso denegado", MessageBoxButton.OK, MessageBoxImage.Warning);
+
+                if (resultado.Bloqueado)
+                {
+                    Username.IsEnabled = false;
+                    TxtPassword.IsEnabled = false;
+                    TxtPasswordRevealed.IsEnabled = false;
+                }
+                else
+                {
+                    TxtPassword.Clear();
+                    TxtPasswordRevealed.Clear();
+                    if (isPasswordVisible) TxtPasswordRevealed.Focus(); else TxtPassword.Focus();
+                }
+            }
+        }
+
+        private void Username_KeyDown(object sender, KeyEventArgs e)
+        {
+            // Evento de tecla Enter adaptado a las enumeraciones de WPF (Key.Enter)
+            if (e.Key == Key.Enter)
+            {
+                if (isPasswordVisible) TxtPasswordRevealed.Focus(); else TxtPassword.Focus();
+            }
+        }
+
+        private void Password_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                LoginServices_Click(sender, e);
+            }
+        }
+
+
+        // ================= TU CÓDIGO ACTUAL DE WPF (PRESERVADO SIN ALTERACIONES) =================
+
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)
@@ -31,14 +166,11 @@ namespace Presentación
             }
         }
 
-        // 2. Este método soluciona el error de la línea 32
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
         }
 
-        private bool isPasswordVisible = false;
-        private bool isDarkMode = true;
         private void BtnTogglePassword_Click(object sender, RoutedEventArgs e)
         {
             if (!isPasswordVisible)
@@ -77,53 +209,32 @@ namespace Presentación
 
         private void ThemeToggle_Click(object sender, RoutedEventArgs e)
         {
-            // Localizar el objeto Path que está dentro de la plantilla del botón
-            var themeIcon = (Path)BtnThemeToggle.Template.FindName("ThemeIcon", BtnThemeToggle);
-            var bc = new System.Windows.Media.BrushConverter();
-
-            if (isDarkMode)
+            if (_isDarkMode)
             {
-                // ================= CONMUTAR A MODO CLARO =================
-                MainWindowBorder.Background = (SolidColorBrush)bc.ConvertFromString("#FFFFFF");
-                RightImageBorder.Background = (SolidColorBrush)bc.ConvertFromString("#FFFFFF");
-
-                // Cambiar el color de los textos para que tengan contraste en fondo blanco
-                SolidColorBrush lightThemeText = (SolidColorBrush)bc.ConvertFromString("#22223B");
-                LblTitle.Foreground = lightThemeText;
-                LblUser.Foreground = lightThemeText;
-                LblPassword.Foreground = lightThemeText;
-                LblTerms.Foreground = lightThemeText;
-
-                if (themeIcon != null)
-                {
-                    // Cambiar vector gráfico a un SOL
-                    themeIcon.Data = Geometry.Parse("M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,3.5A1,1 0 0,1 13,4.5V5.5A1,1 0 0,1 11,5.5V4.5A1,1 0 0,1 12,3.5M12,18.5A1,1 0 0,1 13,19.5V20.5A1,1 0 0,1 11,20.5V19.5A1,1 0 0,1 12,18.5M20.5,12A1,1 0 0,1 19.5,13H18.5A1,1 0 0,1 18.5,11H19.5A1,1 0 0,1 20.5,12M5.5,12A1,1 0 0,1 4.5,13H3.5A1,1 0 0,1 3.5,11H4.5A1,1 0 0,1 5.5,12M6,6A1,1 0 0,1 7.41,6L8.12,6.71A1,1 0 0,1 6.71,8.12L6,7.41A1,1 0 0,1 6,6M18,18A1,1 0 0,1 16.59,18L15.88,17.29A1,1 0 0,1 17.29,15.88L18,16.59A1,1 0 0,1 18,18M18,6A1,1 0 0,1 18,7.41L17.29,8.12A1,1 0 0,1 15.88,6.71L16.59,6A1,1 0 0,1 18,6M6,18A1,1 0 0,1 6,16.59L6.71,15.88A1,1 0 0,1 8.12,17.29L7.41,18A1,1 0 0,1 6,18Z");
-                    themeIcon.Fill = (SolidColorBrush)bc.ConvertFromString("#E89A24"); // Sol naranja/dorado
-                }
-
-                isDarkMode = false;
+                // ☀️ CONFIGURAR PALETA MODO CLARO
+                this.Resources["CardBgColor"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F2FFFFFF"));
+                this.Resources["InputBgColor"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F0F2F5"));
+                this.Resources["InputFocusBgColor"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E4E6E9"));
+                this.Resources["InputBorderColor"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#CCD1D9"));
+                this.Resources["PrimaryTextColor"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#333333"));
+                this.Resources["SecondaryTextColor"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#65676B"));
+                this.Resources["TabTextSelectedColor"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#050505"));
+                this.Resources["TabTextUnselectedColor"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#65676B"));
             }
             else
             {
-                // ================= CONMUTAR A MODO OSCURO =================
-                MainWindowBorder.Background = (SolidColorBrush)bc.ConvertFromString("#060621");
-                RightImageBorder.Background = (SolidColorBrush)bc.ConvertFromString("#060621");
-
-                // Devolver los textos a Blanco original
-                LblTitle.Foreground = Brushes.White;
-                LblUser.Foreground = Brushes.White;
-                LblPassword.Foreground = Brushes.White;
-                LblTerms.Foreground = Brushes.White;
-
-                if (themeIcon != null)
-                {
-                    // Cambiar vector gráfico a una LUNA
-                    themeIcon.Data = Geometry.Parse("M12,2A10,10 0 1,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4Z");
-                    themeIcon.Fill = (SolidColorBrush)bc.ConvertFromString("#A0A0B8"); // Luna grisácea
-                }
-
-                isDarkMode = true;
+                // 🌙 REVERTIR A PALETA MODO OSCURO
+                this.Resources["CardBgColor"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F20A0E29"));
+                this.Resources["InputBgColor"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#12163B"));
+                this.Resources["InputFocusBgColor"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#161B40"));
+                this.Resources["InputBorderColor"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1F2456"));
+                this.Resources["PrimaryTextColor"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#A5A9CC"));
+                this.Resources["SecondaryTextColor"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#757B96"));
+                this.Resources["TabTextSelectedColor"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFFFFF"));
+                this.Resources["TabTextUnselectedColor"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#757B96"));
             }
+
+            _isDarkMode = !_isDarkMode;
         }
     }
 }
