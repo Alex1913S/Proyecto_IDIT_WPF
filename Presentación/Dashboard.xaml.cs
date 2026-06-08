@@ -12,7 +12,6 @@ namespace Presentación
 {
     public partial class Dashboard : Window
     {
-        // Variables globales para almacenar la sesión del usuario logueado
         private readonly string _nombre;
         private readonly string _apellido;
         private readonly string _rol;
@@ -23,12 +22,10 @@ namespace Presentación
         private bool isDarkMode = true;
         private bool isSidebarCollapsed = false;
 
-        // CONSTRUCTOR PRINCIPAL: Invocado desde la pantalla de Login
         public Dashboard(string username, string accesskey, string rol, string Company_Position, byte[] PictureBPhoto, int colaboradorId)
         {
             InitializeComponent();
 
-            // Mapeo de parámetros
             _nombre = username;
             _apellido = accesskey;
             _rol = rol;
@@ -36,40 +33,33 @@ namespace Presentación
             _foto = PictureBPhoto;
             _colaboradorId = colaboradorId;
 
-            // Suscribir al evento de carga de la UI
             this.Loaded += Dashboard_Loaded;
         }
 
-        // CONSTRUCTOR SECUNDARIO: Mantiene compatibilidad con el diseñador visual de Visual Studio
         public Dashboard() : this("Usuario", "Demo", "Administrador", "Desarrollador TI", null, 0)
         {
-            // El '0' al final cubre el parámetro requerido 'colaboradorId'
         }
 
-        // Asignación de credenciales dinámicas al inicializar la ventana
         private void Dashboard_Loaded(object sender, RoutedEventArgs e)
         {
-            // Asigna Nombre y Apellido completo
+            // SOLUCIÓN AL CRASH EN TIEMPO DE DISEÑO DE VISUAL STUDIO
+            if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(this)) return;
+
             if (this.TxtUserName != null)
                 TxtUserName.Text = $"{_nombre} {_apellido}";
 
-            // Asigna Rol y Cargo en el subtexto del perfil
             if (this.TxtUserRole != null)
                 TxtUserRole.Text = $"{_rol} / {_cargo}";
 
-            // Genera las iniciales basadas en el nombre proporcionado
             if (this.TxtUserInitials != null && !string.IsNullOrWhiteSpace(_nombre))
             {
                 TxtUserInitials.Text = _nombre.Substring(0, Math.Min(2, _nombre.Length)).ToUpper();
             }
 
-            // ASIGNAR FECHA REAL: Formato exacto "Lunes, 08 de junio de 2026"
             var culturaEspanol = new System.Globalization.CultureInfo("es-ES");
             string fechaFormateada = DateTime.Now.ToString("dddd, dd 'de' MMMM 'de' yyyy", culturaEspanol);
             LblDate.Text = char.ToUpper(fechaFormateada[0]) + fechaFormateada.Substring(1);
 
-
-            // Carga la imagen binaria si existe
             CargarFotoPerfil();
             CargarKPIs();
             CargarMapaColombia();
@@ -84,8 +74,6 @@ namespace Presentación
                 if (_foto != null && _foto.Length > 0)
                 {
                     BitmapImage bitmap = new BitmapImage();
-
-                    // Nota: Se usa la ruta completa del espacio de nombres para evitar colisiones con System.Windows.Shapes.Path
                     using (System.IO.MemoryStream ms = new System.IO.MemoryStream(_foto))
                     {
                         bitmap.BeginInit();
@@ -95,7 +83,6 @@ namespace Presentación
                     }
                     bitmap.Freeze();
 
-                    // Muestra el componente de imagen y oculta las iniciales de respaldo
                     ImgUserPhoto.Source = bitmap;
                     ImgUserPhoto.Visibility = Visibility.Visible;
                     if (TxtUserInitials != null) TxtUserInitials.Visibility = Visibility.Collapsed;
@@ -103,62 +90,55 @@ namespace Presentación
             }
             catch (Exception)
             {
-                // Fallback seguro por si los bytes de la DB están corruptos
                 if (ImgUserPhoto != null) ImgUserPhoto.Visibility = Visibility.Collapsed;
                 if (TxtUserInitials != null) TxtUserInitials.Visibility = Visibility.Visible;
             }
         }
 
-
-        // HELPER DE NAVEGACIÓN CENTRAL
-        // Toda la navegación pasa por aquí — nunca tocar ContenedorPrincipal
-        private void NavegaA(UserControl control)
+        // HELPER DE NAVEGACIÓN CENTRAL CORREGIDO (Cambia el título del header de forma dinámica)
+        private void NavegaA(UserControl control, string tituloSeccion = "Panel de Control")
         {
+            if (LblMainTitle != null) LblMainTitle.Text = tituloSeccion;
+
             if (control == null)
             {
-                // Volver al panel de inicio
                 NavWorkspaceContent.Content = null;
                 NavWorkspaceContent.Visibility = Visibility.Collapsed;
                 PanelInicioView.Visibility = Visibility.Visible;
             }
             else
             {
-                // Mostrar el UserControl — ocupa todo el Row 1
                 PanelInicioView.Visibility = Visibility.Collapsed;
                 NavWorkspaceContent.Content = control;
                 NavWorkspaceContent.Visibility = Visibility.Visible;
             }
         }
 
-        // NAVEGACIÓN DESDE EL MENÚ
         private void BtnInicio_Click(object sender, RoutedEventArgs e)
         {
-            NavegaA(null);
+            NavegaA(null, "Panel de Control");
         }
 
         private void BtnVerTodosActivos_Click(object sender, RoutedEventArgs e)
         {
-            NavegaA(new See_Assets());
+            NavegaA(new See_Assets(), "Inventario de Activos");
         }
 
         private void BtnNuevoActivo_Click(object sender, RoutedEventArgs e)
         {
-            NavegaA(new View_Create_Assets());
+            NavegaA(new View_Create_Assets(), "Registrar Nuevo Activo");
         }
 
         private void BtnEmpleado_Click(object sender, RoutedEventArgs e)
         {
-            NavegaA(new Employee_Viewer());
+            NavegaA(new Employee_Viewer(), "Gestión de Colaboradores");
         }
 
-        // En Dashboard.xaml.cs, dentro de BtnGestorContrasenas_Click (o el botón que uses):
         private void BtnGestorContrasenas_Click(object sender, RoutedEventArgs e)
         {
-            NavegaA(new GestorContrasenas(_colaboradorId)); // pasa el ID del usuario logueado
+            NavegaA(new GestorContrasenas(_colaboradorId), "Gestor de Contraseñas Seguras");
         }
 
-
-        // COLAPSO DEL SIDEBAR
         private void BtnToggleSidebar_Click(object sender, RoutedEventArgs e)
         {
             if (!isSidebarCollapsed)
@@ -199,9 +179,6 @@ namespace Presentación
             }
         }
 
-        // =================================================================
-        // GRÁFICO DINÁMICO (DÍA / MES / AÑO)
-        // =================================================================
         private void TimeFilter_Checked(object sender, RoutedEventArgs e)
         {
             if (!IsInitialized) return;
@@ -233,9 +210,6 @@ namespace Presentación
             }
         }
 
-        // =================================================================
-        // WORKSPACE SELECTOR
-        // =================================================================
         private void BtnWorkspaceSelector_Click(object sender, RoutedEventArgs e)
         {
             PopupWorkspace.IsOpen = !PopupWorkspace.IsOpen;
@@ -259,13 +233,16 @@ namespace Presentación
             }
         }
 
-        // =================================================================
-        // TEMA CLARO / OSCURO
-        // =================================================================
+        // TEMA CLARO / OSCURO TOTALMENTE CORREGIDO
         private void ThemeToggle_Click(object sender, RoutedEventArgs e)
         {
             var themeIcon = (Path)BtnThemeToggle.Template.FindName("ThemeIcon", BtnThemeToggle);
             var bc = new BrushConverter();
+
+            var txtCategorias = new[] { TxtT1, TxtT2, TxtT3, TxtT4, TxtT5, TxtT6 };
+            var valCategorias = new[] { ValT1, ValT2, ValT3, ValT4, ValT5, ValT6 };
+            var axisLabels = new[] { AxisL1, AxisL2, AxisL3, AxisL4, AxisL5, AxisL6 };
+            var whiteBars = new[] { Bar1, Bar3, Bar5 };
 
             if (isDarkMode)
             {
@@ -281,15 +258,24 @@ namespace Presentación
                 TypesContainerBorder.Background = Brushes.White;
                 MapContainerBorder.Background = Brushes.White;
                 TimeFilterPanel.Background = (SolidColorBrush)bc.ConvertFromString("#F1F5F9");
-                //ColombiaVectorPath.Fill = (SolidColorBrush)bc.ConvertFromString("#E2E8F0");
-                //ColombiaVectorPath.Stroke = (SolidColorBrush)bc.ConvertFromString("#CBD5E1");
 
                 SolidColorBrush lt = (SolidColorBrush)bc.ConvertFromString("#22223B");
+                SolidColorBrush greyText = (SolidColorBrush)bc.ConvertFromString("#4A5568");
+                SolidColorBrush darkGreyBars = (SolidColorBrush)bc.ConvertFromString("#718096");
+
                 LblMainTitle.Foreground = lt; TxtUserName.Foreground = lt;
                 LblChartTitle.Foreground = lt; LblTypesTitle.Foreground = lt;
-                //LblMapTitle.Foreground = lt;
-                TxtT1.Foreground = lt; TxtT2.Foreground = lt;
                 TxtReg1.Foreground = lt; TxtReg2.Foreground = lt; TxtReg3.Foreground = lt;
+                TxtUserRole.Foreground = greyText;
+
+                var txtSelSub = (TextBlock)BtnWorkspaceSelector.Template.FindName("TxtCurrentSub", BtnWorkspaceSelector);
+                if (txtSelSub != null) txtSelSub.Foreground = greyText;
+
+                // Corregir la invisibilidad masiva de etiquetas en Modo Claro
+                foreach (var t in txtCategorias) if (t != null) t.Foreground = lt;
+                foreach (var v in valCategorias) if (v != null) v.Foreground = greyText;
+                foreach (var axis in axisLabels) if (axis != null) axis.Foreground = greyText;
+                foreach (var bar in whiteBars) if (bar != null) bar.Background = darkGreyBars; // Cambia barras blancas a gris oscuro
 
                 BtnWorkspaceSelector.Background = Brushes.White;
                 PopupBorder.Background = Brushes.White;
@@ -320,14 +306,19 @@ namespace Presentación
                 TypesContainerBorder.Background = (SolidColorBrush)bc.ConvertFromString("#0b0b2d");
                 MapContainerBorder.Background = (SolidColorBrush)bc.ConvertFromString("#0b0b2d");
                 TimeFilterPanel.Background = (SolidColorBrush)bc.ConvertFromString("#151538");
-                //ColombiaVectorPath.Fill = (SolidColorBrush)bc.ConvertFromString("#151538");
-                //ColombiaVectorPath.Stroke = (SolidColorBrush)bc.ConvertFromString("#2D2D5A");
 
                 LblMainTitle.Foreground = Brushes.White; TxtUserName.Foreground = Brushes.White;
                 LblChartTitle.Foreground = Brushes.White; LblTypesTitle.Foreground = Brushes.White;
-                //LblMapTitle.Foreground = Brushes.White;
-                TxtT1.Foreground = Brushes.White; TxtT2.Foreground = Brushes.White;
                 TxtReg1.Foreground = Brushes.White; TxtReg2.Foreground = Brushes.White; TxtReg3.Foreground = Brushes.White;
+                TxtUserRole.Foreground = (SolidColorBrush)bc.ConvertFromString("#A0A0B8");
+
+                var txtSelSub = (TextBlock)BtnWorkspaceSelector.Template.FindName("TxtCurrentSub", BtnWorkspaceSelector);
+                if (txtSelSub != null) txtSelSub.Foreground = (SolidColorBrush)bc.ConvertFromString("#A0A0B8");
+
+                foreach (var t in txtCategorias) if (t != null) t.Foreground = Brushes.White;
+                foreach (var v in valCategorias) if (v != null) v.Foreground = (SolidColorBrush)bc.ConvertFromString("#A0A0B8");
+                foreach (var axis in axisLabels) if (axis != null) axis.Foreground = (SolidColorBrush)bc.ConvertFromString("#A0A0B8");
+                foreach (var bar in whiteBars) if (bar != null) bar.Background = Brushes.White; // Regresa barras a blanco puro
 
                 BtnWorkspaceSelector.Background = (SolidColorBrush)bc.ConvertFromString("#0b0b2d");
                 PopupBorder.Background = (SolidColorBrush)bc.ConvertFromString("#0b0b2d");
@@ -341,9 +332,6 @@ namespace Presentación
             }
         }
 
-        // =================================================================
-        // VENTANA
-        // =================================================================
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed) DragMove();
@@ -364,19 +352,15 @@ namespace Presentación
             var activos = new UsuarioDominio.ActivosDominio();
             var colaboradores = new ColaboradorDominio();
 
-            // Card1 - Valor total inventario
             decimal valorTotal = activos.ObtenerValorTotalInventario();
-            NumC1.Text = "$" + valorTotal.ToString("N0",new System.Globalization.CultureInfo("es-CO"));
+            NumC1.Text = "$" + valorTotal.ToString("N0", new System.Globalization.CultureInfo("es-CO"));
 
-            // Card2 - Total activos
             int totalActivos = activos.ObtenerTotalActivos();
             NumC2.Text = $"{totalActivos} Unidades";
 
-            // Card3 - Total colaboradores
             int totalColaboradores = colaboradores.ObtenerTotalColaboradores();
             NumC3.Text = $"{totalColaboradores} Colaboradores";
 
-            // Card4 - Garantías vigentes
             decimal pctGarantias = activos.ObtenerPorcentajeGarantiasVigentes();
             NumC4.Text = $"{pctGarantias}%";
 
@@ -413,7 +397,6 @@ namespace Presentación
             string rutaHtml = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MapaColombia.html");
             string rutaSvg = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "colombia.svg");
 
-            // Validar que ambos archivos existan en la carpeta de ejecución (bin/Debug)
             if (!System.IO.File.Exists(rutaHtml) || !System.IO.File.Exists(rutaSvg))
             {
                 System.Diagnostics.Debug.WriteLine("Error: Faltan archivos en el directorio de salida.");
@@ -423,10 +406,7 @@ namespace Presentación
             string htmlContent = System.IO.File.ReadAllText(rutaHtml);
             string svgContent = System.IO.File.ReadAllText(rutaSvg, System.Text.Encoding.UTF8);
 
-            // Inyectamos el código SVG puro directamente en el DIV del mapa
             htmlContent = htmlContent.Replace("%%MUNDO_SVG%%", svgContent);
-
-            // Enviamos el resultado final al control del formulario
             MapaBrowser.NavigateToString(htmlContent);
         }
     }
