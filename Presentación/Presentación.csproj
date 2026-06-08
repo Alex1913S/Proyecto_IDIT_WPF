@@ -13,6 +13,7 @@
     <None Remove="Assets\a2.png" />
     <None Remove="Assets\a3.png" />
     <None Remove="Assets\image_login_1.png" />
+    <None Remove="Assets\MapaColombia.html" />
   </ItemGroup>
 
   <ItemGroup>

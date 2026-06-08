@@ -260,5 +260,89 @@ namespace AccesoDatos
                 }
             }
         }
+
+        public decimal ObtenerValorTotalInventario()
+        {
+            const string sql = @"
+        SELECT ISNULL(SUM(Costo), 0)
+        FROM ITAM.ActivosBase
+        WHERE EstadoOperativo <> 'De Baja'";
+
+            using (var conn = GetConnection())
+            {
+                conn.Open();
+                using (var cmd = new SqlCommand(sql, conn))
+                {
+                    return (decimal)cmd.ExecuteScalar();
+                }
+            }
+        }
+
+        public int ObtenerTotalActivos()
+        {
+            const string sql = @"
+        SELECT COUNT(*)
+        FROM ITAM.ActivosBase
+        WHERE EstadoOperativo <> 'De Baja'";
+
+            using (var conn = GetConnection())
+            {
+                conn.Open();
+                using (var cmd = new SqlCommand(sql, conn))
+                    return (int)cmd.ExecuteScalar();
+            }
+        }
+
+        public decimal ObtenerPorcentajeGarantiasVigentes()
+        {
+            const string sql = @"
+        SELECT 
+            COUNT(*) AS Total,
+            SUM(CASE WHEN DATEADD(YEAR, 1, FechaAdquisicion) >= CAST(GETDATE() AS DATE) THEN 1 ELSE 0 END) AS Vigentes
+        FROM ITAM.ActivosBase
+        WHERE EstadoOperativo <> 'De Baja'
+          AND FechaAdquisicion IS NOT NULL";
+
+            using (var conn = GetConnection())
+            {
+                conn.Open();
+                using (var cmd = new SqlCommand(sql, conn))
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        int total = reader.GetInt32(0);
+                        int vigentes = reader.GetInt32(1);
+                        return total == 0 ? 0 : Math.Round((decimal)vigentes / total * 100, 1);
+                    }
+                    return 0;
+                }
+            }
+        }
+
+        public DataTable ObtenerTop5CategoriasPorCantidad()
+        {
+            const string sql = @"
+        SELECT TOP 6
+            CAT.Nombre AS Categoria,
+            COUNT(*) AS Cantidad
+        FROM ITAM.ActivosBase AB
+        INNER JOIN ITAM.CategoriasActivo CAT ON AB.CategoriaID = CAT.CategoriaID
+        WHERE AB.EstadoOperativo <> 'De Baja'
+        GROUP BY CAT.Nombre
+        ORDER BY COUNT(*) DESC";
+
+            using (var conn = GetConnection())
+            {
+                conn.Open();
+                using (var cmd = new SqlCommand(sql, conn))
+                {
+                    var dt = new DataTable();
+                    using (var adapter = new SqlDataAdapter(cmd))
+                        adapter.Fill(dt);
+                    return dt;
+                }
+            }
+        }
     }
 }

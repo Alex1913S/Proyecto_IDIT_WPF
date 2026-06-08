@@ -269,23 +269,31 @@
 
                     <!-- Foto circular -->
                     <Border Grid.Row="0" Width="110" Height="110"
-                            CornerRadius="55" HorizontalAlignment="Center"
-                            BorderBrush="#E89A24" BorderThickness="2"
-                            Margin="0,0,0,12" Background="#151538"
-                            ClipToBounds="True">
+                        CornerRadius="55" HorizontalAlignment="Center"
+                        BorderBrush="#E89A24" BorderThickness="2"
+                        Margin="0,0,0,12" Background="#151538"
+                        ClipToBounds="True">        
                         <Grid>
+                            <Grid.OpacityMask>
+                                <VisualBrush>
+                                    <VisualBrush.Visual>
+                                        <Ellipse Width="110" Height="110" Fill="Black"/>
+                                    </VisualBrush.Visual>
+                                </VisualBrush>
+                            </Grid.OpacityMask>
+
                             <!-- Avatar placeholder cuando no hay foto -->
                             <TextBlock x:Name="TxtAvatarInicial"
-                                       Text="?" FontSize="40" FontWeight="Bold"
-                                       Foreground="#3F3F6B"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"/>
+                               Text="?" FontSize="40" FontWeight="Bold"
+                               Foreground="#3F3F6B"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
                             <!-- Imagen cargada desde BD -->
                             <Image x:Name="ImgFotoColaborador"
-                                   Stretch="UniformToFill"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   Visibility="Collapsed"/>
+                               Stretch="UniformToFill"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Visibility="Collapsed"/>
                         </Grid>
                     </Border>
 

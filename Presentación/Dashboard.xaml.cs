@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Dominio;
+using System;
+using System.Data;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -60,6 +62,8 @@ namespace Presentación
 
             // Carga la imagen binaria si existe
             CargarFotoPerfil();
+            CargarKPIs();
+            CargarMapaColombia();
         }
 
         private void CargarFotoPerfil()
@@ -266,13 +270,13 @@ namespace Presentación
                 TypesContainerBorder.Background = Brushes.White;
                 MapContainerBorder.Background = Brushes.White;
                 TimeFilterPanel.Background = (SolidColorBrush)bc.ConvertFromString("#F1F5F9");
-                ColombiaVectorPath.Fill = (SolidColorBrush)bc.ConvertFromString("#E2E8F0");
-                ColombiaVectorPath.Stroke = (SolidColorBrush)bc.ConvertFromString("#CBD5E1");
+                //ColombiaVectorPath.Fill = (SolidColorBrush)bc.ConvertFromString("#E2E8F0");
+                //ColombiaVectorPath.Stroke = (SolidColorBrush)bc.ConvertFromString("#CBD5E1");
 
                 SolidColorBrush lt = (SolidColorBrush)bc.ConvertFromString("#22223B");
                 LblMainTitle.Foreground = lt; TxtUserName.Foreground = lt;
                 LblChartTitle.Foreground = lt; LblTypesTitle.Foreground = lt;
-                LblMapTitle.Foreground = lt;
+                //LblMapTitle.Foreground = lt;
                 TxtT1.Foreground = lt; TxtT2.Foreground = lt;
                 TxtReg1.Foreground = lt; TxtReg2.Foreground = lt; TxtReg3.Foreground = lt;
 
@@ -305,12 +309,12 @@ namespace Presentación
                 TypesContainerBorder.Background = (SolidColorBrush)bc.ConvertFromString("#0b0b2d");
                 MapContainerBorder.Background = (SolidColorBrush)bc.ConvertFromString("#0b0b2d");
                 TimeFilterPanel.Background = (SolidColorBrush)bc.ConvertFromString("#151538");
-                ColombiaVectorPath.Fill = (SolidColorBrush)bc.ConvertFromString("#151538");
-                ColombiaVectorPath.Stroke = (SolidColorBrush)bc.ConvertFromString("#2D2D5A");
+                //ColombiaVectorPath.Fill = (SolidColorBrush)bc.ConvertFromString("#151538");
+                //ColombiaVectorPath.Stroke = (SolidColorBrush)bc.ConvertFromString("#2D2D5A");
 
                 LblMainTitle.Foreground = Brushes.White; TxtUserName.Foreground = Brushes.White;
                 LblChartTitle.Foreground = Brushes.White; LblTypesTitle.Foreground = Brushes.White;
-                LblMapTitle.Foreground = Brushes.White;
+                //LblMapTitle.Foreground = Brushes.White;
                 TxtT1.Foreground = Brushes.White; TxtT2.Foreground = Brushes.White;
                 TxtReg1.Foreground = Brushes.White; TxtReg2.Foreground = Brushes.White; TxtReg3.Foreground = Brushes.White;
 
@@ -343,6 +347,77 @@ namespace Presentación
         {
             new Login().Show();
             this.Close();
+        }
+
+        private void CargarKPIs()
+        {
+            var activos = new UsuarioDominio.ActivosDominio();
+            var colaboradores = new ColaboradorDominio();
+
+            // Card1 - Valor total inventario
+            decimal valorTotal = activos.ObtenerValorTotalInventario();
+            NumC1.Text = "$" + valorTotal.ToString("N0",new System.Globalization.CultureInfo("es-CO"));
+
+            // Card2 - Total activos
+            int totalActivos = activos.ObtenerTotalActivos();
+            NumC2.Text = $"{totalActivos} Unidades";
+
+            // Card3 - Total colaboradores
+            int totalColaboradores = colaboradores.ObtenerTotalColaboradores();
+            NumC3.Text = $"{totalColaboradores} Colaboradores";
+
+            // Card4 - Garantías vigentes
+            decimal pctGarantias = activos.ObtenerPorcentajeGarantiasVigentes();
+            NumC4.Text = $"{pctGarantias}%";
+
+            CargarDistribucionCategorias();
+        }
+
+        private void CargarDistribucionCategorias()
+        {
+            var dominio = new UsuarioDominio.ActivosDominio();
+            DataTable dt = dominio.ObtenerTop5CategoriasPorCantidad();
+
+            var txts = new[] { TxtT1, TxtT2, TxtT3, TxtT4, TxtT5, TxtT6 };
+            var vals = new[] { ValT1, ValT2, ValT3, ValT4, ValT5, ValT6 };
+            var pbs = new[] { PbT1, PbT2, PbT3, PbT4, PbT5, PbT6 };
+
+            int maxCantidad = 1;
+            foreach (DataRow row in dt.Rows)
+            {
+                int qty = Convert.ToInt32(row["Cantidad"]);
+                if (qty > maxCantidad) maxCantidad = qty;
+            }
+
+            for (int i = 0; i < Math.Min(dt.Rows.Count, 6); i++)
+            {
+                int cantidad = Convert.ToInt32(dt.Rows[i]["Cantidad"]);
+                txts[i].Text = dt.Rows[i]["Categoria"].ToString();
+                vals[i].Text = $"{cantidad} Uds";
+                pbs[i].Value = (double)cantidad / maxCantidad * 100;
+            }
+        }
+
+        private void CargarMapaColombia()
+        {
+            string rutaHtml = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MapaColombia.html");
+            string rutaSvg = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "colombia.svg");
+
+            // Validar que ambos archivos existan en la carpeta de ejecución (bin/Debug)
+            if (!System.IO.File.Exists(rutaHtml) || !System.IO.File.Exists(rutaSvg))
+            {
+                System.Diagnostics.Debug.WriteLine("Error: Faltan archivos en el directorio de salida.");
+                return;
+            }
+
+            string htmlContent = System.IO.File.ReadAllText(rutaHtml);
+            string svgContent = System.IO.File.ReadAllText(rutaSvg, System.Text.Encoding.UTF8);
+
+            // Inyectamos el código SVG puro directamente en el DIV del mapa
+            htmlContent = htmlContent.Replace("%%MUNDO_SVG%%", svgContent);
+
+            // Enviamos el resultado final al control del formulario
+            MapaBrowser.NavigateToString(htmlContent);
         }
     }
 }

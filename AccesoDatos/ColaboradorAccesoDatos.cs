@@ -214,5 +214,17 @@ namespace AccesoDatos
                 }
             }
         }
+
+        public int ObtenerTotalColaboradores()
+        {
+            const string sql = "SELECT COUNT(*) FROM Core.Colaboradores";
+
+            using (var conn = GetConnection())
+            {
+                conn.Open();
+                using (var cmd = new SqlCommand(sql, conn))
+                    return (int)cmd.ExecuteScalar();
+            }
+        }
     }
 }

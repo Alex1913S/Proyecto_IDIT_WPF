@@ -81,11 +81,18 @@ namespace Dominio
         public class ActivosDominio
         {
             private readonly ActivosAccesoDatos _datos = new ActivosAccesoDatos();
+            public decimal ObtenerValorTotalInventario() => _datos.ObtenerValorTotalInventario();
+            public int ObtenerTotalActivos() => _datos.ObtenerTotalActivos();
+            public decimal ObtenerPorcentajeGarantiasVigentes() => _datos.ObtenerPorcentajeGarantiasVigentes();
+
 
             // Métodos nuevos para soportar el DataGrid y los filtros
             public DataTable ListarActivos() => _datos.ObtenerTodosLosActivos();
             public DataTable ObtenerCategorias() => _datos.ObtenerCategorias();
             public DataTable ObtenerUbicaciones() => _datos.ObtenerUbicaciones();
+
+            public DataTable ObtenerTop5CategoriasPorCantidad() => _datos.ObtenerTop5CategoriasPorCantidad();
+
 
             /// <summary>
             /// CORREGIDO: Ahora recibe e inserta el parámetro 'etiqueta' requerido por la capa de datos.
@@ -279,6 +286,7 @@ namespace Dominio
     public class ColaboradorDominio
     {
         private readonly ColaboradorAccesoDatos _accesoDatos = new ColaboradorAccesoDatos();
+        public int ObtenerTotalColaboradores() => _accesoDatos.ObtenerTotalColaboradores();
 
         public ResultadoColaborador RegistrarColaborador(
             string documentoIdentidad, string nombres, string apellidos,
@@ -369,4 +377,6 @@ namespace Dominio
 
         public DataTable MostrarColaboradores(string busqueda = "") => objetoCD.ListarColaboradores(busqueda);
     }
+
+
 }
