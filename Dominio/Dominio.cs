@@ -1,10 +1,10 @@
-﻿using AccesoDatos;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Security.Cryptography;
 using System.Text;
+using AccesoDatos;
 
 namespace Dominio
 {
@@ -15,13 +15,17 @@ namespace Dominio
         public int Intentos { get; set; }
         public string Mensaje { get; set; } = "";
 
+
         // Datos del usuario
+        public int ColaboradorID { get; set; }
         public string Nombres { get; set; } = "";
         public string Apellidos { get; set; } = "";
         public string Departamento { get; set; } = "";
         public string Rol { get; set; } = string.Empty;
         public string Cargo { get; set; } = "";
         public byte[] Foto { get; set; }
+
+
     }
 
     public class ResultadoActivo
@@ -41,6 +45,8 @@ namespace Dominio
         private readonly UsuarioAccesoDatos _accesoDatos = new UsuarioAccesoDatos();
         private int _intentosFallidos = 0;
         private const int MaxIntentos = 3;
+
+
 
         public ResultadoLogin Login(string correo, string passwordHash)
         {
@@ -67,6 +73,7 @@ namespace Dominio
             var datos = _accesoDatos.ObtenerDatosUsuario(correo);
 
             resultado.Exitoso = true;
+            resultado.ColaboradorID = datos.ColaboradorID;  // ← agregar esta línea
             resultado.Nombres = datos.Nombres;
             resultado.Apellidos = datos.Apellidos;
             resultado.Departamento = datos.Departamento;
@@ -376,6 +383,160 @@ namespace Dominio
         public bool EliminarColaborador(string documentoIdentidad) => objetoCD.EliminarColaborador(documentoIdentidad);
 
         public DataTable MostrarColaboradores(string busqueda = "") => objetoCD.ListarColaboradores(busqueda);
+    }
+
+
+    // ─────────────────────────────────────────────────────────────────────
+    // DTO de resultado genérico para operaciones de credenciales
+    // ─────────────────────────────────────────────────────────────────────
+    public class ResultadoCredencial
+    {
+        public bool Exitoso { get; set; }
+        public string Mensaje { get; set; } = string.Empty;
+    }
+
+    // ─────────────────────────────────────────────────────────────────────
+    // DOMINIO: Gestor de Contraseñas
+    //   - Cifrado AES-256 de la contraseña antes de persistir
+    //   - Descifrado al momento de revelar
+    //   - Validaciones de negocio
+    // ─────────────────────────────────────────────────────────────────────
+    public class GestorCredencialesDominio
+    {
+        private readonly GestorCredencialesAccesoDatos _datos = new();
+
+        // Clave y vector de inicialización fijos para AES.
+        // ⚠️  En producción, externalizar a un vault o variable de entorno.
+        private static readonly byte[] AesKey = Encoding.UTF8.GetBytes("SGSI_KEY_32BYTES_PRODUCTION!!!!!");  // 32 bytes
+        private static readonly byte[] AesIV = Encoding.UTF8.GetBytes("SGSI_IV_16BYTES!");                 // 16 bytes
+
+        // ── LISTAR ────────────────────────────────────────────────────────
+        public DataTable ListarCredenciales(int colaboradorId)
+        {
+            if (colaboradorId <= 0)
+                throw new ArgumentException("ColaboradorID inválido.");
+
+            return _datos.ObtenerCredencialesDeColaborador(colaboradorId);
+        }
+
+        public DataTable BuscarCredenciales(int colaboradorId, string termino)
+        {
+            if (string.IsNullOrWhiteSpace(termino))
+                return ListarCredenciales(colaboradorId);
+
+            return _datos.BuscarCredenciales(colaboradorId, termino.Trim());
+        }
+
+        // ── CREAR ─────────────────────────────────────────────────────────
+        public ResultadoCredencial Crear(
+            string nombreServicio, string urlAcceso, string usuario,
+            string contrasenaPlana, string categoria,
+            int colaboradorId, int? departamentoId,
+            DateTime? fechaVencimiento, string notasSeguras)
+        {
+            var r = new ResultadoCredencial();
+
+            if (string.IsNullOrWhiteSpace(nombreServicio))
+            { r.Mensaje = "El nombre del servicio es obligatorio."; return r; }
+
+            if (string.IsNullOrWhiteSpace(usuario))
+            { r.Mensaje = "El usuario/correo es obligatorio."; return r; }
+
+            if (string.IsNullOrWhiteSpace(contrasenaPlana))
+            { r.Mensaje = "La contraseña no puede estar vacía."; return r; }
+
+            string cifrada = Cifrar(contrasenaPlana);
+
+            bool ok = _datos.InsertarCredencial(
+                nombreServicio, urlAcceso, usuario, cifrada,
+                categoria, colaboradorId, departamentoId,
+                fechaVencimiento, notasSeguras);
+
+            r.Exitoso = ok;
+            r.Mensaje = ok ? "Credencial guardada correctamente." : "No se pudo guardar la credencial.";
+            return r;
+        }
+
+        // ── EDITAR ────────────────────────────────────────────────────────
+        public ResultadoCredencial Editar(
+            int credencialId, string nombreServicio, string urlAcceso,
+            string usuario, string contrasenaPlana, string categoria,
+            int? departamentoId, DateTime? fechaVencimiento, string notasSeguras)
+        {
+            var r = new ResultadoCredencial();
+
+            if (credencialId <= 0)
+            { r.Mensaje = "Credencial no válida."; return r; }
+
+            if (string.IsNullOrWhiteSpace(nombreServicio))
+            { r.Mensaje = "El nombre del servicio es obligatorio."; return r; }
+
+            if (string.IsNullOrWhiteSpace(usuario))
+            { r.Mensaje = "El usuario/correo es obligatorio."; return r; }
+
+            // Si la contraseña llega vacía, mantenemos la que ya hay en BD
+            // (el caller debe pasar el valor cifrado existente en ese caso)
+            string cifrada = string.IsNullOrWhiteSpace(contrasenaPlana)
+                ? contrasenaPlana          // se enviará vacío; el caller debe manejar esto
+                : Cifrar(contrasenaPlana);
+
+            bool ok = _datos.ActualizarCredencial(
+                credencialId, nombreServicio, urlAcceso,
+                usuario, cifrada, categoria,
+                departamentoId, fechaVencimiento, notasSeguras);
+
+            r.Exitoso = ok;
+            r.Mensaje = ok ? "Credencial actualizada correctamente." : "No se pudo actualizar la credencial.";
+            return r;
+        }
+
+        // ── ELIMINAR ──────────────────────────────────────────────────────
+        public ResultadoCredencial Eliminar(int credencialId, int colaboradorId)
+        {
+            var r = new ResultadoCredencial();
+
+            if (credencialId <= 0)
+            { r.Mensaje = "ID de credencial inválido."; return r; }
+
+            bool ok = _datos.EliminarCredencial(credencialId, colaboradorId);
+            r.Exitoso = ok;
+            r.Mensaje = ok
+                ? "Credencial eliminada correctamente."
+                : "No se encontró la credencial o no tiene permisos para eliminarla.";
+            return r;
+        }
+
+        // ── DESCIFRAR (para mostrar en el panel lateral) ──────────────────
+        public string Descifrar(string textoCifrado)
+        {
+            try
+            {
+                byte[] buffer = Convert.FromBase64String(textoCifrado);
+                using var aes = Aes.Create();
+                aes.Key = AesKey;
+                aes.IV = AesIV;
+                using var decryptor = aes.CreateDecryptor();
+                byte[] resultado = decryptor.TransformFinalBlock(buffer, 0, buffer.Length);
+                return Encoding.UTF8.GetString(resultado);
+            }
+            catch
+            {
+                // Si el valor en BD no está cifrado (datos legacy), lo devolvemos tal cual
+                return textoCifrado;
+            }
+        }
+
+        // ── CIFRAR (privado) ──────────────────────────────────────────────
+        private static string Cifrar(string textoPlano)
+        {
+            using var aes = Aes.Create();
+            aes.Key = AesKey;
+            aes.IV = AesIV;
+            using var encryptor = aes.CreateEncryptor();
+            byte[] plain = Encoding.UTF8.GetBytes(textoPlano);
+            byte[] cifrado = encryptor.TransformFinalBlock(plain, 0, plain.Length);
+            return Convert.ToBase64String(cifrado);
+        }
     }
 
 

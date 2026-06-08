@@ -344,5 +344,43 @@ namespace AccesoDatos
                 }
             }
         }
+
+        public (int ColaboradorID, string Nombres, string Apellidos, string Departamento, string Rol, string Cargo, byte[] Foto) ObtenerDatosUsuario(string correo)
+        {
+            using (var conn = GetConnection())
+            {
+                conn.Open();
+                string query = @"SELECT c.ColaboradorID, c.Nombres, c.Apellidos, 
+                                d.Nombre       AS Departamento,
+                                p.NombrePerfil AS Rol,
+                                c.Cargo,           
+                                c.Foto                
+                         FROM Core.Colaboradores c
+                         INNER JOIN Core.Departamentos d ON c.DepartamentoID = d.DepartamentoID
+                         INNER JOIN Seguridad.Perfiles p ON c.PerfilID = p.PerfilID
+                         WHERE c.CorreoCorporativo = @correo";
+
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.Add("@correo", SqlDbType.NVarChar).Value = correo;
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        byte[] foto = reader["Foto"] == DBNull.Value ? null : (byte[])reader["Foto"];
+                        return (
+                            Convert.ToInt32(reader["ColaboradorID"]),
+                            reader["Nombres"].ToString()!,
+                            reader["Apellidos"].ToString()!,
+                            reader["Departamento"].ToString()!,
+                            reader["Rol"].ToString()!,
+                            reader["Cargo"].ToString()!,
+                            foto
+                        );
+                    }
+                }
+            }
+            return (0, "", "", "", "", "", null);
+        }
     }
 }

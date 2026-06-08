@@ -48,12 +48,12 @@ namespace AccesoDatos
             }
         }
 
-        public (string Nombres, string Apellidos, string Departamento, string Rol, string Cargo, byte[] Foto) ObtenerDatosUsuario(string correo)
+        public (int ColaboradorID, string Nombres, string Apellidos, string Departamento, string Rol, string Cargo, byte[] Foto) ObtenerDatosUsuario(string correo)
         {
             using (var conn = GetConnection())
             {
                 conn.Open();
-                string query = @"SELECT c.Nombres, c.Apellidos, 
+                string query = @"SELECT c.ColaboradorID, c.Nombres, c.Apellidos, 
                                 d.Nombre       AS Departamento,
                                 p.NombrePerfil AS Rol,
                                 c.Cargo,           
@@ -70,23 +70,20 @@ namespace AccesoDatos
                 {
                     if (reader.Read())
                     {
-                        byte[] foto = reader["Foto"] == DBNull.Value
-                                      ? null
-                                      : (byte[])reader["Foto"];
-
-                        return
-                            (
+                        byte[] foto = reader["Foto"] == DBNull.Value ? null : (byte[])reader["Foto"];
+                        return (
+                            Convert.ToInt32(reader["ColaboradorID"]),
                             reader["Nombres"].ToString()!,
                             reader["Apellidos"].ToString()!,
                             reader["Departamento"].ToString()!,
                             reader["Rol"].ToString()!,
                             reader["Cargo"].ToString()!,
                             foto
-                            );
+                        );
                     }
                 }
             }
-            return ("", "", "", "", "", null);
+            return (0, "", "", "", "", "", null);
         }
 
     }

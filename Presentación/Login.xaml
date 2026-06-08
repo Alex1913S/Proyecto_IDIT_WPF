@@ -66,7 +66,7 @@
         <Grid>
             <Border x:Name="RightImageBorder" CornerRadius="24">
                 <Border.Background>
-                    <ImageBrush ImageSource="/Assets/a3.png" Stretch="UniformToFill"/>
+                    <ImageBrush ImageSource="/Assets/LoginIM.png" Stretch="UniformToFill"/>
                 </Border.Background>
             </Border>
 
@@ -106,29 +106,48 @@
                     </Button.Template>
                 </Button>
 
-                <Button Content="X" 
-                        HorizontalAlignment="Right" 
-                        VerticalAlignment="Top" 
-                        Margin="0,10,10,0" 
-                        Grid.Column="1"
-                        Width="28" Height="28"
-                        Foreground="White" 
-                        FontSize="18" 
-                        Cursor="Hand"
-                        Click="CloseButton_Click"
-                        Panel.ZIndex="10">
+
+
+                <Button HorizontalAlignment="Right" 
+        VerticalAlignment="Top" 
+        Margin="0,10,10,0" 
+        Grid.Column="1"
+        Width="30" Height="30"
+        Cursor="Hand"
+        Click="CloseButton_Click"
+        Panel.ZIndex="10">
                     <Button.Resources>
                         <Style TargetType="Button">
                             <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="Background" Value="Transparent"/>
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="Button">
-                                        <Border x:Name="BtnBorder" Background="#66000000" CornerRadius="14">
-                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        <Border x:Name="BtnBorder" 
+                                Background="#1AFFFFFF" 
+                                CornerRadius="15" 
+                                SnapsToDevicePixels="True">
+
+                                            <Path x:Name="BtnIcon" 
+                                  Data="M2,2 L18,18 M18,2 L2,18" 
+                                  Stroke="#A0A0B8" 
+                                  StrokeThickness="3.5" 
+                                  StrokeStartLineCap="Round" 
+                                  StrokeEndLineCap="Round" 
+                                  Width="12" Height="12" 
+                                  Stretch="Uniform" 
+                                  HorizontalAlignment="Center" 
+                                  VerticalAlignment="Center"/>
                                         </Border>
+
                                         <ControlTemplate.Triggers>
                                             <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter TargetName="BtnBorder" Property="Background" Value="#dddd"/>
+                                                <Setter TargetName="BtnBorder" Property="Background" Value="#f59924"/>
+                                                <Setter TargetName="BtnIcon" Property="Stroke" Value="White"/>
+                                            </Trigger>
+                                            <Trigger Property="IsPressed" Value="True">
+                                                <Setter TargetName="BtnBorder" Property="Background" Value="#f7b063"/>
+                                                <Setter TargetName="BtnIcon" Property="Stroke" Value="#7f4506"/>
                                             </Trigger>
                                         </ControlTemplate.Triggers>
                                     </ControlTemplate>
@@ -139,18 +158,17 @@
                 </Button>
 
 
-
                 <Border x:Name="ContentPanels"
-        Grid.Column="0"
-        CornerRadius="30"
-        Margin="10,0,398,0"
-        Padding="35,35,35,35"
-        VerticalAlignment="Center"
-        Grid.ColumnSpan="2"
-        Height="630"
-        BorderBrush="#25FFFFFF"
-        BorderThickness="0"
-        Background="Transparent">
+                        Grid.Column="0"
+                        CornerRadius="30"
+                        Margin="10,0,398,0"
+                        Padding="35,35,35,35"
+                        VerticalAlignment="Center"
+                        Grid.ColumnSpan="2"
+                        Height="630"
+                        BorderBrush="#25FFFFFF"
+                        BorderThickness="0"
+                        Background="Transparent">
 
                     <Grid>
                         <!-- Blur recortado con OpacityMask redondeada -->
@@ -232,8 +250,8 @@
                                                         <ControlTemplate.Triggers>
                                                             <Trigger Property="IsFocused" Value="True">
                                                                 <Setter TargetName="TextBorder" Property="Background" Value="{DynamicResource InputFocusBgColor}"/>
-                                                                <Setter TargetName="TextBorder" Property="BorderBrush" Value="#f49825"/>
-                                                                <Setter TargetName="UserIcon" Property="Fill" Value="#f49825"/>
+                                                                <Setter TargetName="TextBorder" Property="BorderBrush" Value="#2F80ED"/>
+                                                                <Setter TargetName="UserIcon" Property="Fill" Value="#2F80ED"/>
                                                             </Trigger>
                                                         </ControlTemplate.Triggers>
                                                     </ControlTemplate>

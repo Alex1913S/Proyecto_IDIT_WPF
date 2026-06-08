@@ -18,12 +18,13 @@ namespace Presentación
         private readonly string _rol;
         private readonly string _cargo;
         private readonly byte[] _foto;
+        private readonly int _colaboradorId;
 
         private bool isDarkMode = true;
         private bool isSidebarCollapsed = false;
 
         // CONSTRUCTOR PRINCIPAL: Invocado desde la pantalla de Login
-        public Dashboard(string username, string accesskey, string rol, string Company_Position, byte[] PictureBPhoto)
+        public Dashboard(string username, string accesskey, string rol, string Company_Position, byte[] PictureBPhoto, int colaboradorId)
         {
             InitializeComponent();
 
@@ -33,14 +34,16 @@ namespace Presentación
             _rol = rol;
             _cargo = Company_Position;
             _foto = PictureBPhoto;
+            _colaboradorId = colaboradorId;
 
             // Suscribir al evento de carga de la UI
             this.Loaded += Dashboard_Loaded;
         }
 
         // CONSTRUCTOR SECUNDARIO: Mantiene compatibilidad con el diseñador visual de Visual Studio
-        public Dashboard() : this("Usuario", "Demo", "Administrador", "Desarrollador TI", null)
+        public Dashboard() : this("Usuario", "Demo", "Administrador", "Desarrollador TI", null, 0)
         {
+            // El '0' al final cubre el parámetro requerido 'colaboradorId'
         }
 
         // Asignación de credenciales dinámicas al inicializar la ventana
@@ -59,6 +62,12 @@ namespace Presentación
             {
                 TxtUserInitials.Text = _nombre.Substring(0, Math.Min(2, _nombre.Length)).ToUpper();
             }
+
+            // ASIGNAR FECHA REAL: Formato exacto "Lunes, 08 de junio de 2026"
+            var culturaEspanol = new System.Globalization.CultureInfo("es-ES");
+            string fechaFormateada = DateTime.Now.ToString("dddd, dd 'de' MMMM 'de' yyyy", culturaEspanol);
+            LblDate.Text = char.ToUpper(fechaFormateada[0]) + fechaFormateada.Substring(1);
+
 
             // Carga la imagen binaria si existe
             CargarFotoPerfil();
@@ -100,10 +109,9 @@ namespace Presentación
             }
         }
 
-        // =================================================================
+
         // HELPER DE NAVEGACIÓN CENTRAL
         // Toda la navegación pasa por aquí — nunca tocar ContenedorPrincipal
-        // =================================================================
         private void NavegaA(UserControl control)
         {
             if (control == null)
@@ -122,9 +130,7 @@ namespace Presentación
             }
         }
 
-        // =================================================================
         // NAVEGACIÓN DESDE EL MENÚ
-        // =================================================================
         private void BtnInicio_Click(object sender, RoutedEventArgs e)
         {
             NavegaA(null);
@@ -145,9 +151,14 @@ namespace Presentación
             NavegaA(new Employee_Viewer());
         }
 
-        // =================================================================
+        // En Dashboard.xaml.cs, dentro de BtnGestorContrasenas_Click (o el botón que uses):
+        private void BtnGestorContrasenas_Click(object sender, RoutedEventArgs e)
+        {
+            NavegaA(new GestorContrasenas(_colaboradorId)); // pasa el ID del usuario logueado
+        }
+
+
         // COLAPSO DEL SIDEBAR
-        // =================================================================
         private void BtnToggleSidebar_Click(object sender, RoutedEventArgs e)
         {
             if (!isSidebarCollapsed)
@@ -340,12 +351,11 @@ namespace Presentación
 
         private void CloseWindow_Click(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown();
+            Environment.Exit(0);
         }
 
         private void LogOut_Click(object sender, RoutedEventArgs e)
         {
-            new Login().Show();
             this.Close();
         }
 

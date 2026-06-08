@@ -103,7 +103,8 @@ namespace Presentación
                     resultado.Apellidos.Split(' ')[0],
                     resultado.Rol,
                     resultado.Cargo,
-                    resultado.Foto
+                    resultado.Foto,
+                    resultado.ColaboradorID
                 );
 
                 this.Hide();
