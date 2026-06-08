@@ -42,7 +42,6 @@ namespace Presentación
 
         private void Dashboard_Loaded(object sender, RoutedEventArgs e)
         {
-            // SOLUCIÓN AL CRASH EN TIEMPO DE DISEÑO DE VISUAL STUDIO
             if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(this)) return;
 
             if (this.TxtUserName != null)
@@ -52,9 +51,7 @@ namespace Presentación
                 TxtUserRole.Text = $"{_rol} / {_cargo}";
 
             if (this.TxtUserInitials != null && !string.IsNullOrWhiteSpace(_nombre))
-            {
                 TxtUserInitials.Text = _nombre.Substring(0, Math.Min(2, _nombre.Length)).ToUpper();
-            }
 
             var culturaEspanol = new System.Globalization.CultureInfo("es-ES");
             string fechaFormateada = DateTime.Now.ToString("dddd, dd 'de' MMMM 'de' yyyy", culturaEspanol);
@@ -95,7 +92,6 @@ namespace Presentación
             }
         }
 
-        // HELPER DE NAVEGACIÓN CENTRAL CORREGIDO (Cambia el título del header de forma dinámica)
         private void NavegaA(UserControl control, string tituloSeccion = "Panel de Control")
         {
             if (LblMainTitle != null) LblMainTitle.Text = tituloSeccion;
@@ -115,29 +111,19 @@ namespace Presentación
         }
 
         private void BtnInicio_Click(object sender, RoutedEventArgs e)
-        {
-            NavegaA(null, "Panel de Control");
-        }
+            => NavegaA(null, "Panel de Control");
 
         private void BtnVerTodosActivos_Click(object sender, RoutedEventArgs e)
-        {
-            NavegaA(new See_Assets(), "Inventario de Activos");
-        }
+            => NavegaA(new See_Assets(), "Inventario de Activos");
 
         private void BtnNuevoActivo_Click(object sender, RoutedEventArgs e)
-        {
-            NavegaA(new View_Create_Assets(), "Registrar Nuevo Activo");
-        }
+            => NavegaA(new View_Create_Assets(), "Registrar Nuevo Activo");
 
         private void BtnEmpleado_Click(object sender, RoutedEventArgs e)
-        {
-            NavegaA(new Employee_Viewer(), "Gestión de Colaboradores");
-        }
+            => NavegaA(new Employee_Viewer(), "Gestión de Colaboradores");
 
         private void BtnGestorContrasenas_Click(object sender, RoutedEventArgs e)
-        {
-            NavegaA(new GestorContrasenas(_colaboradorId), "Gestor de Contraseñas Seguras");
-        }
+            => NavegaA(new GestorContrasenas(_colaboradorId), "Gestor de Contraseñas Seguras");
 
         private void BtnToggleSidebar_Click(object sender, RoutedEventArgs e)
         {
@@ -211,9 +197,7 @@ namespace Presentación
         }
 
         private void BtnWorkspaceSelector_Click(object sender, RoutedEventArgs e)
-        {
-            PopupWorkspace.IsOpen = !PopupWorkspace.IsOpen;
-        }
+            => PopupWorkspace.IsOpen = !PopupWorkspace.IsOpen;
 
         private void WorkspaceItem_Click(object sender, RoutedEventArgs e)
         {
@@ -233,103 +217,322 @@ namespace Presentación
             }
         }
 
-        // TEMA CLARO / OSCURO TOTALMENTE CORREGIDO
+        // ═══════════════════════════════════════════════════════════════════════════
+        // MODO CLARO / OSCURO
+        // Cambios aplicados:
+        //   - Sidebar → azul #4B93FF (modo claro) con botones blancos + texto azul
+        //   - Cards (1-4) → efecto relieve blanco semitransparente
+        //   - GridContainerBorder, TypesContainerBorder, MapContainerBorder → mismo relieve
+        //   - TxtC1-TxtC4 → color oscuro visible en modo claro
+        //   - Zona del contenedor principal sigue blanca (#F4F6F9)
+        // ═══════════════════════════════════════════════════════════════════════════
         private void ThemeToggle_Click(object sender, RoutedEventArgs e)
         {
             var themeIcon = (Path)BtnThemeToggle.Template.FindName("ThemeIcon", BtnThemeToggle);
             var bc = new BrushConverter();
 
+            // Arrays de controles para manipulación masiva
             var txtCategorias = new[] { TxtT1, TxtT2, TxtT3, TxtT4, TxtT5, TxtT6 };
             var valCategorias = new[] { ValT1, ValT2, ValT3, ValT4, ValT5, ValT6 };
             var axisLabels = new[] { AxisL1, AxisL2, AxisL3, AxisL4, AxisL5, AxisL6 };
             var whiteBars = new[] { Bar1, Bar3, Bar5 };
 
+            // Cards contenedoras de KPI
+            var kpiCards = new[] { Card1, Card2, Card3, Card4 };
+
+            // TxtC (títulos de KPI) y NumC (valores de KPI)
+            var kpiTitles = new[] { TxtC1, TxtC2, TxtC3, TxtC4 };
+            var kpiNumbers = new[] { NumC1, NumC2, NumC3, NumC4 };
+
+            // Paneles de contenido (chart, categorías, mapa)
+            var contentPanels = new[] { GridContainerBorder, TypesContainerBorder, MapContainerBorder };
+
             if (isDarkMode)
             {
+                // ════════════ MODO CLARO ════════════
+
+                // ── Fondo ventana principal ──────────────────────────────────
                 MainWindowBorder.Background = (SolidColorBrush)bc.ConvertFromString("#F4F6F9");
-                SidebarBorder.Background = (SolidColorBrush)bc.ConvertFromString("#FFFFFF");
-                SubmenuActivos.Background = (SolidColorBrush)bc.ConvertFromString("#F8F9FA");
-                SubmenuActivos.BorderBrush = (SolidColorBrush)bc.ConvertFromString("#CBD5E1");
+                MainWindowBorder.BorderBrush = (SolidColorBrush)bc.ConvertFromString("#CBD5E1");
 
-                Card1.Background = Brushes.White; Card2.Background = Brushes.White;
-                Card3.Background = Brushes.White; Card4.Background = Brushes.White;
+                // ── Sidebar AZUL con íconos blancos ──────────────────────────
+                SidebarBorder.Background = (SolidColorBrush)bc.ConvertFromString("#4B93FF");
 
-                GridContainerBorder.Background = Brushes.White;
-                TypesContainerBorder.Background = Brushes.White;
-                MapContainerBorder.Background = Brushes.White;
-                TimeFilterPanel.Background = (SolidColorBrush)bc.ConvertFromString("#F1F5F9");
+                // Texto del usuario en sidebar → blanco
+                TxtUserName.Foreground = Brushes.White;
+                TxtUserRole.Foreground = (SolidColorBrush)bc.ConvertFromString("#D6E8FF");
 
-                SolidColorBrush lt = (SolidColorBrush)bc.ConvertFromString("#22223B");
-                SolidColorBrush greyText = (SolidColorBrush)bc.ConvertFromString("#4A5568");
-                SolidColorBrush darkGreyBars = (SolidColorBrush)bc.ConvertFromString("#718096");
+                // Ícono de tema → blanco
+                if (themeIcon != null) themeIcon.Fill = Brushes.White;
 
-                LblMainTitle.Foreground = lt; TxtUserName.Foreground = lt;
-                LblChartTitle.Foreground = lt; LblTypesTitle.Foreground = lt;
-                TxtReg1.Foreground = lt; TxtReg2.Foreground = lt; TxtReg3.Foreground = lt;
-                TxtUserRole.Foreground = greyText;
+                // Botones del sidebar → fondo blanco semitransparente, texto blanco
+                AplicarEstilosBotonesSidebar(MenuStackPanel, modoClaro: true);
 
-                var txtSelSub = (TextBlock)BtnWorkspaceSelector.Template.FindName("TxtCurrentSub", BtnWorkspaceSelector);
-                if (txtSelSub != null) txtSelSub.Foreground = greyText;
+                // Íconos de los botones del sidebar → blanco
+                AplicarColorIconosSidebar(MenuStackPanel, Brushes.White);
 
-                // Corregir la invisibilidad masiva de etiquetas en Modo Claro
-                foreach (var t in txtCategorias) if (t != null) t.Foreground = lt;
+                // Submenú activos → azul más oscuro
+                SubmenuActivos.Background = (SolidColorBrush)bc.ConvertFromString("#3A7FE0");
+                SubmenuActivos.BorderBrush = (SolidColorBrush)bc.ConvertFromString("#2563EB");
+
+                // ── KPI Cards → glassmorphism blanco (relieve) ────────────────
+                var cardLightBg = (SolidColorBrush)bc.ConvertFromString("#E8F0FF");
+                var cardLightBorder = (SolidColorBrush)bc.ConvertFromString("#BFCFE8");
+
+                foreach (var card in kpiCards)
+                {
+                    card.Background = cardLightBg;
+                    card.BorderBrush = cardLightBorder;
+                    card.BorderThickness = new Thickness(1);
+                    card.Effect = new System.Windows.Media.Effects.DropShadowEffect
+                    {
+                        BlurRadius = 18,
+                        ShadowDepth = 5,
+                        Opacity = 0.18,
+                        Color = Color.FromRgb(0x4B, 0x93, 0xFF),
+                        Direction = 270
+                    };
+                }
+
+                // TxtC1-4 → color oscuro, visible sobre fondo claro
+                foreach (var t in kpiTitles)
+                    if (t != null) t.Foreground = (SolidColorBrush)bc.ConvertFromString("#1E3A5F");
+
+                // NumC1-4 → azul oscuro
+                foreach (var n in kpiNumbers)
+                    if (n != null) n.Foreground = (SolidColorBrush)bc.ConvertFromString("#22223B");
+
+                // ── Paneles de contenido (chart, categorías, mapa) → relieve blanco ──
+                var panelLightBg = (SolidColorBrush)bc.ConvertFromString("#EDF2FF");
+                var panelLightBorder = (SolidColorBrush)bc.ConvertFromString("#C3D3F0");
+
+                foreach (var panel in contentPanels)
+                {
+                    panel.Background = panelLightBg;
+                    panel.BorderBrush = panelLightBorder;
+                    panel.BorderThickness = new Thickness(1);
+                    panel.Effect = new System.Windows.Media.Effects.DropShadowEffect
+                    {
+                        BlurRadius = 20,
+                        ShadowDepth = 6,
+                        Opacity = 0.16,
+                        Color = Color.FromRgb(0x4B, 0x93, 0xFF),
+                        Direction = 270
+                    };
+                }
+
+                // ── Textos dentro de los paneles ─────────────────────────────
+                SolidColorBrush darkText = (SolidColorBrush)bc.ConvertFromString("#1E3A5F");
+                SolidColorBrush greyText = (SolidColorBrush)bc.ConvertFromString("#4A6080");
+                SolidColorBrush darkGreyBars = (SolidColorBrush)bc.ConvertFromString("#4B93FF");
+
+                LblMainTitle.Foreground = darkText;
+                LblDate.Foreground = greyText;
+                LblChartTitle.Foreground = darkText;
+                LblChartSub.Foreground = greyText;
+                LblTypesTitle.Foreground = darkText;
+
+                TxtReg1.Foreground = darkText;
+                TxtReg2.Foreground = darkText;
+                TxtReg3.Foreground = darkText;
+
+                foreach (var t in txtCategorias) if (t != null) t.Foreground = darkText;
                 foreach (var v in valCategorias) if (v != null) v.Foreground = greyText;
                 foreach (var axis in axisLabels) if (axis != null) axis.Foreground = greyText;
-                foreach (var bar in whiteBars) if (bar != null) bar.Background = darkGreyBars; // Cambia barras blancas a gris oscuro
 
+                // Barras blancas → azul visible sobre fondo claro
+                foreach (var bar in whiteBars) if (bar != null) bar.Background = darkGreyBars;
+
+                // TimeFilter panel
+                TimeFilterPanel.Background = (SolidColorBrush)bc.ConvertFromString("#D6E4FF");
+
+                // ── Workspace selector ───────────────────────────────────────
                 BtnWorkspaceSelector.Background = Brushes.White;
+                BtnWorkspaceSelector.BorderBrush = (SolidColorBrush)bc.ConvertFromString("#CBD5E1");
                 PopupBorder.Background = Brushes.White;
                 TxtPopupHeader.Foreground = (SolidColorBrush)bc.ConvertFromString("#6C757D");
                 BtnCloseWindow.Background = (SolidColorBrush)bc.ConvertFromString("#E2E8F0");
 
                 var txtSel = (TextBlock)BtnWorkspaceSelector.Template.FindName("TxtCurrentWorkspace", BtnWorkspaceSelector);
-                if (txtSel != null) txtSel.Foreground = lt;
-                if (themeIcon != null) themeIcon.Fill = lt;
+                var txtSelSub = (TextBlock)BtnWorkspaceSelector.Template.FindName("TxtCurrentSub", BtnWorkspaceSelector);
+                if (txtSel != null) txtSel.Foreground = darkText;
+                if (txtSelSub != null) txtSelSub.Foreground = greyText;
 
-                MainWindowBorder.BorderBrush = (SolidColorBrush)bc.ConvertFromString("#CBD5E1");
-                BtnWorkspaceSelector.BorderBrush = (SolidColorBrush)bc.ConvertFromString("#CBD5E1");
                 isDarkMode = false;
             }
             else
             {
+                // ════════════ MODO OSCURO (restaurar) ════════════
+
                 MainWindowBorder.Background = (SolidColorBrush)bc.ConvertFromString("#060621");
+                MainWindowBorder.BorderBrush = Brushes.White;
+
+                // Sidebar oscuro
                 SidebarBorder.Background = (SolidColorBrush)bc.ConvertFromString("#0b0b2d");
+
+                TxtUserName.Foreground = Brushes.White;
+                TxtUserRole.Foreground = (SolidColorBrush)bc.ConvertFromString("#A0A0B8");
+
+                if (themeIcon != null) themeIcon.Fill = (SolidColorBrush)bc.ConvertFromString("#A0A0B8");
+
+                AplicarEstilosBotonesSidebar(MenuStackPanel, modoClaro: false);
+                AplicarColorIconosSidebar(MenuStackPanel, (SolidColorBrush)bc.ConvertFromString("#A0A0B8"));
+
                 SubmenuActivos.Background = (SolidColorBrush)bc.ConvertFromString("#090924");
                 SubmenuActivos.BorderBrush = Brushes.White;
 
-                Card1.Background = (SolidColorBrush)bc.ConvertFromString("#0b0b2d");
-                Card2.Background = (SolidColorBrush)bc.ConvertFromString("#0b0b2d");
-                Card3.Background = (SolidColorBrush)bc.ConvertFromString("#0b0b2d");
-                Card4.Background = (SolidColorBrush)bc.ConvertFromString("#0b0b2d");
+                // KPI Cards → modo oscuro original
+                var cardDarkBg = (SolidColorBrush)bc.ConvertFromString("#CC0b0b2d");
+                var cardDarkBorder = (SolidColorBrush)bc.ConvertFromString("#25FFFFFF");
 
-                GridContainerBorder.Background = (SolidColorBrush)bc.ConvertFromString("#0b0b2d");
-                TypesContainerBorder.Background = (SolidColorBrush)bc.ConvertFromString("#0b0b2d");
-                MapContainerBorder.Background = (SolidColorBrush)bc.ConvertFromString("#0b0b2d");
-                TimeFilterPanel.Background = (SolidColorBrush)bc.ConvertFromString("#151538");
+                var kpiCards2 = new[] { Card1, Card2, Card3, Card4 };
+                foreach (var card in kpiCards2)
+                {
+                    card.Background = cardDarkBg;
+                    card.BorderBrush = cardDarkBorder;
+                    card.Effect = new System.Windows.Media.Effects.DropShadowEffect
+                    {
+                        BlurRadius = 18,
+                        ShadowDepth = 4,
+                        Opacity = 0.35,
+                        Color = Color.FromRgb(0x00, 0x00, 0x20),
+                        Direction = 270
+                    };
+                }
 
-                LblMainTitle.Foreground = Brushes.White; TxtUserName.Foreground = Brushes.White;
-                LblChartTitle.Foreground = Brushes.White; LblTypesTitle.Foreground = Brushes.White;
-                TxtReg1.Foreground = Brushes.White; TxtReg2.Foreground = Brushes.White; TxtReg3.Foreground = Brushes.White;
-                TxtUserRole.Foreground = (SolidColorBrush)bc.ConvertFromString("#A0A0B8");
+                // TxtC y NumC → modo oscuro
+                var kpiTitles2 = new[] { TxtC1, TxtC2, TxtC3, TxtC4 };
+                var kpiNumbers2 = new[] { NumC1, NumC2, NumC3, NumC4 };
+                foreach (var t in kpiTitles2) if (t != null) t.Foreground = (SolidColorBrush)bc.ConvertFromString("#A0A0B8");
+                foreach (var n in kpiNumbers2) if (n != null) n.Foreground = Brushes.White;
 
-                var txtSelSub = (TextBlock)BtnWorkspaceSelector.Template.FindName("TxtCurrentSub", BtnWorkspaceSelector);
-                if (txtSelSub != null) txtSelSub.Foreground = (SolidColorBrush)bc.ConvertFromString("#A0A0B8");
+                // Paneles de contenido → modo oscuro
+                var panelDarkBg = (SolidColorBrush)bc.ConvertFromString("#CC0b0b2d");
+                var panelDarkBorder = (SolidColorBrush)bc.ConvertFromString("#25FFFFFF");
+
+                var contentPanels2 = new[] { GridContainerBorder, TypesContainerBorder, MapContainerBorder };
+                foreach (var panel in contentPanels2)
+                {
+                    panel.Background = panelDarkBg;
+                    panel.BorderBrush = panelDarkBorder;
+                    panel.Effect = new System.Windows.Media.Effects.DropShadowEffect
+                    {
+                        BlurRadius = 20,
+                        ShadowDepth = 5,
+                        Opacity = 0.4,
+                        Color = Color.FromRgb(0x00, 0x00, 0x20),
+                        Direction = 270
+                    };
+                }
+
+                LblMainTitle.Foreground = Brushes.White;
+                LblDate.Foreground = (SolidColorBrush)bc.ConvertFromString("#A0A0B8");
+                LblChartTitle.Foreground = Brushes.White;
+                LblChartSub.Foreground = (SolidColorBrush)bc.ConvertFromString("#A0A0B8");
+                LblTypesTitle.Foreground = Brushes.White;
+
+                TxtReg1.Foreground = Brushes.White;
+                TxtReg2.Foreground = Brushes.White;
+                TxtReg3.Foreground = Brushes.White;
 
                 foreach (var t in txtCategorias) if (t != null) t.Foreground = Brushes.White;
                 foreach (var v in valCategorias) if (v != null) v.Foreground = (SolidColorBrush)bc.ConvertFromString("#A0A0B8");
                 foreach (var axis in axisLabels) if (axis != null) axis.Foreground = (SolidColorBrush)bc.ConvertFromString("#A0A0B8");
-                foreach (var bar in whiteBars) if (bar != null) bar.Background = Brushes.White; // Regresa barras a blanco puro
+                foreach (var bar in whiteBars) if (bar != null) bar.Background = Brushes.White;
+
+                TimeFilterPanel.Background = (SolidColorBrush)bc.ConvertFromString("#151538");
 
                 BtnWorkspaceSelector.Background = (SolidColorBrush)bc.ConvertFromString("#0b0b2d");
+                BtnWorkspaceSelector.BorderBrush = Brushes.White;
                 PopupBorder.Background = (SolidColorBrush)bc.ConvertFromString("#0b0b2d");
                 TxtPopupHeader.Foreground = (SolidColorBrush)bc.ConvertFromString("#A0A0B8");
                 BtnCloseWindow.Background = (SolidColorBrush)bc.ConvertFromString("#151538");
-                MainWindowBorder.BorderBrush = Brushes.White;
-                BtnWorkspaceSelector.BorderBrush = Brushes.White;
 
-                if (themeIcon != null) themeIcon.Fill = (SolidColorBrush)bc.ConvertFromString("#A0A0B8");
+                var txtSel = (TextBlock)BtnWorkspaceSelector.Template.FindName("TxtCurrentWorkspace", BtnWorkspaceSelector);
+                var txtSelSub = (TextBlock)BtnWorkspaceSelector.Template.FindName("TxtCurrentSub", BtnWorkspaceSelector);
+                if (txtSel != null) txtSel.Foreground = Brushes.White;
+                if (txtSelSub != null) txtSelSub.Foreground = (SolidColorBrush)bc.ConvertFromString("#A0A0B8");
+
                 isDarkMode = true;
             }
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════════
+        // HELPER: Aplica estilos visuales a los botones del sidebar según el modo
+        // En modo claro: fondo blanco semitransparente, texto/ícono en azul oscuro
+        // En modo oscuro: restaura transparente con foreground #A0A0B8
+        // ═══════════════════════════════════════════════════════════════════════════
+        private void AplicarEstilosBotonesSidebar(StackPanel container, bool modoClaro)
+        {
+            var bc = new BrushConverter();
+
+            foreach (var child in container.Children)
+            {
+                if (child is Button btn)
+                {
+                    if (modoClaro)
+                    {
+                        // Fondo: blanco semitransparente para dar sensación de botón sobre fondo azul
+                        btn.Background = (SolidColorBrush)bc.ConvertFromString("#20FFFFFF");
+                        btn.Foreground = Brushes.White;
+                    }
+                    else
+                    {
+                        btn.Background = Brushes.Transparent;
+                        btn.Foreground = (SolidColorBrush)bc.ConvertFromString("#A0A0B8");
+                    }
+                }
+
+                // Submenú también
+                if (child is Border border && border.Child is StackPanel subPanel)
+                {
+                    if (modoClaro)
+                        border.Background = (SolidColorBrush)bc.ConvertFromString("#3A7FE0");
+
+                    foreach (var sub in subPanel.Children)
+                    {
+                        if (sub is Button subBtn)
+                        {
+                            subBtn.Foreground = modoClaro ? Brushes.White
+                                : (SolidColorBrush)bc.ConvertFromString("#A0A0B8");
+                        }
+                    }
+                }
+            }
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════════
+        // HELPER: Cambia el color de los íconos (Path) dentro de los botones del sidebar
+        // Usa reflection sobre el ContentTemplate del botón para encontrar el Path
+        // ═══════════════════════════════════════════════════════════════════════════
+        private void AplicarColorIconosSidebar(StackPanel container, Brush color)
+        {
+            foreach (var child in container.Children)
+            {
+                if (child is Button btn && btn.IsLoaded)
+                {
+                    // Buscar el ContentPresenter nombrado "IconPresenter" en el template
+                    var iconPresenter = btn.Template?.FindName("IconPresenter", btn) as ContentPresenter;
+                    if (iconPresenter != null)
+                    {
+                        // Recorrer el visual tree del ContentPresenter buscando Path
+                        var path = EncontrarPath(iconPresenter);
+                        if (path != null) path.Fill = color;
+                    }
+                }
+            }
+        }
+
+        private Path EncontrarPath(DependencyObject padre)
+        {
+            for (int i = 0; i < System.Windows.Media.VisualTreeHelper.GetChildrenCount(padre); i++)
+            {
+                var hijo = System.Windows.Media.VisualTreeHelper.GetChild(padre, i);
+                if (hijo is Path path) return path;
+                var resultado = EncontrarPath(hijo);
+                if (resultado != null) return resultado;
+            }
+            return null;
         }
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -338,14 +541,10 @@ namespace Presentación
         }
 
         private void CloseWindow_Click(object sender, RoutedEventArgs e)
-        {
-            Environment.Exit(0);
-        }
+            => Environment.Exit(0);
 
         private void LogOut_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
+            => this.Close();
 
         private void CargarKPIs()
         {
