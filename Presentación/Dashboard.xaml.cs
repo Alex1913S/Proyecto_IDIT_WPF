@@ -231,54 +231,37 @@ namespace Presentación
             var themeIcon = (Path)BtnThemeToggle.Template.FindName("ThemeIcon", BtnThemeToggle);
             var bc = new BrushConverter();
 
-            // Arrays de controles para manipulación masiva
             var txtCategorias = new[] { TxtT1, TxtT2, TxtT3, TxtT4, TxtT5, TxtT6 };
             var valCategorias = new[] { ValT1, ValT2, ValT3, ValT4, ValT5, ValT6 };
             var axisLabels = new[] { AxisL1, AxisL2, AxisL3, AxisL4, AxisL5, AxisL6 };
             var whiteBars = new[] { Bar1, Bar3, Bar5 };
-
-            // Cards contenedoras de KPI
             var kpiCards = new[] { Card1, Card2, Card3, Card4 };
-
-            // TxtC (títulos de KPI) y NumC (valores de KPI)
             var kpiTitles = new[] { TxtC1, TxtC2, TxtC3, TxtC4 };
             var kpiNumbers = new[] { NumC1, NumC2, NumC3, NumC4 };
-
-            // Paneles de contenido (chart, categorías, mapa)
             var contentPanels = new[] { GridContainerBorder, TypesContainerBorder, MapContainerBorder };
 
             if (isDarkMode)
             {
                 // ════════════ MODO CLARO ════════════
 
-                // ── Fondo ventana principal ──────────────────────────────────
                 MainWindowBorder.Background = (SolidColorBrush)bc.ConvertFromString("#F4F6F9");
                 MainWindowBorder.BorderBrush = (SolidColorBrush)bc.ConvertFromString("#CBD5E1");
 
-                // ── Sidebar AZUL con íconos blancos ──────────────────────────
                 SidebarBorder.Background = (SolidColorBrush)bc.ConvertFromString("#4B93FF");
 
-                // Texto del usuario en sidebar → blanco
                 TxtUserName.Foreground = Brushes.White;
                 TxtUserRole.Foreground = (SolidColorBrush)bc.ConvertFromString("#D6E8FF");
 
-                // Ícono de tema → blanco
                 if (themeIcon != null) themeIcon.Fill = Brushes.White;
 
-                // Botones del sidebar → fondo blanco semitransparente, texto blanco
                 AplicarEstilosBotonesSidebar(MenuStackPanel, modoClaro: true);
-
-                // Íconos de los botones del sidebar → blanco
                 AplicarColorIconosSidebar(MenuStackPanel, Brushes.White);
 
-                // Submenú activos → azul más oscuro
                 SubmenuActivos.Background = (SolidColorBrush)bc.ConvertFromString("#3A7FE0");
                 SubmenuActivos.BorderBrush = (SolidColorBrush)bc.ConvertFromString("#2563EB");
 
-                // ── KPI Cards → glassmorphism blanco (relieve) ────────────────
                 var cardLightBg = (SolidColorBrush)bc.ConvertFromString("#E8F0FF");
                 var cardLightBorder = (SolidColorBrush)bc.ConvertFromString("#BFCFE8");
-
                 foreach (var card in kpiCards)
                 {
                     card.Background = cardLightBg;
@@ -294,18 +277,11 @@ namespace Presentación
                     };
                 }
 
-                // TxtC1-4 → color oscuro, visible sobre fondo claro
-                foreach (var t in kpiTitles)
-                    if (t != null) t.Foreground = (SolidColorBrush)bc.ConvertFromString("#1E3A5F");
+                foreach (var t in kpiTitles) if (t != null) t.Foreground = (SolidColorBrush)bc.ConvertFromString("#1E3A5F");
+                foreach (var n in kpiNumbers) if (n != null) n.Foreground = (SolidColorBrush)bc.ConvertFromString("#22223B");
 
-                // NumC1-4 → azul oscuro
-                foreach (var n in kpiNumbers)
-                    if (n != null) n.Foreground = (SolidColorBrush)bc.ConvertFromString("#22223B");
-
-                // ── Paneles de contenido (chart, categorías, mapa) → relieve blanco ──
                 var panelLightBg = (SolidColorBrush)bc.ConvertFromString("#EDF2FF");
                 var panelLightBorder = (SolidColorBrush)bc.ConvertFromString("#C3D3F0");
-
                 foreach (var panel in contentPanels)
                 {
                     panel.Background = panelLightBg;
@@ -321,7 +297,6 @@ namespace Presentación
                     };
                 }
 
-                // ── Textos dentro de los paneles ─────────────────────────────
                 SolidColorBrush darkText = (SolidColorBrush)bc.ConvertFromString("#1E3A5F");
                 SolidColorBrush greyText = (SolidColorBrush)bc.ConvertFromString("#4A6080");
                 SolidColorBrush darkGreyBars = (SolidColorBrush)bc.ConvertFromString("#4B93FF");
@@ -331,7 +306,6 @@ namespace Presentación
                 LblChartTitle.Foreground = darkText;
                 LblChartSub.Foreground = greyText;
                 LblTypesTitle.Foreground = darkText;
-
                 TxtReg1.Foreground = darkText;
                 TxtReg2.Foreground = darkText;
                 TxtReg3.Foreground = darkText;
@@ -339,14 +313,10 @@ namespace Presentación
                 foreach (var t in txtCategorias) if (t != null) t.Foreground = darkText;
                 foreach (var v in valCategorias) if (v != null) v.Foreground = greyText;
                 foreach (var axis in axisLabels) if (axis != null) axis.Foreground = greyText;
-
-                // Barras blancas → azul visible sobre fondo claro
                 foreach (var bar in whiteBars) if (bar != null) bar.Background = darkGreyBars;
 
-                // TimeFilter panel
                 TimeFilterPanel.Background = (SolidColorBrush)bc.ConvertFromString("#D6E4FF");
 
-                // ── Workspace selector ───────────────────────────────────────
                 BtnWorkspaceSelector.Background = Brushes.White;
                 BtnWorkspaceSelector.BorderBrush = (SolidColorBrush)bc.ConvertFromString("#CBD5E1");
                 PopupBorder.Background = Brushes.White;
@@ -358,6 +328,10 @@ namespace Presentación
                 if (txtSel != null) txtSel.Foreground = darkText;
                 if (txtSelSub != null) txtSelSub.Foreground = greyText;
 
+                // ── Propagar tema a UserControls activos ─────────────────────
+                if (NavWorkspaceContent.Content is Employee_Viewer ev)
+                    ev.AplicarTema(true);
+
                 isDarkMode = false;
             }
             else
@@ -367,7 +341,6 @@ namespace Presentación
                 MainWindowBorder.Background = (SolidColorBrush)bc.ConvertFromString("#060621");
                 MainWindowBorder.BorderBrush = Brushes.White;
 
-                // Sidebar oscuro
                 SidebarBorder.Background = (SolidColorBrush)bc.ConvertFromString("#0b0b2d");
 
                 TxtUserName.Foreground = Brushes.White;
@@ -381,12 +354,9 @@ namespace Presentación
                 SubmenuActivos.Background = (SolidColorBrush)bc.ConvertFromString("#090924");
                 SubmenuActivos.BorderBrush = Brushes.White;
 
-                // KPI Cards → modo oscuro original
                 var cardDarkBg = (SolidColorBrush)bc.ConvertFromString("#CC0b0b2d");
                 var cardDarkBorder = (SolidColorBrush)bc.ConvertFromString("#25FFFFFF");
-
-                var kpiCards2 = new[] { Card1, Card2, Card3, Card4 };
-                foreach (var card in kpiCards2)
+                foreach (var card in kpiCards)
                 {
                     card.Background = cardDarkBg;
                     card.BorderBrush = cardDarkBorder;
@@ -400,18 +370,12 @@ namespace Presentación
                     };
                 }
 
-                // TxtC y NumC → modo oscuro
-                var kpiTitles2 = new[] { TxtC1, TxtC2, TxtC3, TxtC4 };
-                var kpiNumbers2 = new[] { NumC1, NumC2, NumC3, NumC4 };
-                foreach (var t in kpiTitles2) if (t != null) t.Foreground = (SolidColorBrush)bc.ConvertFromString("#A0A0B8");
-                foreach (var n in kpiNumbers2) if (n != null) n.Foreground = Brushes.White;
+                foreach (var t in kpiTitles) if (t != null) t.Foreground = (SolidColorBrush)bc.ConvertFromString("#A0A0B8");
+                foreach (var n in kpiNumbers) if (n != null) n.Foreground = Brushes.White;
 
-                // Paneles de contenido → modo oscuro
                 var panelDarkBg = (SolidColorBrush)bc.ConvertFromString("#CC0b0b2d");
                 var panelDarkBorder = (SolidColorBrush)bc.ConvertFromString("#25FFFFFF");
-
-                var contentPanels2 = new[] { GridContainerBorder, TypesContainerBorder, MapContainerBorder };
-                foreach (var panel in contentPanels2)
+                foreach (var panel in contentPanels)
                 {
                     panel.Background = panelDarkBg;
                     panel.BorderBrush = panelDarkBorder;
@@ -430,7 +394,6 @@ namespace Presentación
                 LblChartTitle.Foreground = Brushes.White;
                 LblChartSub.Foreground = (SolidColorBrush)bc.ConvertFromString("#A0A0B8");
                 LblTypesTitle.Foreground = Brushes.White;
-
                 TxtReg1.Foreground = Brushes.White;
                 TxtReg2.Foreground = Brushes.White;
                 TxtReg3.Foreground = Brushes.White;
@@ -453,9 +416,14 @@ namespace Presentación
                 if (txtSel != null) txtSel.Foreground = Brushes.White;
                 if (txtSelSub != null) txtSelSub.Foreground = (SolidColorBrush)bc.ConvertFromString("#A0A0B8");
 
+                // ── Propagar tema a UserControls activos ─────────────────────
+                if (NavWorkspaceContent.Content is Employee_Viewer ev)
+                    ev.AplicarTema(false);
+
                 isDarkMode = true;
             }
         }
+
 
         // ═══════════════════════════════════════════════════════════════════════════
         // HELPER: Aplica estilos visuales a los botones del sidebar según el modo
