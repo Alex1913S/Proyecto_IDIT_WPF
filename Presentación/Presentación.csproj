@@ -27,10 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Assets\a1.jpg" />
-    <Resource Include="Assets\a2.png" />
-    <Resource Include="Assets\a3.png" />
-    <Resource Include="Assets\image_login_1.png" />
     <Resource Include="Assets\LoginIM.png" />
     <Resource Include="Assets\Recurso-1.ico" />
   </ItemGroup>
