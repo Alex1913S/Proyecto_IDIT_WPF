@@ -355,6 +355,26 @@ namespace Presentación
             }
         }
 
+        private void BtnNuevo_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void BtnSeleccionarFoto_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void BtnGuardar_Click(object sender, RoutedEventArgs e)
+        {
+            if (_paginaActual < _totalPaginas) { _paginaActual++; RenderizarPagina(); }
+        }
+
+        private void BtnCancelarForm_Click(object sender, RoutedEventArgs e)
+        {
+            if (_paginaActual < _totalPaginas) { _paginaActual++; RenderizarPagina(); }
+        }
+
         private void BtnExportarExcel_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Función de exportación a Excel pendiente de implementar.",

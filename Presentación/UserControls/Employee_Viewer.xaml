@@ -12,7 +12,7 @@
 
     <UserControl.Resources>
 
-        <!-- ══════════════════ SCROLLBAR CUSTOM (igual a See_Assets) ══════════════════ -->
+        <!-- ══════════════════ SCROLLBAR CUSTOM ══════════════════ -->
         <Style x:Key="ScrollBarLineButton" TargetType="RepeatButton">
             <Setter Property="Visibility" Value="Collapsed"/>
         </Style>
@@ -88,7 +88,7 @@
             </Style.Triggers>
         </Style>
 
-        <!-- ══════════════════ TAB FILTER (igual a See_Assets) ══════════════════ -->
+        <!-- ══════════════════ TAB FILTER ══════════════════ -->
         <Style x:Key="TabFilterButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Foreground" Value="#A0A0B8"/>
@@ -170,7 +170,6 @@
             <Setter Property="RowHeight" Value="52"/>
             <Setter Property="SelectionUnit" Value="FullRow"/>
         </Style>
-
         <Style TargetType="DataGridColumnHeader">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Foreground" Value="#A0A0B8"/>
@@ -181,13 +180,11 @@
             <Setter Property="BorderBrush" Value="#1F1F45"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
         </Style>
-
         <Style x:Key="CenterGridCellStyle" TargetType="TextBlock">
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Foreground" Value="White"/>
         </Style>
-
         <Style TargetType="DataGridRow">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Foreground" Value="White"/>
@@ -222,167 +219,402 @@
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="Bg" Property="Opacity" Value="0.85"/>
                             </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Bg" Property="Opacity" Value="0.4"/>
+                            </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
 
+        <!-- ══════════════════ INPUT MODERNO ══════════════════ -->
+        <Style x:Key="ModernInputStyle" TargetType="TextBox">
+            <Setter Property="Height" Value="34"/>
+            <Setter Property="Background" Value="#151538"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#3F3F6B"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="8,3"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="CaretBrush" Value="#E89A24"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="B" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6">
+                            <ScrollViewer x:Name="PART_ContentHost" Focusable="false"
+                                          HorizontalScrollBarVisibility="Hidden"
+                                          VerticalScrollBarVisibility="Hidden"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="B" Property="BorderBrush" Value="#E89A24"/>
+                            </Trigger>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter TargetName="B" Property="BorderBrush" Value="#E89A24"/>
+                                <Setter TargetName="B" Property="BorderThickness" Value="1.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ══════════════════ PASSWORD MODERNO ══════════════════ -->
+        <Style x:Key="ModernPasswordStyle" TargetType="PasswordBox">
+            <Setter Property="Height" Value="34"/>
+            <Setter Property="Background" Value="#151538"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#3F3F6B"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="8,3"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="PasswordBox">
+                        <Border x:Name="B" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6">
+                            <ScrollViewer x:Name="PART_ContentHost" Focusable="false"
+                                          HorizontalScrollBarVisibility="Hidden"
+                                          VerticalScrollBarVisibility="Hidden"
+                                          Margin="0,0,0,0"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter TargetName="B" Property="BorderBrush" Value="#E89A24"/>
+                                <Setter TargetName="B" Property="BorderThickness" Value="1.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ══════════════════ COMBO MODERNO ══════════════════ -->
+        <Style TargetType="ComboBoxItem">
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBoxItem">
+                        <Border x:Name="ItemBorder" Background="{TemplateBinding Background}"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ItemBorder" Property="Background" Value="#E89A24"/>
+                                <Setter Property="Foreground" Value="#060621"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="ItemBorder" Property="Background" Value="#3F3F6B"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <ControlTemplate x:Key="ComboToggleBtn" TargetType="ToggleButton">
+            <Border x:Name="Brd" Background="#151538" BorderBrush="#3F3F6B"
+                    BorderThickness="1" CornerRadius="6">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="28"/>
+                    </Grid.ColumnDefinitions>
+                    <Path x:Name="Arrow" Grid.Column="1" Fill="#A0A0B8"
+                          HorizontalAlignment="Center" VerticalAlignment="Center"
+                          Data="M 0 0 L 4 4 L 8 0 Z"/>
+                </Grid>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter TargetName="Brd" Property="BorderBrush" Value="#E89A24"/>
+                    <Setter TargetName="Arrow" Property="Fill" Value="#E89A24"/>
+                </Trigger>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter TargetName="Brd" Property="BorderBrush" Value="#E89A24"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        <Style x:Key="ModernComboStyle" TargetType="ComboBox">
+            <Setter Property="Height" Value="34"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#151538"/>
+            <Setter Property="BorderBrush" Value="#3F3F6B"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="8,0,0,0"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <ToggleButton x:Name="ToggleButton"
+                                          Template="{StaticResource ComboToggleBtn}"
+                                          Focusable="false"
+                                          IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"/>
+                            <ContentPresenter x:Name="ContentSite" IsHitTestVisible="False"
+                                              Content="{TemplateBinding SelectionBoxItem}"
+                                              Margin="{TemplateBinding Padding}"
+                                              VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                            <Popup x:Name="Popup" Placement="Bottom"
+                                   IsOpen="{TemplateBinding IsDropDownOpen}"
+                                   AllowsTransparency="True" Focusable="False"
+                                   PopupAnimation="Slide">
+                                <Grid x:Name="DropDown" SnapsToDevicePixels="True"
+                                      MinWidth="{TemplateBinding ActualWidth}"
+                                      MaxHeight="200">
+                                    <Border Background="#090924" BorderBrush="#3F3F6B"
+                                            BorderThickness="1" CornerRadius="6" Margin="0,3,0,0">
+                                        <ScrollViewer Margin="0,2" SnapsToDevicePixels="True">
+                                            <StackPanel IsItemsHost="True"
+                                                        KeyboardNavigation.DirectionalNavigation="Contained"/>
+                                        </ScrollViewer>
+                                    </Border>
+                                </Grid>
+                            </Popup>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ══════════════════ LABEL CAMPO ══════════════════ -->
+        <Style x:Key="FieldLabelStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="Foreground" Value="#3F3F6B"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="0,0,0,4"/>
+        </Style>
+
     </UserControl.Resources>
 
-    <!-- ══════════════════════════════════════════════════════════════
-         LAYOUT PRINCIPAL — dos columnas: panel lateral foto + tabla
-    ══════════════════════════════════════════════════════════════ -->
-    <Grid Background="Transparent">
+    <Grid x:Name="RootGrid" Background="Transparent">
         <Grid Margin="15,10,15,10">
             <Grid.ColumnDefinitions>
-                <!-- Panel lateral con foto y datos del colaborador seleccionado -->
-                <ColumnDefinition Width="220"/>
-                <!-- Separación -->
+                <!-- Panel lateral -->
+                <ColumnDefinition Width="240"/>
                 <ColumnDefinition Width="15"/>
-                <!-- Área principal: buscador + tabs + grid + paginador -->
+                <!-- Área principal -->
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
             <!-- ══════════════════════════════════════════════════════
-                 COLUMNA 0 — Panel lateral del colaborador seleccionado
+                 COLUMNA 0 — Panel lateral (detalle / formulario CRUD)
             ══════════════════════════════════════════════════════ -->
-            <Border Grid.Column="0" Background="#090924" CornerRadius="12"
+            <Border x:Name="PanelLateralBorder" Grid.Column="0" Background="#090924" CornerRadius="12"
                     BorderBrush="#151538" BorderThickness="1" Padding="15">
                 <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <!-- Foto circular -->
-                        <RowDefinition Height="Auto"/>
-                        <!-- Nombre -->
-                        <RowDefinition Height="Auto"/>
-                        <!-- Cargo -->
-                        <RowDefinition Height="Auto"/>
-                        <!-- Badge rol -->
-                        <RowDefinition Height="20"/>
-                        <RowDefinition Height="Auto"/>
-                        <!-- Datos detalle -->
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
-                        <!-- Botones acción -->
-                    </Grid.RowDefinitions>
 
-                    <!-- Foto circular -->
-                    <Border Grid.Row="0" Width="110" Height="110"
-                        CornerRadius="55" HorizontalAlignment="Center"
-                        BorderBrush="#E89A24" BorderThickness="2"
-                        Margin="0,0,0,12" Background="#151538"
-                        ClipToBounds="True">        
-                        <Grid>
-                            <Grid.OpacityMask>
-                                <VisualBrush>
-                                    <VisualBrush.Visual>
-                                        <Ellipse Width="110" Height="110" Fill="Black"/>
-                                    </VisualBrush.Visual>
-                                </VisualBrush>
-                            </Grid.OpacityMask>
-
-                            <!-- Avatar placeholder cuando no hay foto -->
-                            <TextBlock x:Name="TxtAvatarInicial"
-                               Text="?" FontSize="40" FontWeight="Bold"
-                               Foreground="#3F3F6B"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"/>
-                            <!-- Imagen cargada desde BD -->
-                            <Image x:Name="ImgFotoColaborador"
-                               Stretch="UniformToFill"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
-                               Visibility="Collapsed"/>
-                        </Grid>
-                    </Border>
-
-                    <!-- Nombre completo -->
-                    <TextBlock x:Name="TxtPanelNombre"
-                               Grid.Row="1"
-                               Text="Selecciona un colaborador"
-                               FontSize="14" FontWeight="Bold"
-                               Foreground="White"
-                               TextAlignment="Center"
-                               TextWrapping="Wrap"
-                               HorizontalAlignment="Center"
-                               Margin="0,0,0,4"/>
-
-                    <!-- Cargo -->
-                    <TextBlock x:Name="TxtPanelCargo"
-                               Grid.Row="2"
-                               Text="—"
-                               FontSize="12"
-                               Foreground="#A0A0B8"
-                               TextAlignment="Center"
-                               HorizontalAlignment="Center"
-                               Margin="0,0,0,8"/>
-
-                    <!-- Badge de Perfil/Rol -->
-                    <Border x:Name="BadgePerfil"
-                            Grid.Row="3"
-                            HorizontalAlignment="Center"
-                            Background="#1b1b4a"
-                            CornerRadius="10" Padding="10,4"
-                            Margin="0,0,0,0">
-                        <TextBlock x:Name="TxtPanelPerfil"
-                                   Text="—"
-                                   FontSize="11" FontWeight="Bold"
-                                   Foreground="#E89A24"/>
-                    </Border>
-
-                    <!-- Separador -->
-                    <Separator Grid.Row="4" Background="#1F1F45" Margin="0,10"/>
-
-                    <!-- Datos detalle -->
-                    <StackPanel Grid.Row="5" Margin="0,0,0,0">
-                        <!-- Cédula -->
-                        <StackPanel Margin="0,0,0,10">
-                            <TextBlock Text="Identificación" FontSize="10" Foreground="#3F3F6B" FontWeight="SemiBold"/>
-                            <TextBlock x:Name="TxtPanelCedula" Text="—" FontSize="13" Foreground="White" Margin="0,2,0,0"/>
-                        </StackPanel>
-                        <!-- Correo -->
-                        <StackPanel Margin="0,0,0,10">
-                            <TextBlock Text="Correo Corporativo" FontSize="10" Foreground="#3F3F6B" FontWeight="SemiBold"/>
-                            <TextBlock x:Name="TxtPanelCorreo" Text="—" FontSize="12" Foreground="#A0A0B8"
-                                       TextWrapping="Wrap" Margin="0,2,0,0"/>
-                        </StackPanel>
-                        <!-- Departamento -->
-                        <StackPanel Margin="0,0,0,10">
-                            <TextBlock Text="Departamento" FontSize="10" Foreground="#3F3F6B" FontWeight="SemiBold"/>
-                            <TextBlock x:Name="TxtPanelDepartamento" Text="—" FontSize="13" Foreground="White" Margin="0,2,0,0"/>
-                        </StackPanel>
-                        <!-- Estado -->
-                        <StackPanel Margin="0,0,0,10">
-                            <TextBlock Text="Estado" FontSize="10" Foreground="#3F3F6B" FontWeight="SemiBold"/>
-                            <Border x:Name="BadgeEstado" Background="#151538" CornerRadius="6"
-                                    Padding="8,3" HorizontalAlignment="Left" Margin="0,4,0,0">
-                                <TextBlock x:Name="TxtPanelEstado" Text="—" FontSize="12" FontWeight="SemiBold" Foreground="#A0A0B8"/>
+                    <!-- ══════════ VISTA DETALLE ══════════ -->
+                    <ScrollViewer x:Name="PanelDetalle" VerticalScrollBarVisibility="Auto">
+                        <StackPanel>
+                            <!-- Foto circular -->
+                            <Border Width="110" Height="110" CornerRadius="55"
+                                    HorizontalAlignment="Center"
+                                    BorderBrush="#E89A24" BorderThickness="2"
+                                    Margin="0,0,0,12" Background="#151538"
+                                    ClipToBounds="True">
+                                <Grid>
+                                    <Grid.OpacityMask>
+                                        <VisualBrush>
+                                            <VisualBrush.Visual>
+                                                <Ellipse Width="110" Height="110" Fill="Black"/>
+                                            </VisualBrush.Visual>
+                                        </VisualBrush>
+                                    </Grid.OpacityMask>
+                                    <TextBlock x:Name="TxtAvatarInicial" Text="?"
+                                               FontSize="40" FontWeight="Bold" Foreground="#3F3F6B"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <Image x:Name="ImgFotoColaborador" Stretch="UniformToFill"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"
+                                           Visibility="Collapsed"/>
+                                </Grid>
                             </Border>
-                        </StackPanel>
-                        <!-- Fecha de ingreso -->
-                        <StackPanel Margin="0,0,0,0">
-                            <TextBlock Text="Fecha de Ingreso" FontSize="10" Foreground="#3F3F6B" FontWeight="SemiBold"/>
-                            <TextBlock x:Name="TxtPanelFechaIngreso" Text="—" FontSize="13" Foreground="White" Margin="0,2,0,0"/>
-                        </StackPanel>
-                    </StackPanel>
 
-                    <!-- Botones de acción -->
-                    <StackPanel Grid.Row="7" Margin="0,12,0,0">
-                        <Button x:Name="BtnEditar"
-                                Content="Editar Colaborador"
-                                Style="{StaticResource ActionButtonStyle}"
-                                Background="#151538" Foreground="#E89A24"
-                                Margin="0,0,0,8"
-                                IsEnabled="False"
-                                Click="BtnEditar_Click"/>
-                        <Button x:Name="BtnEliminar"
-                                Content="Eliminar"
-                                Style="{StaticResource ActionButtonStyle}"
-                                Background="#2D1A22" Foreground="#E53E3E"
-                                IsEnabled="False"
-                                Click="BtnEliminar_Click"/>
-                    </StackPanel>
+                            <TextBlock x:Name="TxtPanelNombre" Text="Selecciona un colaborador"
+                                       FontSize="14" FontWeight="Bold" Foreground="White"
+                                       TextAlignment="Center" TextWrapping="Wrap"
+                                       HorizontalAlignment="Center" Margin="0,0,0,4"/>
+                            <TextBlock x:Name="TxtPanelCargo" Text="—" FontSize="12"
+                                       Foreground="#A0A0B8" TextAlignment="Center"
+                                       HorizontalAlignment="Center" Margin="0,0,0,8"/>
+
+                            <!-- Badge perfil -->
+                            <Border HorizontalAlignment="Center" Background="#1b1b4a"
+                                    CornerRadius="10" Padding="10,4" Margin="0,0,0,0">
+                                <TextBlock x:Name="TxtPanelPerfil" Text="—"
+                                           FontSize="11" FontWeight="Bold" Foreground="#E89A24"/>
+                            </Border>
+
+                            <Separator Background="#1F1F45" Margin="0,10"/>
+
+                            <!-- Datos detalle -->
+                            <StackPanel Margin="0,0,0,10">
+                                <TextBlock Text="Identificación" Style="{StaticResource FieldLabelStyle}"/>
+                                <TextBlock x:Name="TxtPanelCedula" Text="—" FontSize="13" Foreground="White" Margin="0,2,0,0"/>
+                            </StackPanel>
+                            <StackPanel Margin="0,0,0,10">
+                                <TextBlock Text="Correo Corporativo" Style="{StaticResource FieldLabelStyle}"/>
+                                <TextBlock x:Name="TxtPanelCorreo" Text="—" FontSize="12"
+                                           Foreground="#A0A0B8" TextWrapping="Wrap" Margin="0,2,0,0"/>
+                            </StackPanel>
+                            <StackPanel Margin="0,0,0,10">
+                                <TextBlock Text="Departamento" Style="{StaticResource FieldLabelStyle}"/>
+                                <TextBlock x:Name="TxtPanelDepartamento" Text="—" FontSize="13" Foreground="White" Margin="0,2,0,0"/>
+                            </StackPanel>
+                            <StackPanel Margin="0,0,0,10">
+                                <TextBlock Text="Estado" Style="{StaticResource FieldLabelStyle}"/>
+                                <Border Background="#151538" CornerRadius="6" Padding="8,3"
+                                        HorizontalAlignment="Left" Margin="0,4,0,0">
+                                    <TextBlock x:Name="TxtPanelEstado" Text="—"
+                                               FontSize="12" FontWeight="SemiBold" Foreground="#A0A0B8"/>
+                                </Border>
+                            </StackPanel>
+                            <StackPanel Margin="0,0,0,0">
+                                <TextBlock Text="Fecha de Ingreso" Style="{StaticResource FieldLabelStyle}"/>
+                                <TextBlock x:Name="TxtPanelFechaIngreso" Text="—" FontSize="13" Foreground="White" Margin="0,2,0,0"/>
+                            </StackPanel>
+
+                            <!-- Botones de acción -->
+                            <StackPanel Margin="0,14,0,0">
+                                <Button x:Name="BtnNuevo"
+                                        Content="+ Nuevo Colaborador"
+                                        Style="{StaticResource ActionButtonStyle}"
+                                        Background="#E89A24" Foreground="#060621"
+                                        Margin="0,0,0,8"
+                                        Click="BtnNuevo_Click"/>
+                                <Button x:Name="BtnEditar"
+                                        Content="Editar Colaborador"
+                                        Style="{StaticResource ActionButtonStyle}"
+                                        Background="#151538" Foreground="#E89A24"
+                                        Margin="0,0,0,8" IsEnabled="False"
+                                        Click="BtnEditar_Click"/>
+                                <Button x:Name="BtnEliminar"
+                                        Content="Eliminar"
+                                        Style="{StaticResource ActionButtonStyle}"
+                                        Background="#2D1A22" Foreground="#E53E3E"
+                                        IsEnabled="False"
+                                        Click="BtnEliminar_Click"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </ScrollViewer>
+
+                    <!-- ══════════ VISTA FORMULARIO CRUD ══════════ -->
+                    <ScrollViewer x:Name="PanelFormulario" VerticalScrollBarVisibility="Auto"
+                                  Visibility="Collapsed">
+                        <StackPanel>
+                            <!-- Título formulario -->
+                            <TextBlock x:Name="TxtFormTitulo" Text="Nuevo Colaborador"
+                                       FontSize="14" FontWeight="Bold" Foreground="White"
+                                       Margin="0,0,0,12"/>
+
+                            <!-- Foto preview en formulario -->
+                            <Grid HorizontalAlignment="Center" Margin="0,0,0,10">
+                                <Border Width="80" Height="80" CornerRadius="40"
+                                        BorderBrush="#E89A24" BorderThickness="2"
+                                        Background="#151538" ClipToBounds="True">
+                                    <Grid>
+                                        <Grid.OpacityMask>
+                                            <VisualBrush>
+                                                <VisualBrush.Visual>
+                                                    <Ellipse Width="80" Height="80" Fill="Black"/>
+                                                </VisualBrush.Visual>
+                                            </VisualBrush>
+                                        </Grid.OpacityMask>
+                                        <TextBlock x:Name="TxtFotoPlaceholder" Text="📷"
+                                                   FontSize="28" HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"/>
+                                        <Image x:Name="ImgFotoPreview" Stretch="UniformToFill"
+                                               Visibility="Collapsed"/>
+                                    </Grid>
+                                </Border>
+                            </Grid>
+                            <Button x:Name="BtnSeleccionarFoto"
+                                    Content="Seleccionar Foto"
+                                    Style="{StaticResource ActionButtonStyle}"
+                                    Background="#151538" Foreground="#A0A0B8"
+                                    Margin="0,0,0,12"
+                                    Click="BtnSeleccionarFoto_Click"/>
+
+                            <!-- Cédula -->
+                            <TextBlock Text="Cédula *" Style="{StaticResource FieldLabelStyle}"/>
+                            <TextBox x:Name="TxtFCedula" Style="{StaticResource ModernInputStyle}" Margin="0,0,0,8"/>
+
+                            <!-- Nombres -->
+                            <TextBlock Text="Nombres *" Style="{StaticResource FieldLabelStyle}"/>
+                            <TextBox x:Name="TxtFNombres" Style="{StaticResource ModernInputStyle}" Margin="0,0,0,8"/>
+
+                            <!-- Apellidos -->
+                            <TextBlock Text="Apellidos *" Style="{StaticResource FieldLabelStyle}"/>
+                            <TextBox x:Name="TxtFApellidos" Style="{StaticResource ModernInputStyle}" Margin="0,0,0,8"/>
+
+                            <!-- Cargo -->
+                            <TextBlock Text="Cargo *" Style="{StaticResource FieldLabelStyle}"/>
+                            <TextBox x:Name="TxtFCargo" Style="{StaticResource ModernInputStyle}" Margin="0,0,0,8"/>
+
+                            <!-- Correo corporativo -->
+                            <TextBlock Text="Correo Corporativo" Style="{StaticResource FieldLabelStyle}"/>
+                            <TextBox x:Name="TxtFCorreo" Style="{StaticResource ModernInputStyle}" Margin="0,0,0,8"/>
+
+                            <!-- Departamento -->
+                            <TextBlock Text="Departamento *" Style="{StaticResource FieldLabelStyle}"/>
+                            <ComboBox x:Name="CbFDepartamento" Style="{StaticResource ModernComboStyle}" Margin="0,0,0,8"/>
+
+                            <!-- Ubicación -->
+                            <TextBlock Text="Ubicación *" Style="{StaticResource FieldLabelStyle}"/>
+                            <ComboBox x:Name="CbFUbicacion" Style="{StaticResource ModernComboStyle}" Margin="0,0,0,8"/>
+
+                            <!-- Perfil -->
+                            <TextBlock Text="Perfil / Rol *" Style="{StaticResource FieldLabelStyle}"/>
+                            <ComboBox x:Name="CbFPerfil" Style="{StaticResource ModernComboStyle}" Margin="0,0,0,8"/>
+
+                            <!-- Estado -->
+                            <TextBlock Text="Estado *" Style="{StaticResource FieldLabelStyle}"/>
+                            <ComboBox x:Name="CbFEstado" Style="{StaticResource ModernComboStyle}" Margin="0,0,0,8">
+                                <ComboBoxItem Content="Activo" IsSelected="True"/>
+                                <ComboBoxItem Content="Inactivo"/>
+                            </ComboBox>
+
+                            <!-- Fecha de ingreso -->
+                            <TextBlock Text="Fecha de Ingreso *" Style="{StaticResource FieldLabelStyle}"/>
+                            <DatePicker x:Name="DpFIngreso" Height="34" Margin="0,0,0,8"/>
+
+                            <!-- Usuario App -->
+                            <TextBlock Text="Usuario App *" Style="{StaticResource FieldLabelStyle}"/>
+                            <TextBox x:Name="TxtFUsuario" Style="{StaticResource ModernInputStyle}" Margin="0,0,0,8"/>
+
+                            <!-- Contraseña -->
+                            <TextBlock x:Name="LblPassword" Text="Contraseña *" Style="{StaticResource FieldLabelStyle}"/>
+                            <PasswordBox x:Name="PbFPassword" Style="{StaticResource ModernPasswordStyle}" Margin="0,0,0,4"/>
+                            <TextBlock x:Name="TxtPasswordHint" Text="Dejar vacío para no cambiar"
+                                       FontSize="10" Foreground="#3F3F6B"
+                                       Visibility="Collapsed" Margin="0,0,0,8"/>
+
+                            <!-- Botones formulario -->
+                            <Button x:Name="BtnGuardar"
+                                    Content="Guardar Colaborador"
+                                    Style="{StaticResource ActionButtonStyle}"
+                                    Background="#E89A24" Foreground="#060621"
+                                    Margin="0,14,0,8"
+                                    Click="BtnGuardar_Click"/>
+                            <Button x:Name="BtnCancelarForm"
+                                    Content="Cancelar"
+                                    Style="{StaticResource ActionButtonStyle}"
+                                    Background="#151538" Foreground="#A0A0B8"
+                                    Click="BtnCancelarForm_Click"/>
+                        </StackPanel>
+                    </ScrollViewer>
+
                 </Grid>
             </Border>
 
@@ -392,22 +624,16 @@
             <Grid Grid.Column="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
-                    <!-- Header: título + buscador -->
                     <RowDefinition Height="Auto"/>
-                    <!-- Tabs de filtro -->
                     <RowDefinition Height="*"/>
-                    <!-- DataGrid -->
                     <RowDefinition Height="55"/>
-                    <!-- Paginador -->
                 </Grid.RowDefinitions>
 
                 <!-- Header -->
                 <Grid Grid.Row="0" Margin="0,0,0,15">
-                    <TextBlock Text="Gestión de Colaboradores"
-                               FontSize="18" FontWeight="Bold"
-                               Foreground="White"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Left"/>
+                    <TextBlock x:Name="TxtTituloSeccion" 
+                               FontSize="18" FontWeight="Bold" Foreground="White"
+                               VerticalAlignment="Center" HorizontalAlignment="Left"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
                         <Border Width="260" Height="36" Background="#151538"
                                 BorderBrush="#3F3F6B" BorderThickness="1"
@@ -418,17 +644,12 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="🔍" Foreground="#A0A0B8"
-                                           VerticalAlignment="Center"
-                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center" HorizontalAlignment="Center"
                                            FontSize="12"/>
-                                <TextBox x:Name="TxtBuscarColaborador"
-                                         Grid.Column="1"
-                                         Background="Transparent"
-                                         BorderThickness="0"
-                                         Foreground="White"
-                                         VerticalContentAlignment="Center"
-                                         FontSize="13"
-                                         CaretBrush="#E89A24"
+                                <TextBox x:Name="TxtBuscarColaborador" Grid.Column="1"
+                                         Background="Transparent" BorderThickness="0"
+                                         Foreground="White" VerticalContentAlignment="Center"
+                                         FontSize="13" CaretBrush="#E89A24"
                                          TextChanged="TxtBuscarColaborador_TextChanged"/>
                             </Grid>
                         </Border>
@@ -437,8 +658,7 @@
                                 Width="120" Height="36"
                                 Background="#107C41" Foreground="White"
                                 FontWeight="SemiBold" BorderThickness="0"
-                                Cursor="Hand"
-                                Click="BtnExportarExcel_Click">
+                                Cursor="Hand" Click="BtnExportarExcel_Click">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <Border Background="{TemplateBinding Background}" CornerRadius="6">
@@ -450,42 +670,31 @@
                     </StackPanel>
                 </Grid>
 
-                <!-- Tabs de filtro por rol -->
+                <!-- Tabs de filtro -->
                 <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,5,0,15">
-                    <Button x:Name="BtnTabTodos"
-                            Content="Todos"
+                    <Button x:Name="BtnTabTodos" Content="Todos"
                             Style="{StaticResource TabFilterButtonStyle}"
-                            IsEnabled="False" Tag="0"
-                            Click="FilterTab_Click"/>
-                    <Button x:Name="BtnTabAdministradores"
-                            Content="Administradores"
+                            IsEnabled="False" Tag="0" Click="FilterTab_Click"/>
+                    <Button x:Name="BtnTabAdministradores" Content="Administradores"
                             Style="{StaticResource TabFilterButtonStyle}"
-                            Tag="0"
-                            Click="FilterTab_Click"/>
-                    <Button x:Name="BtnTabOperadores"
-                            Content="Operadores"
+                            Tag="0" Click="FilterTab_Click"/>
+                    <Button x:Name="BtnTabOperadores" Content="Operadores"
                             Style="{StaticResource TabFilterButtonStyle}"
-                            Tag="0"
-                            Click="FilterTab_Click"/>
-                    <Button x:Name="BtnTabEmpleados"
-                            Content="Empleados"
+                            Tag="0" Click="FilterTab_Click"/>
+                    <Button x:Name="BtnTabEmpleados" Content="Empleados"
                             Style="{StaticResource TabFilterButtonStyle}"
-                            Tag="0"
-                            Click="FilterTab_Click"/>
+                            Tag="0" Click="FilterTab_Click"/>
                 </StackPanel>
 
-                <!-- DataGrid de colaboradores -->
-                <Border Grid.Row="2" Background="#090924" CornerRadius="8"
+                <!-- DataGrid -->
+                <Border x:Name="GridContainerBorder" Grid.Row="2" Background="#090924" CornerRadius="8"
                         BorderBrush="#151538" BorderThickness="1" Padding="10">
                     <DataGrid x:Name="DgColaboradores"
                               Style="{StaticResource ModernDataGridStyle}"
                               SelectionChanged="DgColaboradores_SelectionChanged">
                         <DataGrid.Columns>
-
-                            <!-- Identificación -->
                             <DataGridTextColumn Header="Identificación"
-                                               Binding="{Binding DocumentoIdentidad}"
-                                               Width="1.3*">
+                                               Binding="{Binding DocumentoIdentidad}" Width="1.3*">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="Foreground" Value="#E89A24"/>
@@ -496,10 +705,8 @@
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
 
-                            <!-- Nombre completo -->
                             <DataGridTextColumn Header="Colaborador"
-                                               Binding="{Binding NombreCompleto}"
-                                               Width="1.6*">
+                                               Binding="{Binding NombreCompleto}" Width="1.6*">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="Foreground" Value="White"/>
@@ -510,22 +717,13 @@
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
 
-                            <!-- Cargo -->
-                            <DataGridTextColumn Header="Cargo"
-                                               Binding="{Binding Cargo}"
-                                               Width="1.2*"
-                                               ElementStyle="{StaticResource CenterGridCellStyle}"/>
+                            <DataGridTextColumn Header="Cargo" Binding="{Binding Cargo}"
+                                               Width="1.2*" ElementStyle="{StaticResource CenterGridCellStyle}"/>
 
-                            <!-- Departamento -->
-                            <DataGridTextColumn Header="Departamento"
-                                               Binding="{Binding NombreDepartamento}"
-                                               Width="1.2*"
-                                               ElementStyle="{StaticResource CenterGridCellStyle}"/>
+                            <DataGridTextColumn Header="Departamento" Binding="{Binding NombreDepartamento}"
+                                               Width="1.2*" ElementStyle="{StaticResource CenterGridCellStyle}"/>
 
-                            <!-- Perfil / Rol — con color por tipo -->
-                            <DataGridTextColumn Header="Perfil"
-                                               Binding="{Binding NombrePerfil}"
-                                               Width="1.1*">
+                            <DataGridTextColumn Header="Perfil" Binding="{Binding NombrePerfil}" Width="1.1*">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -546,10 +744,7 @@
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
 
-                            <!-- Correo -->
-                            <DataGridTextColumn Header="Correo"
-                                               Binding="{Binding CorreoCorporativo}"
-                                               Width="1.6*">
+                            <DataGridTextColumn Header="Correo" Binding="{Binding CorreoCorporativo}" Width="1.6*">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="Foreground" Value="#A0A0B8"/>
@@ -559,10 +754,7 @@
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
 
-                            <!-- Estado — Activo / Inactivo -->
-                            <DataGridTextColumn Header="Estado"
-                                               Binding="{Binding EstadoTexto}"
-                                               Width="0.9*">
+                            <DataGridTextColumn Header="Estado" Binding="{Binding EstadoTexto}" Width="0.9*">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -580,42 +772,33 @@
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
 
-                            <!-- Fecha de ingreso -->
                             <DataGridTextColumn Header="Ingreso"
                                                Binding="{Binding FechaIngreso, StringFormat='{}{0:dd/MM/yyyy}'}"
-                                               Width="1*"
-                                               ElementStyle="{StaticResource CenterGridCellStyle}"/>
-
+                                               Width="1*" ElementStyle="{StaticResource CenterGridCellStyle}"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Border>
 
                 <!-- Paginador -->
                 <Grid Grid.Row="3" Margin="0,10,0,0">
-                    <TextBlock x:Name="TxtInfoPagina"
-                               Text="Página 1 de 1"
+                    <TextBlock x:Name="TxtInfoPagina" Text="Página 1 de 1"
                                Foreground="#A0A0B8" FontSize="13"
                                HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                    <StackPanel Orientation="Horizontal"
-                                HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <Button x:Name="BtnPaginaAnterior"
-                                Style="{StaticResource PagerButtonStyle}"
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Button x:Name="BtnPaginaAnterior" Style="{StaticResource PagerButtonStyle}"
                                 Click="BtnPaginaAnterior_Click">
                             <TextBlock Text="‹" FontSize="18" FontWeight="Bold" Margin="0,0,0,2"/>
                         </Button>
                         <StackPanel x:Name="PnlNumerosPagina" Orientation="Horizontal"/>
-                        <Button x:Name="BtnPaginaSiguiente"
-                                Style="{StaticResource PagerButtonStyle}"
+                        <Button x:Name="BtnPaginaSiguiente" Style="{StaticResource PagerButtonStyle}"
                                 Click="BtnPaginaSiguiente_Click">
                             <TextBlock Text="›" FontSize="18" FontWeight="Bold" Margin="0,0,0,2"/>
                         </Button>
                     </StackPanel>
-                    <TextBlock x:Name="TxtContadorRegistros"
-                               Text="Mostrando 0 registros"
+                    <TextBlock x:Name="TxtContadorRegistros" Text="Mostrando 0 registros"
                                Foreground="#A0A0B8" FontSize="12"
                                HorizontalAlignment="Right" VerticalAlignment="Center"/>
                 </Grid>
-
             </Grid>
         </Grid>
     </Grid>
