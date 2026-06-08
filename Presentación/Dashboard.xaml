@@ -6,6 +6,7 @@
         mc:Ignorable="d"
         Title="Dashboard" Height="750" Width="1200"
         WindowStartupLocation="CenterScreen"
+        Icon="/Assets/Recurso-1.ico"
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent">
