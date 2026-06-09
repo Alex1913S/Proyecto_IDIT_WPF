@@ -338,10 +338,10 @@ namespace Presentación
             {
                 // ════════════ MODO OSCURO (restaurar) ════════════
 
-                MainWindowBorder.Background = (SolidColorBrush)bc.ConvertFromString("#060621");
+                MainWindowBorder.Background = (SolidColorBrush)bc.ConvertFromString("#08213a");
                 MainWindowBorder.BorderBrush = Brushes.White;
 
-                SidebarBorder.Background = (SolidColorBrush)bc.ConvertFromString("#0b0b2d");
+                SidebarBorder.Background = (SolidColorBrush)bc.ConvertFromString("#09274c");
 
                 TxtUserName.Foreground = Brushes.White;
                 TxtUserRole.Foreground = (SolidColorBrush)bc.ConvertFromString("#A0A0B8");
@@ -351,10 +351,10 @@ namespace Presentación
                 AplicarEstilosBotonesSidebar(MenuStackPanel, modoClaro: false);
                 AplicarColorIconosSidebar(MenuStackPanel, (SolidColorBrush)bc.ConvertFromString("#A0A0B8"));
 
-                SubmenuActivos.Background = (SolidColorBrush)bc.ConvertFromString("#090924");
+                SubmenuActivos.Background = (SolidColorBrush)bc.ConvertFromString("#071d34");
                 SubmenuActivos.BorderBrush = Brushes.White;
 
-                var cardDarkBg = (SolidColorBrush)bc.ConvertFromString("#CC0b0b2d");
+                var cardDarkBg = (SolidColorBrush)bc.ConvertFromString("#09274c");
                 var cardDarkBorder = (SolidColorBrush)bc.ConvertFromString("#25FFFFFF");
                 foreach (var card in kpiCards)
                 {
@@ -373,7 +373,7 @@ namespace Presentación
                 foreach (var t in kpiTitles) if (t != null) t.Foreground = (SolidColorBrush)bc.ConvertFromString("#A0A0B8");
                 foreach (var n in kpiNumbers) if (n != null) n.Foreground = Brushes.White;
 
-                var panelDarkBg = (SolidColorBrush)bc.ConvertFromString("#CC0b0b2d");
+                var panelDarkBg = (SolidColorBrush)bc.ConvertFromString("#09274c");
                 var panelDarkBorder = (SolidColorBrush)bc.ConvertFromString("#25FFFFFF");
                 foreach (var panel in contentPanels)
                 {
@@ -403,13 +403,13 @@ namespace Presentación
                 foreach (var axis in axisLabels) if (axis != null) axis.Foreground = (SolidColorBrush)bc.ConvertFromString("#A0A0B8");
                 foreach (var bar in whiteBars) if (bar != null) bar.Background = Brushes.White;
 
-                TimeFilterPanel.Background = (SolidColorBrush)bc.ConvertFromString("#151538");
+                TimeFilterPanel.Background = (SolidColorBrush)bc.ConvertFromString("#0d3a5c");
 
-                BtnWorkspaceSelector.Background = (SolidColorBrush)bc.ConvertFromString("#0b0b2d");
+                BtnWorkspaceSelector.Background = (SolidColorBrush)bc.ConvertFromString("#09274c");
                 BtnWorkspaceSelector.BorderBrush = Brushes.White;
-                PopupBorder.Background = (SolidColorBrush)bc.ConvertFromString("#0b0b2d");
+                PopupBorder.Background = (SolidColorBrush)bc.ConvertFromString("#09274c");
                 TxtPopupHeader.Foreground = (SolidColorBrush)bc.ConvertFromString("#A0A0B8");
-                BtnCloseWindow.Background = (SolidColorBrush)bc.ConvertFromString("#151538");
+                BtnCloseWindow.Background = (SolidColorBrush)bc.ConvertFromString("#0d3a5c");
 
                 var txtSel = (TextBlock)BtnWorkspaceSelector.Template.FindName("TxtCurrentWorkspace", BtnWorkspaceSelector);
                 var txtSelSub = (TextBlock)BtnWorkspaceSelector.Template.FindName("TxtCurrentSub", BtnWorkspaceSelector);
