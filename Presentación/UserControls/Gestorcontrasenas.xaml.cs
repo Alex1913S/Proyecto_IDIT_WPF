@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using static AccesoDatos.ConexionSql;
 
@@ -38,6 +39,8 @@ namespace Presentación
         private const string TAB_CORREO = "Correo Electrónico";
         private const string TAB_SISTEMA = "Sistema Interno";
         private const string TAB_VENCIDAS = "PROXIMAS";
+        private bool _isDarkMode = true;
+        private bool _esModoClaro = false;
 
         // ═════════════════════════════════════════════════════════════════
         // CONSTRUCTOR
@@ -602,6 +605,109 @@ namespace Presentación
             "VPN / Acceso Remoto" => "🔒",
             _ => "🔑"
         };
+
+        public void AplicarTema(bool modoClaro)
+        {
+            _isDarkMode = !modoClaro;
+            var bc = new BrushConverter();
+
+            if (modoClaro)
+            {
+                RootGrid.Background = (SolidColorBrush)bc.ConvertFromString("#F4F6F9");
+                PanelLateralBorder.Background = (SolidColorBrush)bc.ConvertFromString("#EDF2FF");
+                PanelLateralBorder.BorderBrush = (SolidColorBrush)bc.ConvertFromString("#C3D3F0");
+                TxtPanelServicio.Foreground = (SolidColorBrush)bc.ConvertFromString("#1E3A5F");
+                TxtPanelCategoria.Foreground = (SolidColorBrush)bc.ConvertFromString("#4A6080");
+                TxtPanelUsuario.Foreground = (SolidColorBrush)bc.ConvertFromString("#1E3A5F");
+                TxtPanelUrl.Foreground = (SolidColorBrush)bc.ConvertFromString("#4A6080");
+                TxtPanelNotas.Foreground = (SolidColorBrush)bc.ConvertFromString("#4A6080");
+                TxtPanelActualizacion.Foreground = (SolidColorBrush)bc.ConvertFromString("#1E3A5F");
+                TxtPanelPassword.Foreground = (SolidColorBrush)bc.ConvertFromString("#1E3A5F");
+                BadgeVencimiento.Background = (SolidColorBrush)bc.ConvertFromString("#D6E4FF");
+                BusquedaBorder.Background = (SolidColorBrush)bc.ConvertFromString("#E8F0FF");
+                BusquedaBorder.BorderBrush = (SolidColorBrush)bc.ConvertFromString("#BFCFE8");
+                TxtBuscar.Foreground = (SolidColorBrush)bc.ConvertFromString("#1E3A5F");
+                TxtTitulo.Foreground = (SolidColorBrush)bc.ConvertFromString("#1E3A5F");
+                TxtSubtitulo.Foreground = (SolidColorBrush)bc.ConvertFromString("#4A6080");
+                TxtInfoPagina.Foreground = (SolidColorBrush)bc.ConvertFromString("#4A6080");
+                TxtContadorRegistros.Foreground = (SolidColorBrush)bc.ConvertFromString("#4A6080");
+                GridBorder.Background = (SolidColorBrush)bc.ConvertFromString("#EDF2FF");
+                GridBorder.BorderBrush = (SolidColorBrush)bc.ConvertFromString("#C3D3F0");
+                DgCredenciales.Background = (SolidColorBrush)bc.ConvertFromString("#EDF2FF");
+                DgCredenciales.Foreground = (SolidColorBrush)bc.ConvertFromString("#1E3A5F");
+
+                var rowStyle = new Style(typeof(DataGridRow));
+                rowStyle.Setters.Add(new Setter(DataGridRow.BackgroundProperty, (SolidColorBrush)bc.ConvertFromString("#EDF2FF")));
+                rowStyle.Setters.Add(new Setter(DataGridRow.ForegroundProperty, (SolidColorBrush)bc.ConvertFromString("#1E3A5F")));
+                rowStyle.Setters.Add(new Setter(DataGridRow.BorderBrushProperty, (SolidColorBrush)bc.ConvertFromString("#C3D3F0")));
+                rowStyle.Setters.Add(new Setter(DataGridRow.BorderThicknessProperty, new Thickness(0, 0, 0, 1)));
+                var th = new Trigger { Property = DataGridRow.IsMouseOverProperty, Value = true };
+                th.Setters.Add(new Setter(DataGridRow.BackgroundProperty, (SolidColorBrush)bc.ConvertFromString("#D6E4FF")));
+                rowStyle.Triggers.Add(th);
+                var ts = new Trigger { Property = DataGridRow.IsSelectedProperty, Value = true };
+                ts.Setters.Add(new Setter(DataGridRow.BackgroundProperty, (SolidColorBrush)bc.ConvertFromString("#BFCFE8")));
+                ts.Setters.Add(new Setter(DataGridRow.ForegroundProperty, (SolidColorBrush)bc.ConvertFromString("#1E3A5F")));
+                rowStyle.Triggers.Add(ts);
+                DgCredenciales.RowStyle = rowStyle;
+
+                var hdr = new Style(typeof(DataGridColumnHeader));
+                hdr.Setters.Add(new Setter(DataGridColumnHeader.BackgroundProperty, (SolidColorBrush)bc.ConvertFromString("#EDF2FF")));
+                hdr.Setters.Add(new Setter(DataGridColumnHeader.ForegroundProperty, (SolidColorBrush)bc.ConvertFromString("#4A6080")));
+                hdr.Setters.Add(new Setter(DataGridColumnHeader.FontWeightProperty, FontWeights.SemiBold));
+                hdr.Setters.Add(new Setter(DataGridColumnHeader.BorderBrushProperty, (SolidColorBrush)bc.ConvertFromString("#C3D3F0")));
+                hdr.Setters.Add(new Setter(DataGridColumnHeader.BorderThicknessProperty, new Thickness(0, 0, 0, 1)));
+                hdr.Setters.Add(new Setter(DataGridColumnHeader.HorizontalContentAlignmentProperty, HorizontalAlignment.Center));
+                DgCredenciales.ColumnHeaderStyle = hdr;
+            }
+            else
+            {
+                RootGrid.Background = Brushes.Transparent;
+                PanelLateralBorder.Background = (SolidColorBrush)bc.ConvertFromString("#09274c");
+                PanelLateralBorder.BorderBrush = (SolidColorBrush)bc.ConvertFromString("#0d3a5c");
+                TxtPanelServicio.Foreground = Brushes.White;
+                TxtPanelCategoria.Foreground = (SolidColorBrush)bc.ConvertFromString("#A0C4E0");
+                TxtPanelUsuario.Foreground = Brushes.White;
+                TxtPanelUrl.Foreground = (SolidColorBrush)bc.ConvertFromString("#A0C4E0");
+                TxtPanelNotas.Foreground = (SolidColorBrush)bc.ConvertFromString("#A0C4E0");
+                TxtPanelActualizacion.Foreground = Brushes.White;
+                TxtPanelPassword.Foreground = Brushes.White;
+                BadgeVencimiento.Background = (SolidColorBrush)bc.ConvertFromString("#0e3560");
+                BusquedaBorder.Background = (SolidColorBrush)bc.ConvertFromString("#0d3a5c");
+                BusquedaBorder.BorderBrush = (SolidColorBrush)bc.ConvertFromString("#1a4a7a");
+                TxtBuscar.Foreground = Brushes.White;
+                TxtTitulo.Foreground = Brushes.White;
+                TxtSubtitulo.Foreground = (SolidColorBrush)bc.ConvertFromString("#A0C4E0");
+                TxtInfoPagina.Foreground = (SolidColorBrush)bc.ConvertFromString("#A0C4E0");
+                TxtContadorRegistros.Foreground = (SolidColorBrush)bc.ConvertFromString("#A0C4E0");
+                GridBorder.Background = (SolidColorBrush)bc.ConvertFromString("#09274c");
+                GridBorder.BorderBrush = (SolidColorBrush)bc.ConvertFromString("#0d3a5c");
+                DgCredenciales.Background = Brushes.Transparent;
+                DgCredenciales.Foreground = Brushes.White;
+
+                var rowStyle = new Style(typeof(DataGridRow));
+                rowStyle.Setters.Add(new Setter(DataGridRow.BackgroundProperty, Brushes.Transparent));
+                rowStyle.Setters.Add(new Setter(DataGridRow.ForegroundProperty, Brushes.White));
+                rowStyle.Setters.Add(new Setter(DataGridRow.BorderBrushProperty, (SolidColorBrush)bc.ConvertFromString("#0d3a5c")));
+                rowStyle.Setters.Add(new Setter(DataGridRow.BorderThicknessProperty, new Thickness(0, 0, 0, 1)));
+                var tho = new Trigger { Property = DataGridRow.IsMouseOverProperty, Value = true };
+                tho.Setters.Add(new Setter(DataGridRow.BackgroundProperty, (SolidColorBrush)bc.ConvertFromString("#0e3560")));
+                rowStyle.Triggers.Add(tho);
+                var tso = new Trigger { Property = DataGridRow.IsSelectedProperty, Value = true };
+                tso.Setters.Add(new Setter(DataGridRow.BackgroundProperty, (SolidColorBrush)bc.ConvertFromString("#1a4a7a")));
+                tso.Setters.Add(new Setter(DataGridRow.ForegroundProperty, (SolidColorBrush)bc.ConvertFromString("#E89A24")));
+                rowStyle.Triggers.Add(tso);
+                DgCredenciales.RowStyle = rowStyle;
+
+                var hdr = new Style(typeof(DataGridColumnHeader));
+                hdr.Setters.Add(new Setter(DataGridColumnHeader.BackgroundProperty, Brushes.Transparent));
+                hdr.Setters.Add(new Setter(DataGridColumnHeader.ForegroundProperty, (SolidColorBrush)bc.ConvertFromString("#A0C4E0")));
+                hdr.Setters.Add(new Setter(DataGridColumnHeader.FontWeightProperty, FontWeights.SemiBold));
+                hdr.Setters.Add(new Setter(DataGridColumnHeader.BorderBrushProperty, (SolidColorBrush)bc.ConvertFromString("#0e3560")));
+                hdr.Setters.Add(new Setter(DataGridColumnHeader.BorderThicknessProperty, new Thickness(0, 0, 0, 1)));
+                hdr.Setters.Add(new Setter(DataGridColumnHeader.HorizontalContentAlignmentProperty, HorizontalAlignment.Center));
+                DgCredenciales.ColumnHeaderStyle = hdr;
+            }
+        }
     }
 
     // ═════════════════════════════════════════════════════════════════════
@@ -635,4 +741,5 @@ namespace Presentación
             }
         }
     }
+
 }

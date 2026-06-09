@@ -14,10 +14,9 @@
     <None Remove="Assets\a3.png" />
     <None Remove="Assets\idit_logo.png" />
     <None Remove="Assets\image_login_1.png" />
-    <None Remove="Assets\immf.png" />
+    <None Remove="Assets\log.png" />
     <None Remove="Assets\LoginIM.png" />
     <None Remove="Assets\MapaColombia.html" />
-    <None Remove="Assets\Recurso 3.png" />
     <None Remove="Assets\Recurso-1.ico" />
     <None Remove="init.sql" />
   </ItemGroup>
@@ -36,9 +35,8 @@
 
   <ItemGroup>
     <Resource Include="Assets\idit_logo.png" />
-    <Resource Include="Assets\immf.png" />
+    <Resource Include="Assets\log.png" />
     <Resource Include="Assets\LoginIM.png" />
-    <Resource Include="Assets\Recurso 3.png" />
     <Resource Include="Assets\Recurso-1.ico" />
   </ItemGroup>
 

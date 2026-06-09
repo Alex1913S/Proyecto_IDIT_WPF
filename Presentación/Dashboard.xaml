@@ -126,8 +126,8 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="60"/>
                         <RowDefinition x:Name="LogoRow" Height="80"/>
-                        <RowDefinition Height="75"/>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="9"/>
+                        <RowDefinition/>
                         <RowDefinition Height="65"/>
                     </Grid.RowDefinitions>
 
@@ -135,24 +135,23 @@
                         <Path x:Name="MenuHamIcon" Data="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" Fill="#A0A0B8" Width="20" Height="20" Stretch="Uniform"/>
                     </Button>
 
-                    <Button x:Name="BtnThemeToggle" Grid.Row="0" HorizontalAlignment="Left" Width="35" Height="35" Margin="16,15,0,10" Background="Transparent" BorderThickness="0" Cursor="Hand" Click="ThemeToggle_Click">
+                    <Button x:Name="BtnThemeToggle" Grid.Row="0" HorizontalAlignment="Left" Width="35" Margin="16,15,0,10" Background="Transparent" BorderThickness="0" Cursor="Hand" Click="ThemeToggle_Click">
                         <Path x:Name="ThemeIcon" Data="M12,2A10,10 0 1,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4Z" Fill="#A0A0B8" Width="18" Height="18" Stretch="Uniform"/>
                     </Button>
 
                     <!-- LOGO DE EMPRESA -->
                     <Border x:Name="LogoContainer" Grid.Row="1"
-                            Background="#0a2d4a"
+                            Background="#09274c"
                             CornerRadius="10"
-                            Margin="12,8,12,8"
+                            Margin="12,0,12,0"
                             Padding="8"
-                            VerticalAlignment="Center">
+                            VerticalAlignment="Center" Height="64">
                         <Grid>
                             <Image x:Name="LogoExpandido"
-                                   Source="/Assets/Recurso 3.png"
-                                   Height="47"
+                                   Source="/Assets/log.png"
+                                   Height="48"
                                    Stretch="Uniform"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center" Width="103"/>
+                                   VerticalAlignment="Center" Margin="10,0,23,0"/>
                             <Image x:Name="LogoReducido"
                                    Source="/Assets/immf.png"
                                    Height="28"
@@ -199,7 +198,7 @@
                             </Border>
 
 
-                            <Button Content="Asignaciones" Style="{StaticResource SidebarButtonStyle}">
+                            <Button Content="Asignaciones" Style="{StaticResource SidebarButtonStyle}" Click="BtnAssignInventory_Click">
                                 <Button.ContentTemplate>
                                     <DataTemplate>
 
@@ -242,7 +241,7 @@
                     </ScrollViewer>
 
 
-                    <Button Grid.Row="4" Content="Salir" Style="{StaticResource SidebarButtonStyle}" Click="LogOut_Click" Foreground="#E53E3E">
+                    <Button Grid.Row="4" Content="Salir" Style="{StaticResource SidebarButtonStyle}" Click="LogOut_Click" Foreground="#E53E3E" Margin="8,10,8,10">
                         <Button.ContentTemplate>
                             <DataTemplate>
                                 <Path Data="M14.08,15.59L16.67,13H7V11H16.67L14.08,8.41L15.5,7L20.5,12L15.5,17L14.08,15.59M19,3A2,2 0 0,1 21,5V9.67L19,7.67V5H5V19H19V16.33L21,14.33V19A2,2 0 0,1 19,21H5C3.89,21 3,20.1 3,19V5C3,3.89 3.89,3 5,3H19Z" Fill="#E53E3E" Width="18" Height="18" Stretch="Uniform"/>

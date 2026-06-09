@@ -1,4 +1,5 @@
 ﻿using Dominio;
+using Presentación.UserControls;
 using System;
 using System.Data;
 using System.Windows;
@@ -124,6 +125,10 @@ namespace Presentación
 
         private void BtnGestorContrasenas_Click(object sender, RoutedEventArgs e)
             => NavegaA(new GestorContrasenas(_colaboradorId), "Gestor de Contraseñas Seguras");
+
+        // Evento para cargar el módulo de asignación de inventario
+        private void BtnAssignInventory_Click(object sender, RoutedEventArgs e) =>
+            NavegaA(new Assign_Inventory(), "Asignación de Activos");
 
         private void BtnToggleSidebar_Click(object sender, RoutedEventArgs e)
         {
