@@ -31,12 +31,12 @@ namespace AccesoDatos
                         Guid activoId = Guid.NewGuid();
                         string sqlBase = @"
                             INSERT INTO ITAM.ActivosBase
-                                (ActivoID, CategoriaID, UbicacionID,EtiquetaActivo,
+                                (ActivoID, CategoriaID, UbicacionID,
                                  Marca, Modelo, NumeroSerie, ProveedorID,
                                  FechaAdquisicion, Costo, EstadoOperativo,
                                  FacturaCompra)
                             VALUES
-                                (@ActivoID, @CategoriaID, @UbicacionID,@EtiquetaActivo,
+                                (@ActivoID, @CategoriaID, @UbicacionID,
                                  @Marca, @Modelo, @NumeroSerie, @ProveedorID,
                                  @FechaAdquisicion, @Costo, @EstadoOperativo,
                                  @FacturaCompra)";
