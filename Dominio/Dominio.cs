@@ -110,7 +110,7 @@ namespace Dominio
                 DateTime? fechaAdquis, decimal? costo, string estadoOperativo,
                 string procesador, string memoriaRAM, string almac1, string almac2,
                 string tarjetaGrafica, string sistemaOperativo, string mac, string ip,
-                string resolucion)
+                string resolucion, byte[] facturaCompra = null)
             {
                 var resultado = new ResultadoActivo();
 
@@ -130,20 +130,13 @@ namespace Dominio
                         return resultado;
                     }
 
-                    if (string.IsNullOrWhiteSpace(etiqueta))
-                    {
-                        resultado.Exitoso = false;
-                        resultado.Mensaje = "La etiqueta o placa de inventario es obligatoria.";
-                        return resultado;
-                    }
-
                     bool ok = _datos.InsertarActivo(
                         categoriaId, ubicacionId, etiqueta, // <-- Enviado correctamente a Acceso a Datos
                         marca, modelo, numeroSerie, proveedorId,
                         fechaAdquis, costo, estadoOperativo,
                         procesador, memoriaRAM, almac1, almac2,
                         tarjetaGrafica, sistemaOperativo, mac, ip,
-                        resolucion
+                        resolucion, facturaCompra
                     );
 
                     resultado.Exitoso = ok;
@@ -168,7 +161,7 @@ namespace Dominio
                 string marca, string modelo, string numeroSerie, int? proveedorId,
                 DateTime? fechaAdquis, decimal? costo, string estadoOperativo,
                 string procesador, string memoriaRAM, string almac1, string almac2,
-                string tarjetaGrafica, string sistemaOperativo, string mac, string ip, string resolucion)
+                string tarjetaGrafica, string sistemaOperativo, string mac, string ip, string resolucion, byte[] facturaCompra = null)
             {
                 var resultado = new ResultadoActivo();
                 try
@@ -192,7 +185,7 @@ namespace Dominio
                         activoId, categoriaId, ubicacionId, etiqueta, marca, modelo,
                         numeroSerie, proveedorId, fechaAdquis, costo, estadoOperativo,
                         procesador, memoriaRAM, almac1, almac2, tarjetaGrafica, sistemaOperativo,
-                        mac, ip, resolucion
+                        mac, ip, resolucion, facturaCompra
                     );
 
                     resultado.Exitoso = operacionExitosa;

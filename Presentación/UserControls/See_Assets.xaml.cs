@@ -257,12 +257,19 @@ namespace Presentación
             }
         }
 
+        private void BtnDescargarFactura_Click(object sender, RoutedEventArgs e)
+        {
+            if (_activoSeleccionadoId == null) return;
+            DescargarFactura(_activoSeleccionadoId);
+        }
+
         private void DgActivos_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (DgActivos.SelectedItem == null)
             {
                 _activoSeleccionadoId = null;
                 _estadoActivoSeleccionado = "";
+                BtnDescargarFactura.IsEnabled = false;   // ✅ deshabilitar
                 return;
             }
 
@@ -270,6 +277,11 @@ namespace Presentación
             {
                 _activoSeleccionadoId = fila["ActivoID"];
                 _estadoActivoSeleccionado = fila["EstadoOperativo"]?.ToString() ?? "";
+
+                // ✅ Habilitar solo si la fila trae bytes de factura
+                bool tieneFactura = fila["FacturaCompra"] != DBNull.Value
+                                 && fila["FacturaCompra"] != null;
+                BtnDescargarFactura.IsEnabled = tieneFactura;
             }
         }
 
@@ -277,6 +289,53 @@ namespace Presentación
         {
             MessageBox.Show("Exportando el set de datos filtrados a Microsoft Excel...",
                             "SGSI Asset Management", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+
+
+        private void DescargarFactura(object activoId)
+        {
+            try
+            {
+                // Leer desde la fila ya cargada en el DataGrid (sin viaje extra a la BD)
+                if (DgActivos.SelectedItem is not DataRowView fila)
+                {
+                    MessageBox.Show("Selecciona un activo primero.",
+                        "Sin selección", MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
+
+                if (fila["FacturaCompra"] == DBNull.Value || fila["FacturaCompra"] == null)
+                {
+                    MessageBox.Show("Este activo no tiene factura registrada.",
+                        "Sin factura", MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
+
+                byte[] pdf = (byte[])fila["FacturaCompra"];
+                string etiq = fila["EtiquetaActivo"]?.ToString() ?? "factura";
+
+                // Opción A: Guardar en disco con SaveFileDialog
+                var dialog = new Microsoft.Win32.SaveFileDialog
+                {
+                    Title = "Guardar factura de compra",
+                    FileName = $"Factura_{etiq}.pdf",
+                    DefaultExt = ".pdf",
+                    Filter = "Archivos PDF (*.pdf)|*.pdf"
+                };
+
+                if (dialog.ShowDialog() == true)
+                {
+                    System.IO.File.WriteAllBytes(dialog.FileName, pdf);
+                    MessageBox.Show($"Factura guardada en:\n{dialog.FileName}",
+                        "Descarga exitosa", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al descargar la factura:\n{ex.Message}",
+                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }

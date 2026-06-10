@@ -14,6 +14,7 @@ namespace Presentación
 
         // Instancia global de la capa de negocio
         private readonly ActivosDominio _dominio = new ActivosDominio();
+        private byte[] _facturaCompraBytes = null;
 
         public View_Create_Assets()
         {
@@ -123,27 +124,96 @@ namespace Presentación
             }
         }
 
+        private void BtnSeleccionarPdf_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new Microsoft.Win32.OpenFileDialog
+            {
+                Title = "Seleccionar factura de compra",
+                Filter = "Archivos PDF (*.pdf)|*.pdf"
+            };
+
+            if (dialog.ShowDialog() != true) return;
+
+            try
+            {
+                var info = new System.IO.FileInfo(dialog.FileName);
+
+                // Límite de 10 MB para no saturar la BD con PDFs enormes
+                if (info.Length > 10 * 1024 * 1024)
+                {
+                    MessageBox.Show("El archivo supera el límite de 10 MB. Seleccione un PDF más pequeño.",
+                        "Archivo demasiado grande", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                _facturaCompraBytes = System.IO.File.ReadAllBytes(dialog.FileName);
+                TxtNombreFactura.Text = info.Name;
+                TxtNombreFactura.Foreground = System.Windows.Media.Brushes.White;
+
+                double kb = info.Length / 1024.0;
+                TxtTamañoPdf.Text = kb < 1024
+                    ? $"{kb:F1} KB"
+                    : $"{kb / 1024:F2} MB";
+                TxtTamañoPdf.Visibility = Visibility.Visible;
+                BtnVerPdf.Visibility = Visibility.Visible;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al leer el archivo:\n{ex.Message}",
+                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void BtnVerPdf_Click(object sender, RoutedEventArgs e)
+        {
+            if (_facturaCompraBytes == null) return;
+
+            try
+            {
+                // Escribe en un archivo temporal y lo abre con el visor predeterminado
+                string tmp = System.IO.Path.Combine(
+                    System.IO.Path.GetTempPath(),
+                    $"factura_preview_{System.IO.Path.GetRandomFileName()}.pdf");
+
+                System.IO.File.WriteAllBytes(tmp, _facturaCompraBytes);
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = tmp,
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"No se pudo abrir el PDF:\n{ex.Message}",
+                    "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
         private bool ValidarPasoBase()
         {
             if (CbCategoria.SelectedIndex == -1)
             {
-                MessageBox.Show("Debe seleccionar una categoría para el activo.", "Validación", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Debe seleccionar una categoría para el activo.",
+                    "Validación", MessageBoxButton.OK, MessageBoxImage.Warning);
                 CbCategoria.Focus();
                 return false;
             }
             if (CbUbicacion.SelectedIndex == -1)
             {
-                MessageBox.Show("Debe asignar una ubicación física inicial.", "Validación", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Debe asignar una ubicación física inicial.",
+                    "Validación", MessageBoxButton.OK, MessageBoxImage.Warning);
                 CbUbicacion.Focus();
                 return false;
             }
             if (!string.IsNullOrWhiteSpace(TxtCosto.Text) && !decimal.TryParse(TxtCosto.Text, out _))
             {
-                MessageBox.Show("El costo del activo debe ser un valor numérico válido.", "Validación", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("El costo del activo debe ser un valor numérico válido.",
+                    "Validación", MessageBoxButton.OK, MessageBoxImage.Warning);
                 TxtCosto.Focus();
                 return false;
             }
             return true;
+            // ✅ Sin ninguna mención a TxtEtiqueta
         }
 
         private void ProcesarGuardadoActivo()
@@ -157,32 +227,32 @@ namespace Presentación
 
                 // Inyección y consumo de la capa Dominio con los 19 parámetros exactos
                 var resultado = _dominio.CrearActivo(
-                    // Campos del Paso 1 (ActivosBase)
-                    (int)CbCategoria.SelectedValue,                            // 1 (int)
-                    (int)CbUbicacion.SelectedValue,                            // 2 (int)
-                    TxtEtiqueta.Text.Trim(),                                   // 3 (string) <-- ¡FALTABA ESTE PARÁMETRO AQUÍ!
-                    TxtMarca.Text.Trim(),                                      // 4 (string)
-                    TxtModelo.Text.Trim(),                                     // 5 (string)
-                    TxtSerie.Text.Trim(),                                      // 6 (string)
-                    proveedorId,                                               // 7 (int?)
-                    fecha,                                                     // 8 (DateTime?)
-                    costo,                                                     // 9 (decimal?)
-                    ((ComboBoxItem)CbEstado.SelectedItem).Content.ToString(),  // 10 (string)
+                    (int)CbCategoria.SelectedValue,
+                    (int)CbUbicacion.SelectedValue,
+                    string.Empty,                                              // ✅ La BD lo genera
+                    TxtMarca.Text.Trim(),
+                    TxtModelo.Text.Trim(),
+                    TxtSerie.Text.Trim(),
+                    proveedorId,
+                    fecha,
+                    costo,
+                    ((ComboBoxItem)CbEstado.SelectedItem).Content.ToString(),
+                    TxtProcesador.Text.Trim(),
+                    TxtRam.Text.Trim(),
+                    TxtDisco1.Text.Trim(),
+                    TxtDisco2.Text.Trim(),
+                    TxtGrafica.Text.Trim(),
+                    TxtSo.Text.Trim(),
+                    TxtMac.Text.Trim(),
+                    TxtIp.Text.Trim(),
+                    TxtResolucion.Text.Trim(),
+                    _facturaCompraBytes
+                                );
 
-                    // Campos del Paso 2 (EspecificacionesHardware)
-                    TxtProcesador.Text.Trim(),                                 // 11 (string)
-                    TxtRam.Text.Trim(),                                        // 12 (string)
-                    TxtDisco1.Text.Trim(),                                     // 13 (string)
-                    TxtDisco2.Text.Trim(),                                     // 14 (string)
-                    TxtGrafica.Text.Trim(),                                    // 15 (string)
-                    TxtSo.Text.Trim(),                                         // 16 (string)
-                    TxtMac.Text.Trim(),                                        // 17 (string)
-                    TxtIp.Text.Trim(),                                         // 18 (string)
-                    TxtResolucion.Text.Trim()                                  // 19 (string) <-- ¡Ahora sí cae en su posición correcta!
-                );
-
-                MessageBox.Show(resultado.Mensaje, resultado.Exitoso ? "Éxito" : "Error de Integridad",
-                                MessageBoxButton.OK, resultado.Exitoso ? MessageBoxImage.Information : MessageBoxImage.Error);
+                MessageBox.Show(resultado.Mensaje,
+                    resultado.Exitoso ? "Éxito" : "Error de Integridad",
+                    MessageBoxButton.OK,
+                    resultado.Exitoso ? MessageBoxImage.Information : MessageBoxImage.Error);
 
                 if (resultado.Exitoso)
                 {
@@ -210,6 +280,13 @@ namespace Presentación
             TxtMarca.Clear(); TxtModelo.Clear(); TxtSerie.Clear(); TxtMac.Clear(); TxtIp.Clear();
             TxtProcesador.Clear(); TxtRam.Clear(); TxtDisco1.Clear(); TxtDisco2.Clear();
             TxtGrafica.Clear(); TxtSo.Clear(); TxtResolucion.Clear();
+
+            // Resetear estado del PDF ────────────────────────
+            _facturaCompraBytes = null;
+            TxtNombreFactura.Text = "Ningún archivo seleccionado";
+            TxtNombreFactura.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#A0A0B8"));
+            TxtTamañoPdf.Visibility = Visibility.Collapsed;
+            BtnVerPdf.Visibility = Visibility.Collapsed;
         }
 
         private void RegresarAlPanelInicial()

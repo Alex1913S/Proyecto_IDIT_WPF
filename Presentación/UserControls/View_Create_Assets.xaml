@@ -211,11 +211,6 @@
                     <UniformGrid Columns="2" Margin="10,0,10,0" VerticalAlignment="Top">
 
                         <StackPanel Margin="15,8,15,8">
-                            <TextBlock x:Name="L0" Text="Etiqueta/Código" Foreground="#A0C4E0" FontWeight="Medium" Margin="0,0,0,6"/>
-                            <TextBox x:Name="TxtEtiqueta" Style="{StaticResource ModernInputStyle}"/>
-                        </StackPanel>
-
-                        <StackPanel Margin="15,8,15,8">
                             <TextBlock x:Name="L1" Text="Categoría" Foreground="#A0C4E0" FontWeight="Medium" Margin="0,0,0,6"/>
                             <ComboBox x:Name="CbCategoria" Style="{StaticResource ModernComboStyle}"/>
                         </StackPanel>
@@ -247,6 +242,65 @@
                         <StackPanel Margin="15,8,15,8">
                             <TextBlock x:Name="L6" Text="Costo de Activo ($)" Foreground="#A0C4E0" FontWeight="Medium" Margin="0,0,0,6"/>
                             <TextBox x:Name="TxtCosto" Style="{StaticResource ModernInputStyle}"/>
+                        </StackPanel>
+                        <!-- Agregar dentro del UniformGrid del TabItem Paso 1 -->
+                        <StackPanel Margin="15,8,15,8" Grid.ColumnSpan="2">
+                            <TextBlock Text="Factura de Compra (PDF)" Foreground="#A0C4E0" FontWeight="Medium" Margin="0,0,0,6"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Nombre del archivo seleccionado -->
+                                <Border Grid.Column="0" Background="#09274c" BorderBrush="#061e35" BorderThickness="1" CornerRadius="6,0,0,6" Height="38">
+                                    <TextBlock x:Name="TxtNombreFactura"
+                                                   Text="Ningún archivo seleccionado"
+                                                   Foreground="#A0A0B8" FontSize="12"
+                                                   VerticalAlignment="Center" Margin="10,0"/>
+                                </Border>
+
+                                <!-- Botón seleccionar PDF -->
+                                <Button x:Name="BtnSeleccionarPdf" Grid.Column="1"
+                                            Content="Seleccionar PDF"
+                                            Height="38" Padding="12,0"
+                                            Background="#2F80ED" Foreground="#060621"
+                                            FontWeight="SemiBold" BorderThickness="0" Cursor="Hand"
+                                            Click="BtnSeleccionarPdf_Click">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}">
+                                                <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+
+                                <!-- Botón ver PDF (solo si hay uno cargado) -->
+                                <Button x:Name="BtnVerPdf" Grid.Column="2"
+                                            Content="Ver PDF"
+                                            Height="38" Padding="12,0"
+                                            Background="#151538" Foreground="#A0C4E0"
+                                            FontWeight="SemiBold" BorderThickness="0" Cursor="Hand"
+                                            Visibility="Collapsed"
+                                            Click="BtnVerPdf_Click">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}" CornerRadius="0,6,6,0">
+                                                <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                            </Grid>
+
+                            <!-- Badge de tamaño del archivo -->
+                            <TextBlock x:Name="TxtTamañoPdf"
+                                       FontSize="11" Foreground="#5a8ab0"
+                                       Margin="0,4,0,0" Visibility="Collapsed"/>
                         </StackPanel>
                     </UniformGrid>
                 </ScrollViewer>

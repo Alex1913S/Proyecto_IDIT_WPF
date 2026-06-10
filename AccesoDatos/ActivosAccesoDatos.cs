@@ -17,7 +17,8 @@ namespace AccesoDatos
             // EspecificacionesHardware
             string procesador, string memoriaRAM, string almac1, string almac2,
             string tarjetaGrafica, string sistemaOperativo, string mac, string ip,
-            string resolucion)
+            string resolucion,
+            byte[] facturaCompra = null)
         {
             using (var conn = GetConnection())
             {
@@ -32,19 +33,18 @@ namespace AccesoDatos
                         // INSERT ActivosBase (Se agrega EtiquetaActivo)
                         string sqlBase = @"
                             INSERT INTO ITAM.ActivosBase
-                                (ActivoID, CategoriaID, UbicacionID, EtiquetaActivo,
+                                (ActivoID, CategoriaID, UbicacionID,
                                  Marca, Modelo, NumeroSerie, ProveedorID,
-                                 FechaAdquisicion, Costo, EstadoOperativo)
+                                 FechaAdquisicion, Costo, EstadoOperativo, FacturaCompra)
                             VALUES
                                 (@ActivoID, @CategoriaID, @UbicacionID, @EtiquetaActivo,
                                  @Marca, @Modelo, @NumeroSerie, @ProveedorID,
-                                 @FechaAdquisicion, @Costo, @EstadoOperativo)";
+                                 @FechaAdquisicion, @Costo, @EstadoOperativo, @FacturaCompra)";
 
                         var cmdBase = new SqlCommand(sqlBase, conn, transaction);
                         cmdBase.Parameters.Add("@ActivoID", SqlDbType.UniqueIdentifier).Value = activoId;
                         cmdBase.Parameters.Add("@CategoriaID", SqlDbType.Int).Value = categoriaId;
                         cmdBase.Parameters.Add("@UbicacionID", SqlDbType.Int).Value = ubicacionId;
-                        cmdBase.Parameters.Add("@EtiquetaActivo", SqlDbType.VarChar).Value = etiquetaActivo ?? (object)DBNull.Value;
                         cmdBase.Parameters.Add("@Marca", SqlDbType.NVarChar).Value = marca ?? (object)DBNull.Value;
                         cmdBase.Parameters.Add("@Modelo", SqlDbType.NVarChar).Value = modelo ?? (object)DBNull.Value;
                         cmdBase.Parameters.Add("@NumeroSerie", SqlDbType.VarChar).Value = numeroSerie ?? (object)DBNull.Value;
@@ -52,6 +52,7 @@ namespace AccesoDatos
                         cmdBase.Parameters.Add("@FechaAdquisicion", SqlDbType.Date).Value = fechaAdquis.HasValue ? fechaAdquis.Value : (object)DBNull.Value;
                         cmdBase.Parameters.Add("@Costo", SqlDbType.Decimal).Value = costo.HasValue ? costo.Value : (object)DBNull.Value;
                         cmdBase.Parameters.Add("@EstadoOperativo", SqlDbType.VarChar).Value = estadoOperativo ?? (object)DBNull.Value;
+                        cmdBase.Parameters.Add("@FacturaCompra", SqlDbType.VarBinary).Value = facturaCompra != null ? (object)facturaCompra : DBNull.Value; ;
 
                         cmdBase.ExecuteNonQuery();
 
@@ -99,7 +100,7 @@ namespace AccesoDatos
             Guid activoId, int categoriaId, int ubicacionId, string etiquetaActivo, string marca, string modelo,
             string numeroSerie, int? proveedorId, DateTime? fechaAdquis, decimal? costo, string estadoOperativo,
             string procesador, string memoriaRAM, string almac1, string almac2,
-            string tarjetaGrafica, string sistemaOperativo, string mac, string ip, string resolucion)
+            string tarjetaGrafica, string sistemaOperativo, string mac, string ip, string resolucion, byte[] facturaCompra = null)
         {
             using (var conn = GetConnection())
             {
@@ -114,7 +115,8 @@ namespace AccesoDatos
                             SET CategoriaID = @CategoriaID, UbicacionID = @UbicacionID, 
                                 EtiquetaActivo = @EtiquetaActivo, Marca = @Marca, Modelo = @Modelo, 
                                 NumeroSerie = @NumeroSerie, ProveedorID = @ProveedorID, 
-                                FechaAdquisicion = @FechaAdquisicion, Costo = @Costo, EstadoOperativo = @EstadoOperativo
+                                FechaAdquisicion = @FechaAdquisicion, Costo = @Costo, EstadoOperativo = @EstadoOperativo,
+                                FacturaCompra = COALESCE(@FacturaCompra, FacturaCompra)
                             WHERE ActivoID = @ActivoID";
 
                         using (var cmd = new SqlCommand(sqlBase, conn, transaction))
@@ -130,6 +132,7 @@ namespace AccesoDatos
                             cmd.Parameters.AddWithValue("@FechaAdquisicion", fechaAdquis ?? (object)DBNull.Value);
                             cmd.Parameters.AddWithValue("@Costo", costo ?? (object)DBNull.Value);
                             cmd.Parameters.AddWithValue("@EstadoOperativo", estadoOperativo);
+                            cmd.Parameters.AddWithValue("@FacturaCompra", facturaCompra != null ? (object)facturaCompra : DBNull.Value);
                             cmd.ExecuteNonQuery();
                         }
 
@@ -208,7 +211,8 @@ namespace AccesoDatos
                     EH.SistemaOperativo,
                     EH.DireccionMAC,
                     EH.DireccionIP_Estatica,
-                    EH.ResolucionPantalla
+                    EH.ResolucionPantalla,
+                    AB.FacturaCompra
                 FROM ITAM.ActivosBase AB
                 INNER JOIN ITAM.CategoriasActivo CAT ON AB.CategoriaID = CAT.CategoriaID
                 LEFT JOIN Core.Ubicaciones UBI ON AB.UbicacionID = UBI.UbicacionID
