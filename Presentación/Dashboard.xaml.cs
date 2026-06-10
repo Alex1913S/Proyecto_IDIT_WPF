@@ -57,6 +57,9 @@ namespace Presentación
             var culturaEspanol = new System.Globalization.CultureInfo("es-ES");
             string fechaFormateada = DateTime.Now.ToString("dddd, dd 'de' MMMM 'de' yyyy", culturaEspanol);
             LblDate.Text = char.ToUpper(fechaFormateada[0]) + fechaFormateada.Substring(1);
+            BtnThemeToggle.IsEnabled = false;
+            BtnThemeToggle.Visibility = Visibility.Collapsed;
+
 
             CargarFotoPerfil();
             CargarKPIs();

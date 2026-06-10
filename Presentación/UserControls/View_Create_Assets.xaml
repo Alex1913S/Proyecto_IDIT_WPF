@@ -231,7 +231,7 @@
 
                         <StackPanel Margin="15,8,15,8">
                             <TextBlock x:Name="L4" Text="Fecha de Registro" Foreground="#A0C4E0" FontWeight="Medium" Margin="0,0,0,6"/>
-                            <DatePicker x:Name="DpFecha" Height="38" VerticalContentAlignment="Center"/>
+                            <DatePicker x:Name="DpFecha" Height="38" VerticalContentAlignment="Center" />
                         </StackPanel>
 
                         <StackPanel Margin="15,8,15,8">
@@ -270,7 +270,7 @@
                                             Click="BtnSeleccionarPdf_Click">
                                     <Button.Template>
                                         <ControlTemplate TargetType="Button">
-                                            <Border Background="{TemplateBinding Background}">
+                                            <Border Background="{TemplateBinding Background}"  CornerRadius="0,6,6,0">
                                                 <ContentPresenter HorizontalAlignment="Center"
                                           VerticalAlignment="Center"/>
                                             </Border>

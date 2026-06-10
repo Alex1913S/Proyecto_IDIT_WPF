@@ -18,8 +18,51 @@ namespace AccesoDatos
 
         public ConexionSql()
         {
-            // Tu cadena de conexión hacia GSSGSI1
-            _connectionString = @"Data Source=.;Initial Catalog=GSSGSI1;Integrated Security=True;Encrypt=True;TrustServerCertificate=True;";
+            // 1. Definimos las instancias locales más comunes de SQL Server
+            string[] instanciasComunes = {
+            @".\SQLEXPRESS",              // SQL Server Express (La más común en entornos locales)
+            @".",                         // Instancia por defecto (Developer / Enterprise)
+            @"(localdb)\MSSQLLocalDB",    // LocalDB (Instancia ligera que viene con Visual Studio)
+            @"localhost"                  // Variación estándar de red local
+        };
+
+            bool conexionExitosa = false;
+
+            // 2. Probamos cada instancia hasta encontrar una que responda
+            foreach (string instancia in instanciasComunes)
+            {
+                string cadenaTentativa = $"Data Source={instancia};Initial Catalog=GSSGSI1;Integrated Security=True;Encrypt=True;TrustServerCertificate=True;Connection Timeout=2;";
+
+                if (ProbarConexion(cadenaTentativa))
+                {
+                    _connectionString = cadenaTentativa;
+                    conexionExitosa = true;
+                    break; // Encontró una activa, salimos del ciclo inmediatamente
+                }
+            }
+
+            // 3. Si recorrió todas y ninguna funcionó, asignamos la de por defecto por seguridad
+            if (!conexionExitosa)
+            {
+                _connectionString = @"Data Source=.\SQLEXPRESS;Initial Catalog=GSSGSI1;Integrated Security=True;Encrypt=True;TrustServerCertificate=True;";
+            }
+        }
+
+        // Método auxiliar para verificar si la instancia responde rápido
+        private bool ProbarConexion(string cadena)
+        {
+            try
+            {
+                using (var conexion = new SqlConnection(cadena))
+                {
+                    conexion.Open();
+                    return true; // Si abre sin error, la instancia es válida
+                }
+            }
+            catch
+            {
+                return false; // Si falla (por ejemplo, porque la instancia no existe), ignora el error y pasa a la siguiente
+            }
         }
 
         protected SqlConnection GetConnection()

@@ -148,12 +148,12 @@
                             VerticalAlignment="Center" Height="64">
                         <Grid>
                             <Image x:Name="LogoExpandido"
-                                   Source="/Assets/log.png"
+                                   Source="/Assets/Recurso 5.png"
                                    Height="48"
                                    Stretch="Uniform"
                                    VerticalAlignment="Center" Margin="10,0,23,0"/>
                             <Image x:Name="LogoReducido"
-                                   Source="/Assets/immf.png"
+                                   Source="/Assets/Recurso 5.png"
                                    Height="28"
                                    Width="28"
                                    Stretch="Uniform"

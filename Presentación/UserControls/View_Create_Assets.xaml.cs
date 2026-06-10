@@ -74,7 +74,7 @@ namespace Presentación
 
                 // Actualización visual del Wizard Header a tono Activo
                 Step2Indicator.Opacity = 1.0;
-                CircleStep2.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E89A24"));
+                CircleStep2.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#2F80ED"));
                 CircleStep2.BorderThickness = new Thickness(0);
                 TxtNum2.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#060621"));
                 TxtStep2Title.Foreground = Brushes.White;
@@ -102,7 +102,7 @@ namespace Presentación
                 // Restablecer estados visuales del Header
                 Step1Indicator.Opacity = 1.0;
                 Step2Indicator.Opacity = 0.5;
-                CircleStep2.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#151538"));
+                CircleStep2.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#2F80ED"));
                 CircleStep2.BorderThickness = new Thickness(1);
                 TxtNum2.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#A0A0B8"));
                 TxtStep2Title.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#A0A0B8"));

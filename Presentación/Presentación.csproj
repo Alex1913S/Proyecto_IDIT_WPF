@@ -17,6 +17,7 @@
     <None Remove="Assets\log.png" />
     <None Remove="Assets\LoginIM.png" />
     <None Remove="Assets\MapaColombia.html" />
+    <None Remove="Assets\Recurso 5.png" />
     <None Remove="Assets\Recurso-1.ico" />
     <None Remove="init.sql" />
   </ItemGroup>
@@ -37,6 +38,7 @@
     <Resource Include="Assets\idit_logo.png" />
     <Resource Include="Assets\log.png" />
     <Resource Include="Assets\LoginIM.png" />
+    <Resource Include="Assets\Recurso 5.png" />
     <Resource Include="Assets\Recurso-1.ico" />
   </ItemGroup>
 
