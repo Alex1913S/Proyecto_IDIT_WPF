@@ -232,6 +232,7 @@ namespace Dominio
     {
         private readonly AsignarActivoAccesoDatos _acceso = new();
 
+        // ── CONSULTAS DE ACTIVOS DISPONIBLES ──────────────────────────────
         public DataTable ObtenerActivosDisponibles() => _acceso.ObtenerActivosDisponibles();
 
         public DataTable BuscarActivos(string termino)
@@ -239,6 +240,7 @@ namespace Dominio
                 ? _acceso.ObtenerActivosDisponibles()
                 : _acceso.BuscarActivosDisponibles(termino.Trim());
 
+        // ── CONSULTAS DE COLABORADORES ────────────────────────────────────
         public DataTable ObtenerColaboradores() => _acceso.ObtenerColaboradores();
 
         public DataTable BuscarColaboradores(string termino)
@@ -246,6 +248,11 @@ namespace Dominio
                 ? _acceso.ObtenerColaboradores()
                 : _acceso.BuscarColaboradores(termino.Trim());
 
+        // ── EL PUENTE CORREGIDO PARA LA GRILLA DE HISTORIAL ─────────────────
+        // Este método resuelve el error de compilación en tu UserControl de WPF
+        public DataTable ObtenerAsignacionesActivas() => _acceso.ObtenerActivosDisponibles();
+
+        // ── PROCESAMIENTO Y VALIDACIÓN DE ASIGNACIONES ────────────────────
         public ResultadoAsignacion Registrar(
             Guid? activoId, int? colaboradorId, DateTime fechaAsignacion, string observaciones)
         {
@@ -258,18 +265,18 @@ namespace Dominio
             if (fechaAsignacion > DateTime.Today)
                 return Error("La fecha de asignación no puede ser futura.");
 
+            // Llama al método transaccional de Acceso a Datos
             int id = _acceso.RegistrarAsignacion(
                 activoId.Value, colaboradorId.Value, fechaAsignacion, observaciones);
 
             return id > 0
-                ? new ResultadoAsignacion { Exitoso = true, AsignacionID = id }
-                : Error("Ocurrió un error al guardar. Intente nuevamente.");
+                ? new ResultadoAsignacion { Exitoso = true, AsignacionID = id, Mensaje = "Asignación registrada con éxito." }
+                : Error("Ocurrió un error al guardar la asignación en la base de datos. Intente nuevamente.");
         }
 
         private static ResultadoAsignacion Error(string msg) => new() { Exitoso = false, Mensaje = msg };
     }
-
-    public class ResultadoAsignacion
+        public class ResultadoAsignacion
     {
         public bool Exitoso { get; set; }
         public int AsignacionID { get; set; }
