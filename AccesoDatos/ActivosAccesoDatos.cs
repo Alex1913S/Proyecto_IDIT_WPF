@@ -8,6 +8,7 @@ namespace AccesoDatos
 {
     public class ActivosAccesoDatos : ConexionSql
     {
+        private static object NullSiVacio(string valor) => string.IsNullOrWhiteSpace(valor) ? DBNull.Value : (object)valor;
         public bool InsertarActivo(
             // ActivosBase
             int categoriaId, int ubicacionId, string etiquetaActivo,
@@ -35,11 +36,13 @@ namespace AccesoDatos
                             INSERT INTO ITAM.ActivosBase
                                 (ActivoID, CategoriaID, UbicacionID,
                                  Marca, Modelo, NumeroSerie, ProveedorID,
-                                 FechaAdquisicion, Costo, EstadoOperativo, FacturaCompra)
+                                 FechaAdquisicion, Costo, EstadoOperativo,
+                                 FacturaCompra)
                             VALUES
-                                (@ActivoID, @CategoriaID, @UbicacionID, @EtiquetaActivo,
+                                (@ActivoID, @CategoriaID, @UbicacionID,
                                  @Marca, @Modelo, @NumeroSerie, @ProveedorID,
-                                 @FechaAdquisicion, @Costo, @EstadoOperativo, @FacturaCompra)";
+                                 @FechaAdquisicion, @Costo, @EstadoOperativo,
+                                 @FacturaCompra)";
 
                         var cmdBase = new SqlCommand(sqlBase, conn, transaction);
                         cmdBase.Parameters.Add("@ActivoID", SqlDbType.UniqueIdentifier).Value = activoId;
@@ -47,7 +50,7 @@ namespace AccesoDatos
                         cmdBase.Parameters.Add("@UbicacionID", SqlDbType.Int).Value = ubicacionId;
                         cmdBase.Parameters.Add("@Marca", SqlDbType.NVarChar).Value = marca ?? (object)DBNull.Value;
                         cmdBase.Parameters.Add("@Modelo", SqlDbType.NVarChar).Value = modelo ?? (object)DBNull.Value;
-                        cmdBase.Parameters.Add("@NumeroSerie", SqlDbType.VarChar).Value = numeroSerie ?? (object)DBNull.Value;
+                        cmdBase.Parameters.Add("@NumeroSerie", SqlDbType.VarChar).Value = NullSiVacio(numeroSerie);
                         cmdBase.Parameters.Add("@ProveedorID", SqlDbType.Int).Value = proveedorId.HasValue ? proveedorId.Value : (object)DBNull.Value;
                         cmdBase.Parameters.Add("@FechaAdquisicion", SqlDbType.Date).Value = fechaAdquis.HasValue ? fechaAdquis.Value : (object)DBNull.Value;
                         cmdBase.Parameters.Add("@Costo", SqlDbType.Decimal).Value = costo.HasValue ? costo.Value : (object)DBNull.Value;

@@ -130,6 +130,7 @@ namespace Dominio
                         return resultado;
                     }
 
+
                     bool ok = _datos.InsertarActivo(
                         categoriaId, ubicacionId, etiqueta, // <-- Enviado correctamente a Acceso a Datos
                         marca, modelo, numeroSerie, proveedorId,
