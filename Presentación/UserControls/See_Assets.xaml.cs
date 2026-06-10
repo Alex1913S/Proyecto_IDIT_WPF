@@ -269,7 +269,7 @@ namespace Presentación
             {
                 _activoSeleccionadoId = null;
                 _estadoActivoSeleccionado = "";
-                BtnDescargarFactura.IsEnabled = false;   // ✅ deshabilitar
+                BtnDescargarFactura.IsEnabled = false;
                 return;
             }
 
@@ -278,9 +278,11 @@ namespace Presentación
                 _activoSeleccionadoId = fila["ActivoID"];
                 _estadoActivoSeleccionado = fila["EstadoOperativo"]?.ToString() ?? "";
 
-                // ✅ Habilitar solo si la fila trae bytes de factura
-                bool tieneFactura = fila["FacturaCompra"] != DBNull.Value
+                // ✅ Verificar que la columna existe y tiene datos
+                bool tieneFactura = fila.Row.Table.Columns.Contains("FacturaCompra")
+                                 && fila["FacturaCompra"] != DBNull.Value
                                  && fila["FacturaCompra"] != null;
+
                 BtnDescargarFactura.IsEnabled = tieneFactura;
             }
         }

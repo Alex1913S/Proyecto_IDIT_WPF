@@ -130,7 +130,6 @@ namespace Dominio
                         return resultado;
                     }
 
-
                     bool ok = _datos.InsertarActivo(
                         categoriaId, ubicacionId, etiqueta, // <-- Enviado correctamente a Acceso a Datos
                         marca, modelo, numeroSerie, proveedorId,
@@ -162,7 +161,7 @@ namespace Dominio
                 string marca, string modelo, string numeroSerie, int? proveedorId,
                 DateTime? fechaAdquis, decimal? costo, string estadoOperativo,
                 string procesador, string memoriaRAM, string almac1, string almac2,
-                string tarjetaGrafica, string sistemaOperativo, string mac, string ip, string resolucion, byte[] facturaCompra = null)
+                string tarjetaGrafica, string sistemaOperativo, string mac, string ip, string resolucion, byte[] facturaCompra)
             {
                 var resultado = new ResultadoActivo();
                 try

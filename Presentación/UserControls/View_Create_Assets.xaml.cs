@@ -216,10 +216,16 @@ namespace Presentación
             // ✅ Sin ninguna mención a TxtEtiqueta
         }
 
+
+
         private void ProcesarGuardadoActivo()
         {
             try
             {
+                MessageBox.Show($"Bytes de factura: {(_facturaCompraBytes == null ? "NULL" : _facturaCompraBytes.Length + " bytes")}",
+                "Debug Factura", MessageBoxButton.OK, MessageBoxImage.Information);
+
+
                 // Extracción segura de tipos anulables (Nullables)
                 decimal? costo = string.IsNullOrWhiteSpace(TxtCosto.Text) ? null : decimal.Parse(TxtCosto.Text);
                 DateTime? fecha = DpFecha.SelectedDate;

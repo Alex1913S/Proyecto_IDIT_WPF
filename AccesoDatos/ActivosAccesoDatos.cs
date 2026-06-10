@@ -8,7 +8,7 @@ namespace AccesoDatos
 {
     public class ActivosAccesoDatos : ConexionSql
     {
-        private static object NullSiVacio(string valor) => string.IsNullOrWhiteSpace(valor) ? DBNull.Value : (object)valor;
+        private static object NullSiVacio(string valor) =>string.IsNullOrWhiteSpace(valor) ? DBNull.Value : (object)valor;
         public bool InsertarActivo(
             // ActivosBase
             int categoriaId, int ubicacionId, string etiquetaActivo,
@@ -50,12 +50,13 @@ namespace AccesoDatos
                         cmdBase.Parameters.Add("@UbicacionID", SqlDbType.Int).Value = ubicacionId;
                         cmdBase.Parameters.Add("@Marca", SqlDbType.NVarChar).Value = marca ?? (object)DBNull.Value;
                         cmdBase.Parameters.Add("@Modelo", SqlDbType.NVarChar).Value = modelo ?? (object)DBNull.Value;
-                        cmdBase.Parameters.Add("@NumeroSerie", SqlDbType.VarChar).Value = NullSiVacio(numeroSerie);
+                        cmdBase.Parameters.Add("@NumeroSerie", SqlDbType.VarChar).Value = numeroSerie ?? (object)DBNull.Value;
                         cmdBase.Parameters.Add("@ProveedorID", SqlDbType.Int).Value = proveedorId.HasValue ? proveedorId.Value : (object)DBNull.Value;
                         cmdBase.Parameters.Add("@FechaAdquisicion", SqlDbType.Date).Value = fechaAdquis.HasValue ? fechaAdquis.Value : (object)DBNull.Value;
                         cmdBase.Parameters.Add("@Costo", SqlDbType.Decimal).Value = costo.HasValue ? costo.Value : (object)DBNull.Value;
                         cmdBase.Parameters.Add("@EstadoOperativo", SqlDbType.VarChar).Value = estadoOperativo ?? (object)DBNull.Value;
-                        cmdBase.Parameters.Add("@FacturaCompra", SqlDbType.VarBinary).Value = facturaCompra != null ? (object)facturaCompra : DBNull.Value; ;
+                        cmdBase.Parameters.Add("@FacturaCompra", SqlDbType.VarBinary).Value = (object)facturaCompra ?? DBNull.Value;
+
 
                         cmdBase.ExecuteNonQuery();
 
