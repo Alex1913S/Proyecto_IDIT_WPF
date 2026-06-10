@@ -105,7 +105,7 @@
                                 Padding="{TemplateBinding Padding}">
                             <StackPanel Orientation="Horizontal">
                                 <ContentPresenter VerticalAlignment="Center"/>
-                                <Border x:Name="Badge" Margin="8,0,0,0" Background="#0d3a5c"
+                                <Border x:Name="Badge" Margin="8,0,0,0" Background="#09274c"
                                         CornerRadius="10" Padding="6,2" VerticalAlignment="Center">
                                     <TextBlock x:Name="BadgeText"
                                                Text="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}"
@@ -172,7 +172,7 @@
         </Style>
         <Style TargetType="DataGridColumnHeader">
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="#A0A0B8"/>
+            <Setter Property="Foreground" Value="#A0C4E0"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="Padding" Value="12,12"/>
@@ -192,7 +192,7 @@
             <Setter Property="BorderBrush" Value="#0d3a5c"/>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#0e3560"/>
+                    <Setter Property="Background" Value="#0D0D2D"/>
                 </Trigger>
                 <Trigger Property="IsSelected" Value="True">
                     <Setter Property="Background" Value="#1a4a7a"/>
@@ -643,7 +643,7 @@
                                     <ColumnDefinition Width="35"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="🔍" Foreground="#A0A0B8"
+                                <TextBlock Text="🔍" Foreground="#A0C4E0"
                                            VerticalAlignment="Center" HorizontalAlignment="Center"
                                            FontSize="12"/>
                                 <TextBox x:Name="TxtBuscarColaborador" Grid.Column="1"

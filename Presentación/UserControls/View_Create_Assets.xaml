@@ -10,14 +10,14 @@
     <UserControl.Resources>
         <Style x:Key="ModernInputStyle" TargetType="TextBox">
             <Setter Property="Height" Value="38"/>
-            <Setter Property="Background" Value="#151538"/>
+            <Setter Property="Background" Value="#09274c"/>
             <Setter Property="Foreground" Value="White"/>
-            <Setter Property="BorderBrush" Value="#3F3F6B"/>
+            <Setter Property="BorderBrush" Value="#061e35"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Padding" Value="10,3"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="FontSize" Value="13"/>
-            <Setter Property="CaretBrush" Value="#E89A24"/>
+            <Setter Property="CaretBrush" Value="#2F80ED"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="TextBox">
@@ -30,10 +30,10 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="BaseBorder" Property="BorderBrush" Value="#E89A24"/>
+                                <Setter TargetName="BaseBorder" Property="BorderBrush" Value="#2F80ED"/>
                             </Trigger>
                             <Trigger Property="IsFocused" Value="True">
-                                <Setter TargetName="BaseBorder" Property="BorderBrush" Value="#E89A24"/>
+                                <Setter TargetName="BaseBorder" Property="BorderBrush" Value="#2F80ED"/>
                                 <Setter TargetName="BaseBorder" Property="BorderThickness" Value="1.5"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
@@ -54,7 +54,7 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="ItemBorder" Property="Background" Value="#E89A24"/>
+                                <Setter TargetName="ItemBorder" Property="Background" Value="#2F80ED"/>
                                 <Setter Property="Foreground" Value="#060621"/>
                             </Trigger>
                             <Trigger Property="IsSelected" Value="True">
@@ -69,8 +69,8 @@
 
         <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="ToggleButton">
             <Border x:Name="ToggleButtonBorder" 
-                    Background="#151538" 
-                    BorderBrush="#3F3F6B" 
+                    Background="#09274c" 
+                    BorderBrush="#061e35" 
                     BorderThickness="1" 
                     CornerRadius="6">
                 <Grid>
@@ -88,11 +88,11 @@
             </Border>
             <ControlTemplate.Triggers>
                 <Trigger Property="IsMouseOver" Value="true">
-                    <Setter TargetName="ToggleButtonBorder" Property="BorderBrush" Value="#E89A24"/>
-                    <Setter TargetName="Arrow" Property="Fill" Value="#E89A24"/>
+                    <Setter TargetName="ToggleButtonBorder" Property="BorderBrush" Value="#2F80ED"/>
+                    <Setter TargetName="Arrow" Property="Fill" Value="#2F80ED"/>
                 </Trigger>
                 <Trigger Property="IsChecked" Value="true">
-                    <Setter TargetName="ToggleButtonBorder" Property="BorderBrush" Value="#E89A24"/>
+                    <Setter TargetName="ToggleButtonBorder" Property="BorderBrush" Value="#2F80ED"/>
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
@@ -102,8 +102,8 @@
         <Style x:Key="ModernComboStyle" TargetType="ComboBox">
             <Setter Property="Height" Value="38"/>
             <Setter Property="Foreground" Value="White"/>
-            <Setter Property="Background" Value="#151538"/>
-            <Setter Property="BorderBrush" Value="#3F3F6B"/>
+            <Setter Property="Background" Value="#0d3a5c"/>
+            <Setter Property="BorderBrush" Value="#09274c"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Padding" Value="10,0,0,0"/>
             <Setter Property="FontSize" Value="13"/>
@@ -139,8 +139,8 @@
                                       MinWidth="{TemplateBinding ActualWidth}" 
                                       MaxHeight="{TemplateBinding MaxDropDownHeight}">
                                     <Border x:Name="DropDownBorder" 
-                                            Background="#090924" 
-                                            BorderBrush="#3F3F6B" 
+                                            Background="#09274c" 
+                                            BorderBrush="#2F80ED" 
                                             BorderThickness="1" 
                                             CornerRadius="6"
                                             Margin="0,3,0,0">
@@ -176,7 +176,7 @@
         <Grid Grid.Row="0" Margin="0,0,0,25">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <StackPanel x:Name="Step1Indicator" Orientation="Horizontal" VerticalAlignment="Center">
-                    <Border x:Name="CircleStep1" Width="28" Height="28" Background="#E89A24" CornerRadius="14">
+                    <Border x:Name="CircleStep1" Width="28" Height="28" Background="#2F80ED" CornerRadius="14">
                         <TextBlock Text="1" Foreground="#060621" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                     <StackPanel Margin="10,0,0,0" VerticalAlignment="Center">
@@ -185,11 +185,11 @@
                     </StackPanel>
                 </StackPanel>
 
-                <Rectangle x:Name="LineConnector" Width="80" Height="2" Fill="#3F3F6B" Margin="20,0,20,0" VerticalAlignment="Center"/>
+                <Rectangle x:Name="LineConnector" Width="80" Height="2" Fill="#A0A0B8" Margin="20,0,20,0" VerticalAlignment="Center"/>
 
                 <StackPanel x:Name="Step2Indicator" Orientation="Horizontal" VerticalAlignment="Center" Opacity="0.5">
-                    <Border x:Name="CircleStep2" Width="28" Height="28" Background="#151538" CornerRadius="14" BorderBrush="#3F3F6B" BorderThickness="1">
-                        <TextBlock x:Name="TxtNum2" Text="2" Foreground="#A0A0B8" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <Border x:Name="CircleStep2" Width="28" Height="28" Background="#2160a5" CornerRadius="14" BorderBrush="#060621" BorderThickness="1">
+                        <TextBlock x:Name="TxtNum2" Text="2" Foreground="#060621" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                     <StackPanel Margin="10,0,0,0" VerticalAlignment="Center">
                         <TextBlock x:Name="TxtStep2Title" Text="Detalles de Hardware" FontSize="13" FontWeight="Bold" Foreground="#A0A0B8"/>
@@ -211,17 +211,17 @@
                     <UniformGrid Columns="2" Margin="10,0,10,0" VerticalAlignment="Top">
 
                         <StackPanel Margin="15,8,15,8">
-                            <TextBlock x:Name="L0" Text="Etiqueta/Código" Foreground="#A0A0B8" FontWeight="Medium" Margin="0,0,0,6"/>
+                            <TextBlock x:Name="L0" Text="Etiqueta/Código" Foreground="#A0C4E0" FontWeight="Medium" Margin="0,0,0,6"/>
                             <TextBox x:Name="TxtEtiqueta" Style="{StaticResource ModernInputStyle}"/>
                         </StackPanel>
 
                         <StackPanel Margin="15,8,15,8">
-                            <TextBlock x:Name="L1" Text="Categoría" Foreground="#A0A0B8" FontWeight="Medium" Margin="0,0,0,6"/>
+                            <TextBlock x:Name="L1" Text="Categoría" Foreground="#A0C4E0" FontWeight="Medium" Margin="0,0,0,6"/>
                             <ComboBox x:Name="CbCategoria" Style="{StaticResource ModernComboStyle}"/>
                         </StackPanel>
 
                         <StackPanel Margin="15,8,15,8">
-                            <TextBlock x:Name="L2" Text="Estado Operativo" Foreground="#A0A0B8" FontWeight="Medium" Margin="0,0,0,6"/>
+                            <TextBlock x:Name="L2" Text="Estado Operativo" Foreground="#A0C4E0" FontWeight="Medium" Margin="0,0,0,6"/>
                             <ComboBox x:Name="CbEstado" Style="{StaticResource ModernComboStyle}">
                                 <ComboBoxItem Content="En Bodega" IsSelected="True"/>
                                 <ComboBoxItem Content="Asignado"/>
@@ -230,22 +230,22 @@
                         </StackPanel>
 
                         <StackPanel Margin="15,8,15,8">
-                            <TextBlock x:Name="L3" Text="Ubicación" Foreground="#A0A0B8" FontWeight="Medium" Margin="0,0,0,6"/>
+                            <TextBlock x:Name="L3" Text="Ubicación" Foreground="#A0C4E0" FontWeight="Medium" Margin="0,0,0,6"/>
                             <ComboBox x:Name="CbUbicacion" Style="{StaticResource ModernComboStyle}"/>
                         </StackPanel>
 
                         <StackPanel Margin="15,8,15,8">
-                            <TextBlock x:Name="L4" Text="Fecha de Registro" Foreground="#A0A0B8" FontWeight="Medium" Margin="0,0,0,6"/>
+                            <TextBlock x:Name="L4" Text="Fecha de Registro" Foreground="#A0C4E0" FontWeight="Medium" Margin="0,0,0,6"/>
                             <DatePicker x:Name="DpFecha" Height="38" VerticalContentAlignment="Center"/>
                         </StackPanel>
 
                         <StackPanel Margin="15,8,15,8">
-                            <TextBlock x:Name="L5" Text="Proveedor" Foreground="#A0A0B8" FontWeight="Medium" Margin="0,0,0,6"/>
+                            <TextBlock x:Name="L5" Text="Proveedor" Foreground="#A0C4E0" FontWeight="Medium" Margin="0,0,0,6"/>
                             <ComboBox x:Name="CbProveedor" Style="{StaticResource ModernComboStyle}"/>
                         </StackPanel>
 
                         <StackPanel Margin="15,8,15,8">
-                            <TextBlock x:Name="L6" Text="Costo de Activo ($)" Foreground="#A0A0B8" FontWeight="Medium" Margin="0,0,0,6"/>
+                            <TextBlock x:Name="L6" Text="Costo de Activo ($)" Foreground="#A0C4E0" FontWeight="Medium" Margin="0,0,0,6"/>
                             <TextBox x:Name="TxtCosto" Style="{StaticResource ModernInputStyle}"/>
                         </StackPanel>
                     </UniformGrid>
@@ -256,51 +256,51 @@
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <UniformGrid Columns="2" Margin="10,0,10,0">
                         <StackPanel Margin="15,6,15,6">
-                            <TextBlock x:Name="LH1" Text="Marca" Foreground="#A0A0B8" FontWeight="Medium" Margin="0,0,0,5"/>
+                            <TextBlock x:Name="LH1" Text="Marca" Foreground="#A0C4E0" FontWeight="Medium" Margin="0,0,0,5"/>
                             <TextBox x:Name="TxtMarca" Style="{StaticResource ModernInputStyle}"/>
                         </StackPanel>
                         <StackPanel Margin="15,6,15,6">
-                            <TextBlock x:Name="LH2" Text="Tarjeta Gráfica" Foreground="#A0A0B8" FontWeight="Medium" Margin="0,0,0,5"/>
+                            <TextBlock x:Name="LH2" Text="Tarjeta Gráfica" Foreground="#A0C4E0" FontWeight="Medium" Margin="0,0,0,5"/>
                             <TextBox x:Name="TxtGrafica" Style="{StaticResource ModernInputStyle}"/>
                         </StackPanel>
                         <StackPanel Margin="15,6,15,6">
-                            <TextBlock x:Name="LH3" Text="Modelo" Foreground="#A0A0B8" FontWeight="Medium" Margin="0,0,0,5"/>
+                            <TextBlock x:Name="LH3" Text="Modelo" Foreground="#A0C4E0" FontWeight="Medium" Margin="0,0,0,5"/>
                             <TextBox x:Name="TxtModelo" Style="{StaticResource ModernInputStyle}"/>
                         </StackPanel>
                         <StackPanel Margin="15,6,15,6">
-                            <TextBlock x:Name="LH4" Text="Memoria RAM" Foreground="#A0A0B8" FontWeight="Medium" Margin="0,0,0,5"/>
+                            <TextBlock x:Name="LH4" Text="Memoria RAM" Foreground="#A0C4E0" FontWeight="Medium" Margin="0,0,0,5"/>
                             <TextBox x:Name="TxtRam" Style="{StaticResource ModernInputStyle}"/>
                         </StackPanel>
                         <StackPanel Margin="15,6,15,6">
-                            <TextBlock x:Name="LH5" Text="Número de Serie" Foreground="#A0A0B8" FontWeight="Medium" Margin="0,0,0,5"/>
+                            <TextBlock x:Name="LH5" Text="Número de Serie" Foreground="#A0C4E0" FontWeight="Medium" Margin="0,0,0,5"/>
                             <TextBox x:Name="TxtSerie" Style="{StaticResource ModernInputStyle}"/>
                         </StackPanel>
                         <StackPanel Margin="15,6,15,6">
-                            <TextBlock x:Name="LH6" Text="Almacenamiento [1]" Foreground="#A0A0B8" FontWeight="Medium" Margin="0,0,0,5"/>
+                            <TextBlock x:Name="LH6" Text="Almacenamiento [1]" Foreground="#A0C4E0" FontWeight="Medium" Margin="0,0,0,5"/>
                             <TextBox x:Name="TxtDisco1" Style="{StaticResource ModernInputStyle}"/>
                         </StackPanel>
                         <StackPanel Margin="15,6,15,6">
-                            <TextBlock x:Name="LH7" Text="Dirección MAC" Foreground="#A0A0B8" FontWeight="Medium" Margin="0,0,0,5"/>
+                            <TextBlock x:Name="LH7" Text="Dirección MAC" Foreground="#A0C4E0" FontWeight="Medium" Margin="0,0,0,5"/>
                             <TextBox x:Name="TxtMac" Style="{StaticResource ModernInputStyle}"/>
                         </StackPanel>
                         <StackPanel Margin="15,6,15,6">
-                            <TextBlock x:Name="LH8" Text="Almacenamiento [2]" Foreground="#A0A0B8" FontWeight="Medium" Margin="0,0,0,5"/>
+                            <TextBlock x:Name="LH8" Text="Almacenamiento [2]" Foreground="#A0C4E0" FontWeight="Medium" Margin="0,0,0,5"/>
                             <TextBox x:Name="TxtDisco2" Style="{StaticResource ModernInputStyle}"/>
                         </StackPanel>
                         <StackPanel Margin="15,6,15,6">
-                            <TextBlock x:Name="LH9" Text="Dirección IP" Foreground="#A0A0B8" FontWeight="Medium" Margin="0,0,0,5"/>
+                            <TextBlock x:Name="LH9" Text="Dirección IP" Foreground="#A0C4E0" FontWeight="Medium" Margin="0,0,0,5"/>
                             <TextBox x:Name="TxtIp" Style="{StaticResource ModernInputStyle}"/>
                         </StackPanel>
                         <StackPanel Margin="15,6,15,6">
-                            <TextBlock x:Name="LH10" Text="Sistema Operativo" Foreground="#A0A0B8" FontWeight="Medium" Margin="0,0,0,5"/>
+                            <TextBlock x:Name="LH10" Text="Sistema Operativo" Foreground="#A0C4E0" FontWeight="Medium" Margin="0,0,0,5"/>
                             <TextBox x:Name="TxtSo" Style="{StaticResource ModernInputStyle}"/>
                         </StackPanel>
                         <StackPanel Margin="15,6,15,6">
-                            <TextBlock x:Name="LH11" Text="Procesador" Foreground="#A0A0B8" FontWeight="Medium" Margin="0,0,0,5"/>
+                            <TextBlock x:Name="LH11" Text="Procesador" Foreground="#A0C4E0" FontWeight="Medium" Margin="0,0,0,5"/>
                             <TextBox x:Name="TxtProcesador" Style="{StaticResource ModernInputStyle}"/>
                         </StackPanel>
                         <StackPanel Margin="15,6,15,6">
-                            <TextBlock x:Name="LH12" Text="Resolución de Pantalla" Foreground="#A0A0B8" FontWeight="Medium" Margin="0,0,0,5"/>
+                            <TextBlock x:Name="LH12" Text="Resolución de Pantalla" Foreground="#A0C4E0" FontWeight="Medium" Margin="0,0,0,5"/>
                             <TextBox x:Name="TxtResolucion" Style="{StaticResource ModernInputStyle}"/>
                         </StackPanel>
                     </UniformGrid>
@@ -309,7 +309,7 @@
         </TabControl>
 
         <Grid Grid.Row="2" Margin="15,10,15,0">
-            <Button x:Name="BtnCancelar" Content="Cancelar Registro" HorizontalAlignment="Left" Width="140" Height="38" Background="Transparent" Foreground="#E53E3E" BorderBrush="#E53E3E" BorderThickness="1" Cursor="Hand" Click="BtnCancelar_Click">
+            <Button x:Name="BtnCancelar" Content="Cancelar Registro" HorizontalAlignment="Left" Width="140" Height="38" Background="#e7133f" Foreground="#890927" BorderBrush="#890927" FontWeight="Bold" BorderThickness="1" Cursor="Hand" Click="BtnCancelar_Click">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="6">
@@ -320,7 +320,7 @@
             </Button>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button x:Name="BtnSiguiente" Content="Siguiente" Width="120" Height="38" Background="#E89A24" Foreground="#060621" FontWeight="Bold" BorderThickness="0" Cursor="Hand" Click="BtnSiguiente_Click">
+                <Button x:Name="BtnSiguiente" Content="Siguiente" Width="120" Height="38" Background="#2F80ED" Foreground="#060621" FontWeight="Bold" BorderThickness="0" Cursor="Hand" Click="BtnSiguiente_Click">
                     <Button.Template>
                         <ControlTemplate TargetType="{x:Type Button}">
                             <Border Background="{TemplateBinding Background}" CornerRadius="6">

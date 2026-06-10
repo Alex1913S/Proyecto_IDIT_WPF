@@ -16,7 +16,7 @@
         <Style x:Key="SidebarButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Foreground" Value="#A0A0B8"/>
+            <Setter Property="Foreground" Value="#2F80ED"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="Height" Value="45"/>
             <Setter Property="Margin" Value="8,4,8,4"/>
@@ -41,8 +41,8 @@
                         <ControlTemplate.Triggers>
 
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="BtnBorder" Property="Background" Value="#0d3a5c"/>
-                                <Setter Property="Foreground" Value="#E89A24"/>
+                                <Setter TargetName="BtnBorder" Property="Background" Value="#113359"/>
+                                <Setter Property="Foreground" Value="#FFFF"/>
 
                             </Trigger>
                         </ControlTemplate.Triggers>
@@ -55,7 +55,7 @@
         <Style x:Key="SubmenuButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Foreground" Value="#A0A0B8"/>
+            <Setter Property="Foreground" Value="#2366af"/>
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="Height" Value="35"/>
             <Setter Property="Margin" Value="15,2,8,2"/>
@@ -70,8 +70,8 @@
                         <ControlTemplate.Triggers>
 
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="SubBtnBorder" Property="Background" Value="#0d3a5c"/>
-                                <Setter Property="Foreground" Value="#E89A24"/>
+                                <Setter TargetName="SubBtnBorder" Property="Background" Value="#061e35"/>
+                                <Setter Property="Foreground" Value="#FFFF"/>
 
                             </Trigger>
                         </ControlTemplate.Triggers>
@@ -101,7 +101,7 @@
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsChecked" Value="True">
 
-                                <Setter TargetName="TabBorder" Property="Background" Value="#E89A24"/>
+                                <Setter TargetName="TabBorder" Property="Background" Value="#FFFF"/>
                                 <Setter Property="Foreground" Value="#08213a"/>
                             </Trigger>
 
@@ -132,7 +132,7 @@
                     </Grid.RowDefinitions>
 
                     <Button x:Name="BtnToggleSidebar" Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Top" Width="35" Height="35" Margin="16,7,0,0" Background="Transparent" BorderThickness="0" Cursor="Hand" Click="BtnToggleSidebar_Click">
-                        <Path x:Name="MenuHamIcon" Data="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" Fill="#A0A0B8" Width="20" Height="20" Stretch="Uniform"/>
+                        <Path x:Name="MenuHamIcon" Data="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" Fill="#2F80ED" Width="20" Height="20" Stretch="Uniform"/>
                     </Button>
 
                     <Button x:Name="BtnThemeToggle" Grid.Row="0" HorizontalAlignment="Left" Width="35" Margin="16,15,0,10" Background="Transparent" BorderThickness="0" Cursor="Hand" Click="ThemeToggle_Click">
@@ -170,7 +170,7 @@
                                 <Button.ContentTemplate>
 
                                     <DataTemplate>
-                                        <Path Data="M10,20V14H14V20H19V12H22L12,3L2,12H5V20H10Z" Fill="#A0A0B8" Width="18" Height="18" Stretch="Uniform"/>
+                                        <Path Data="M10,20V14H14V20H19V12H22L12,3L2,12H5V20H10Z" Fill="#2F80ED" Width="18" Height="18" Stretch="Uniform"/>
                                     </DataTemplate>
 
                                 </Button.ContentTemplate>
@@ -180,13 +180,13 @@
 
                                 <Button.ContentTemplate>
                                     <DataTemplate>
-                                        <Path Data="M4,6H2V20A2,2 0 0,0 4,22H18V20H4M20,2H8A2,2 0 0,0 6,4V16A2,2 0 0,0 8,18H20A2,2 0 0,0 22,16V4A2,2 0 0,0 20,2M20,12L17.5,10.5L15,12V4H20V12Z" Fill="#A0A0B8" Width="18" Height="18" Stretch="Uniform"/>
+                                        <Path Data="M4,6H2V20A2,2 0 0,0 4,22H18V20H4M20,2H8A2,2 0 0,0 6,4V16A2,2 0 0,0 8,18H20A2,2 0 0,0 22,16V4A2,2 0 0,0 20,2M20,12L17.5,10.5L15,12V4H20V12Z" Fill="#2F80ED" Width="18" Height="18" Stretch="Uniform"/>
                                     </DataTemplate>
                                 </Button.ContentTemplate>
                             </Button>
 
 
-                            <Border x:Name="SubmenuActivos" Visibility="Collapsed" Background="#071d34" BorderBrush="White" BorderThickness="1" CornerRadius="10" Margin="10,4,10,8">
+                            <Border x:Name="SubmenuActivos" Visibility="Collapsed" Background="#09274c" BorderBrush="#09274c" BorderThickness="1" CornerRadius="10" Margin="10,4,10,8">
                                 <StackPanel Background="Transparent">
 
                                     <Button Content="• Ver Todos" Style="{StaticResource SubmenuButtonStyle}" Click="BtnVerTodosActivos_Click"/>
@@ -202,7 +202,7 @@
                                 <Button.ContentTemplate>
                                     <DataTemplate>
 
-                                        <Path Data="M19,3H5C3.89,3 3,3.89 3,4V20A2,2 0 0,0 5,22H19A2,2 0 0,0 21,20V4C21,3.89 20.1,3 19,3M19,20H5V4H19V20M11,6H17V8H11V6M11,10H17V12H11V10M11,14H17V16H11V14M7,6H9V8H7V6M7,10H9V12H7V10M7,14H9V16H7V14Z" Fill="#A0A0B8" Width="18" Height="18" Stretch="Uniform"/>
+                                        <Path Data="M19,3H5C3.89,3 3,3.89 3,4V20A2,2 0 0,0 5,22H19A2,2 0 0,0 21,20V4C21,3.89 20.1,3 19,3M19,20H5V4H19V20M11,6H17V8H11V6M11,10H17V12H11V10M11,14H17V16H11V14M7,6H9V8H7V6M7,10H9V12H7V10M7,14H9V16H7V14Z" Fill="#2F80ED" Width="18" Height="18" Stretch="Uniform"/>
                                     </DataTemplate>
 
                                 </Button.ContentTemplate>
@@ -212,7 +212,7 @@
 
                                 <Button.ContentTemplate>
                                     <DataTemplate>
-                                        <Path Data="M16,13C15.71,13 15.38,13 15.03,13.05C16.19,13.89 17,15.22 17,16.79V19H22V16.79C22,14.77 18.27,13 16,13M8,13C5.73,13 2,14.77 2,16.79V19H14V16.79C14,14.77 10.27,13 8,13M8,4A4,4 0 0,0 4,8A4,4 0 0,0 8,12A4,4 0 0,0 12,8A4,4 0 0,0 8,4M16,4A4,4 0 0,0 15.14,4.1C16.19,5.05 16.85,6.44 16.85,8C16.85,9.56 16.19,10.95 15.14,11.9C16.44,12 17.61,11.35 18.33,10.23C19.38,11.3 20,12.75 20,14.35C20,14.35 19.46,16.81 18.57,17.65L20,19H22V16.79C22,14.77 18.27,13 16,13Z" Fill="#A0A0B8" Width="18" Height="18" Stretch="Uniform"/>
+                                        <Path Data="M16,13C15.71,13 15.38,13 15.03,13.05C16.19,13.89 17,15.22 17,16.79V19H22V16.79C22,14.77 18.27,13 16,13M8,13C5.73,13 2,14.77 2,16.79V19H14V16.79C14,14.77 10.27,13 8,13M8,4A4,4 0 0,0 4,8A4,4 0 0,0 8,12A4,4 0 0,0 12,8A4,4 0 0,0 8,4M16,4A4,4 0 0,0 15.14,4.1C16.19,5.05 16.85,6.44 16.85,8C16.85,9.56 16.19,10.95 15.14,11.9C16.44,12 17.61,11.35 18.33,10.23C19.38,11.3 20,12.75 20,14.35C20,14.35 19.46,16.81 18.57,17.65L20,19H22V16.79C22,14.77 18.27,13 16,13Z" Fill="#2F80ED" Width="18" Height="18" Stretch="Uniform"/>
                                     </DataTemplate>
                                 </Button.ContentTemplate>
 
@@ -222,7 +222,7 @@
                                 <Button.ContentTemplate>
 
                                     <DataTemplate>
-                                        <Path Data="M12,2C6.5,2 2,6.5 2,12C2,17.5 6.5,22 12,22C17.5,22 22,17.5 22,12C22,6.5 17.5,2 12,2M12,4C16.4,4 20,7.6 20,12C20,16.4 16.4,20 12,20C7.6,20 4,16.4 4,12C4,7.6 7.6,4 12,4M11,6V13H16V11.5H12.5V6H11Z" Fill="#A0A0B8" Width="18" Height="18" Stretch="Uniform"/>
+                                        <Path Data="M12,2C6.5,2 2,6.5 2,12C2,17.5 6.5,22 12,22C17.5,22 22,17.5 22,12C22,6.5 17.5,2 12,2M12,4C16.4,4 20,7.6 20,12C20,16.4 16.4,20 12,20C7.6,20 4,16.4 4,12C4,7.6 7.6,4 12,4M11,6V13H16V11.5H12.5V6H11Z" Fill="#2F80ED" Width="18" Height="18" Stretch="Uniform"/>
 
                                     </DataTemplate>
                                 </Button.ContentTemplate>
@@ -232,7 +232,7 @@
                                 <Button.ContentTemplate>
                                     <DataTemplate>
 
-                                        <Path Data="M18,8H17V6C17,3.24 14.76,1 12,1C9.24,1 7,3.24 7,6V8H6C4.9,8 4,8.9 4,10V20C4,21.1 4.9,22 6,22H18C19.1,22 20,21.1 20,20V10C20,8.9 19.1,8 18,8M12,17C10.9,17 10,16.1 10,15C10,13.9 10.9,13 12,13C13.1,13 14,13.9 14,15C14,16.1 13.1,17 12,17M15.1,8H8.9V6C8.9,4.28 10.28,2.9 12,2C13.72,2 15.1,3.28 15.1,6V8Z" Fill="#A0A0B8" Width="18" Height="18" Stretch="Uniform"/>
+                                        <Path Data="M18,8H17V6C17,3.24 14.76,1 12,1C9.24,1 7,3.24 7,6V8H6C4.9,8 4,8.9 4,10V20C4,21.1 4.9,22 6,22H18C19.1,22 20,21.1 20,20V10C20,8.9 19.1,8 18,8M12,17C10.9,17 10,16.1 10,15C10,13.9 10.9,13 12,13C13.1,13 14,13.9 14,15C14,16.1 13.1,17 12,17M15.1,8H8.9V6C8.9,4.28 10.28,2.9 12,2C13.72,2 15.1,3.28 15.1,6V8Z" Fill="#2F80ED" Width="18" Height="18" Stretch="Uniform"/>
                                     </DataTemplate>
 
                                 </Button.ContentTemplate>
@@ -241,10 +241,10 @@
                     </ScrollViewer>
 
 
-                    <Button Grid.Row="4" Content="Salir" Style="{StaticResource SidebarButtonStyle}" Click="LogOut_Click" Foreground="#E53E3E" Margin="8,10,8,10">
+                    <Button Grid.Row="4" Content="Salir" Style="{StaticResource SidebarButtonStyle}" Click="LogOut_Click" Foreground="#e7133f" Margin="8,10,8,10">
                         <Button.ContentTemplate>
                             <DataTemplate>
-                                <Path Data="M14.08,15.59L16.67,13H7V11H16.67L14.08,8.41L15.5,7L20.5,12L15.5,17L14.08,15.59M19,3A2,2 0 0,1 21,5V9.67L19,7.67V5H5V19H19V16.33L21,14.33V19A2,2 0 0,1 19,21H5C3.89,21 3,20.1 3,19V5C3,3.89 3.89,3 5,3H19Z" Fill="#E53E3E" Width="18" Height="18" Stretch="Uniform"/>
+                                <Path Data="M14.08,15.59L16.67,13H7V11H16.67L14.08,8.41L15.5,7L20.5,12L15.5,17L14.08,15.59M19,3A2,2 0 0,1 21,5V9.67L19,7.67V5H5V19H19V16.33L21,14.33V19A2,2 0 0,1 19,21H5C3.89,21 3,20.1 3,19V5C3,3.89 3.89,3 5,3H19Z" Fill="#e7133f" Width="18" Height="18" Stretch="Uniform"/>
                             </DataTemplate>
                         </Button.ContentTemplate>
                     </Button>
@@ -302,19 +302,14 @@
 
                                                     <ColumnDefinition Width="Auto"/>
                                                 </Grid.ColumnDefinitions>
-
-                                                <Border Grid.Column="0" Width="24" Height="24" Background="#0d3a5c" CornerRadius="12" VerticalAlignment="Center">
-                                                    <Path Data="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4Z" Fill="#E89A24" Width="14" Height="14" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-
-                                                </Border>
                                                 <StackPanel Grid.Column="1" Margin="8,0,5,0" VerticalAlignment="Center">
 
                                                     <TextBlock x:Name="TxtCurrentWorkspace" Text="Menú" FontSize="12" FontWeight="SemiBold" Foreground="White"/>
 
-                                                    <TextBlock x:Name="TxtCurrentSub" Text="Administración TI" FontSize="9" Foreground="#A0A0B8"/>
+                                                    <TextBlock x:Name="TxtCurrentSub" Text="Administrador TI" FontSize="9" Foreground="#e7133f"/>
                                                 </StackPanel>
 
-                                                <Path Grid.Column="2" Data="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" Fill="#A0A0B8" Width="16" Height="16" Stretch="Uniform" VerticalAlignment="Center"/>
+                                                <Path Grid.Column="2" Data="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" Fill="#fff" Width="16" Height="16" Stretch="Uniform" VerticalAlignment="Center"/>
                                             </Grid>
                                         </Border>
 
@@ -332,7 +327,7 @@
 
 
                             <Popup x:Name="PopupWorkspace" AllowsTransparency="True" PlacementTarget="{Binding ElementName=BtnWorkspaceSelector}" Placement="Bottom" VerticalOffset="5" StaysOpen="False">
-                                <Border x:Name="PopupBorder" Width="180" Background="#09274c" CornerRadius="12" Padding="6" Margin="15">
+                                <Border x:Name="PopupBorder" Width="180" Background="#09274c" CornerRadius="12" Padding="6" Margin="15" BorderBrush="White" BorderThickness="1">
 
                                     <Border.Effect>
                                         <DropShadowEffect x:Name="PopupShadow" BlurRadius="15" Direction="270" ShadowDepth="3" Opacity="0.4" Color="Black"/>
@@ -438,7 +433,7 @@
                                 <ControlTemplate TargetType="Button">
 
                                     <Border x:Name="CloseBgBorder" Background="{TemplateBinding Background}" CornerRadius="17">
-                                        <Path Data="M16.56,5.44L15.11,6.89C16.84,7.94 18,9.83 18,12A6,6 0 0,1 12,18A6,6 0 0,1 6,12C6,9.83 7.16,7.94 8.88,6.88L7.44,5.44C5.18,7.16 3.75,9.91 3.75,13A8.25,8.25 0 0,0 12,21.25A8.25,8.25 0 0,0 20.25,13C20.25,9.91 18.82,7.16 16.56,5.44M11,3H13V13H11V3Z" Fill="#E53E3E" Width="15" Height="15" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        <Path Data="M16.56,5.44L15.11,6.89C16.84,7.94 18,9.83 18,12A6,6 0 0,1 12,18A6,6 0 0,1 6,12C6,9.83 7.16,7.94 8.88,6.88L7.44,5.44C5.18,7.16 3.75,9.91 3.75,13A8.25,8.25 0 0,0 12,21.25A8.25,8.25 0 0,0 20.25,13C20.25,9.91 18.82,7.16 16.56,5.44M11,3H13V13H11V3Z" Fill="#e7133f" Width="15" Height="15" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     </Border>
                                     <ControlTemplate.Triggers>
 
@@ -602,7 +597,7 @@
                                             </Grid>
 
                                             <Grid VerticalAlignment="Bottom" Height="100">
-                                                <Border x:Name="Bar6" Background="#E53E3E" Width="24" CornerRadius="4,4,0,0" HorizontalAlignment="Center"/>
+                                                <Border x:Name="Bar6" Background="#e7133f" Width="24" CornerRadius="4,4,0,0" HorizontalAlignment="Center"/>
 
                                             </Grid>
                                         </UniformGrid>
@@ -714,19 +709,19 @@
                                             <TextBlock Text="Sedes con mayor densidad" FontSize="10" Foreground="#A0A0B8" Margin="0,1,0,8"/>
 
                                             <StackPanel Orientation="Horizontal" Margin="0,2,0,2">
-                                                <Ellipse Width="8" Height="8" Fill="#E53E3E" Margin="0,0,6,0"/>
+                                                <Ellipse Width="8" Height="8" Fill="#e7133f" Margin="0,0,6,0"/>
 
                                                 <TextBlock x:Name="TxtReg1" Text="Alta densidad" FontSize="10" Foreground="White"/>
                                             </StackPanel>
 
                                             <StackPanel Orientation="Horizontal" Margin="0,2,0,2">
-                                                <Ellipse Width="8" Height="8" Fill="#E89A24" Margin="0,0,6,0"/>
+                                                <Ellipse Width="8" Height="8" Fill="#3B82F6" Margin="0,0,6,0"/>
 
                                                 <TextBlock x:Name="TxtReg2" Text="Densidad media" FontSize="10" Foreground="White"/>
                                             </StackPanel>
 
                                             <StackPanel Orientation="Horizontal" Margin="0,2,0,2">
-                                                <Ellipse Width="8" Height="8" Fill="#319795" Margin="0,0,6,0"/>
+                                                <Ellipse Width="8" Height="8" Fill="#FFFF" Margin="0,0,6,0"/>
 
                                                 <TextBlock x:Name="TxtReg3" Text="Estable" FontSize="10" Foreground="White"/>
                                             </StackPanel>

@@ -176,7 +176,7 @@
             <Setter Property="BorderBrush" Value="#0d3a5c"/>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#0e3560"/>
+                    <Setter Property="Background" Value="#0D0D2D"/>
                 </Trigger>
                 <Trigger Property="IsSelected" Value="True">
                     <Setter Property="Background" Value="#1a4a7a"/>
@@ -494,8 +494,8 @@
                     <Border x:Name="BusquedaBorder"
                             HorizontalAlignment="Right"
                             Width="260" Height="36"
-                            Background="#0d3a5c"
-                            BorderBrush="#1a4a7a"
+                            Background="#09274c"
+                            BorderBrush="#0d3a5c"
                             BorderThickness="1"
                             CornerRadius="6">
                         <Grid>

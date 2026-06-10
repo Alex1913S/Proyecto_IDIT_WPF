@@ -119,7 +119,7 @@
         <!-- ══ TAB FILTER ══ -->
         <Style x:Key="TabFilterButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="#A0A0B8"/>
+            <Setter Property="Foreground" Value="#A0C4E0"/>
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="FontWeight" Value="Medium"/>
             <Setter Property="Padding" Value="15,10"/>
@@ -133,7 +133,7 @@
                                 Padding="{TemplateBinding Padding}">
                             <StackPanel Orientation="Horizontal">
                                 <ContentPresenter VerticalAlignment="Center"/>
-                                <Border x:Name="Badge" Margin="8,0,0,0" Background="#0d3a5c"
+                                <Border x:Name="Badge" Margin="8,0,0,0" Background="#09274c"
                                         CornerRadius="10" Padding="6,2" VerticalAlignment="Center">
                                     <TextBlock x:Name="BadgeText"
                                                Text="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}"
@@ -225,7 +225,7 @@
             <Setter Property="BorderBrush" Value="#0d3a5c"/>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#0e3560"/>
+                    <Setter Property="Background" Value="#0D0D2D"/>
                 </Trigger>
                 <Trigger Property="IsSelected" Value="True">
                     <Setter Property="Background" Value="#1a4a7a"/>
@@ -594,8 +594,8 @@
                                    FontSize="12" Foreground="#A0C4E0" Margin="0,2,0,0"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                        <Border x:Name="BusquedaBorder" Width="250" Height="36" Background="#0d3a5c"
-                                BorderBrush="#1a4a7a" BorderThickness="1" CornerRadius="6" Margin="0,0,12,0">
+                        <Border x:Name="BusquedaBorder" Width="250" Height="36" Background="#09274c"
+                                BorderBrush="#0d3a5c" BorderThickness="1" CornerRadius="6" Margin="0,0,12,0">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="35"/>
