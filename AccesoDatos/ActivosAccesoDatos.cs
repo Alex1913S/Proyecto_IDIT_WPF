@@ -28,18 +28,15 @@ namespace AccesoDatos
                 {
                     try
                     {
-                        // GUID generado en C#
                         Guid activoId = Guid.NewGuid();
-
-                        // INSERT ActivosBase (Se agrega EtiquetaActivo)
                         string sqlBase = @"
                             INSERT INTO ITAM.ActivosBase
-                                (ActivoID, CategoriaID, UbicacionID,
+                                (ActivoID, CategoriaID, UbicacionID,EtiquetaActivo,
                                  Marca, Modelo, NumeroSerie, ProveedorID,
                                  FechaAdquisicion, Costo, EstadoOperativo,
                                  FacturaCompra)
                             VALUES
-                                (@ActivoID, @CategoriaID, @UbicacionID,
+                                (@ActivoID, @CategoriaID, @UbicacionID,@EtiquetaActivo,
                                  @Marca, @Modelo, @NumeroSerie, @ProveedorID,
                                  @FechaAdquisicion, @Costo, @EstadoOperativo,
                                  @FacturaCompra)";
@@ -55,7 +52,7 @@ namespace AccesoDatos
                         cmdBase.Parameters.Add("@FechaAdquisicion", SqlDbType.Date).Value = fechaAdquis.HasValue ? fechaAdquis.Value : (object)DBNull.Value;
                         cmdBase.Parameters.Add("@Costo", SqlDbType.Decimal).Value = costo.HasValue ? costo.Value : (object)DBNull.Value;
                         cmdBase.Parameters.Add("@EstadoOperativo", SqlDbType.VarChar).Value = estadoOperativo ?? (object)DBNull.Value;
-                        cmdBase.Parameters.Add("@FacturaCompra", SqlDbType.VarBinary).Value = (object)facturaCompra ?? DBNull.Value;
+                        cmdBase.Parameters.Add("@FacturaCompra", SqlDbType.VarBinary, -1).Value = (object)facturaCompra ?? DBNull.Value;
 
 
                         cmdBase.ExecuteNonQuery();
@@ -117,7 +114,7 @@ namespace AccesoDatos
                         string sqlBase = @"
                             UPDATE ITAM.ActivosBase
                             SET CategoriaID = @CategoriaID, UbicacionID = @UbicacionID, 
-                                EtiquetaActivo = @EtiquetaActivo, Marca = @Marca, Modelo = @Modelo, 
+                                Marca = @Marca, Modelo = @Modelo, 
                                 NumeroSerie = @NumeroSerie, ProveedorID = @ProveedorID, 
                                 FechaAdquisicion = @FechaAdquisicion, Costo = @Costo, EstadoOperativo = @EstadoOperativo,
                                 FacturaCompra = COALESCE(@FacturaCompra, FacturaCompra)
@@ -128,7 +125,6 @@ namespace AccesoDatos
                             cmd.Parameters.AddWithValue("@ActivoID", activoId);
                             cmd.Parameters.AddWithValue("@CategoriaID", categoriaId);
                             cmd.Parameters.AddWithValue("@UbicacionID", ubicacionId);
-                            cmd.Parameters.AddWithValue("@EtiquetaActivo", etiquetaActivo ?? (object)DBNull.Value);
                             cmd.Parameters.AddWithValue("@Marca", marca ?? (object)DBNull.Value);
                             cmd.Parameters.AddWithValue("@Modelo", modelo ?? (object)DBNull.Value);
                             cmd.Parameters.AddWithValue("@NumeroSerie", numeroSerie ?? (object)DBNull.Value);
