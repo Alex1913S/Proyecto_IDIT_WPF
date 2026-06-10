@@ -112,7 +112,7 @@
         </Style>
     </Window.Resources>
 
-    <Border x:Name="MainWindowBorder" Background="#08213a" BorderBrush="White" BorderThickness="1" CornerRadius="16" MouseLeftButtonDown="Window_MouseLeftButtonDown">
+    <Border x:Name="MainWindowBorder" Background="#113359" BorderBrush="White" BorderThickness="1" CornerRadius="16" MouseLeftButtonDown="Window_MouseLeftButtonDown">
         <Grid>
 
             <Grid.ColumnDefinitions>

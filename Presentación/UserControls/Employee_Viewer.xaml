@@ -37,13 +37,13 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Thumb">
-                        <Border x:Name="Border" CornerRadius="4" Background="#3F3F6B" Margin="2"/>
+                        <Border x:Name="Border" CornerRadius="4" Background="#1a4a7a" Margin="2"/>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Border" Property="Background" Value="#E89A24"/>
+                                <Setter TargetName="Border" Property="Background" Value="#2F80ED"/>
                             </Trigger>
                             <Trigger Property="IsDragging" Value="True">
-                                <Setter TargetName="Border" Property="Background" Value="#C27E1B"/>
+                                <Setter TargetName="Border" Property="Background" Value="#2F80ED"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -61,7 +61,7 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="ScrollBar">
-                                <Grid Background="#050518">
+                                <Grid Background="#0d3a5c">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="*"/>
@@ -91,7 +91,7 @@
         <!-- ══════════════════ TAB FILTER ══════════════════ -->
         <Style x:Key="TabFilterButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="#A0A0B8"/>
+            <Setter Property="Foreground" Value="#A0C4E0"/>
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="FontWeight" Value="Medium"/>
             <Setter Property="Padding" Value="15,10"/>
@@ -105,11 +105,11 @@
                                 Padding="{TemplateBinding Padding}">
                             <StackPanel Orientation="Horizontal">
                                 <ContentPresenter VerticalAlignment="Center"/>
-                                <Border x:Name="Badge" Margin="8,0,0,0" Background="#151538"
+                                <Border x:Name="Badge" Margin="8,0,0,0" Background="#0d3a5c"
                                         CornerRadius="10" Padding="6,2" VerticalAlignment="Center">
                                     <TextBlock x:Name="BadgeText"
                                                Text="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}"
-                                               FontSize="11" Foreground="#A0A0B8" FontWeight="Bold"/>
+                                               FontSize="11" Foreground="#A0C4E0" FontWeight="Bold"/>
                                 </Border>
                             </StackPanel>
                         </Border>
@@ -119,10 +119,10 @@
                                 <Setter TargetName="TabBorder" Property="BorderBrush" Value="#3F3F6B"/>
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
-                                <Setter Property="Foreground" Value="#E89A24"/>
-                                <Setter TargetName="TabBorder" Property="BorderBrush" Value="#E89A24"/>
-                                <Setter TargetName="BadgeText" Property="Foreground" Value="#E89A24"/>
-                                <Setter TargetName="Badge" Property="Background" Value="#1b1b4a"/>
+                                <Setter Property="Foreground" Value="#2F80ED"/>
+                                <Setter TargetName="TabBorder" Property="BorderBrush" Value="#2F80ED"/>
+                                <Setter TargetName="BadgeText" Property="Foreground" Value="#2F80ED"/>
+                                <Setter TargetName="Badge" Property="Background" Value="#0d3a5c"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -146,11 +146,11 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="BtnBorder" Property="Background" Value="#151538"/>
+                                <Setter TargetName="BtnBorder" Property="Background" Value="#0d3a5c"/>
                                 <Setter Property="Foreground" Value="White"/>
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
-                                <Setter Property="Foreground" Value="#3F3F6B"/>
+                                <Setter Property="Foreground" Value="#2F80ED"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -177,7 +177,7 @@
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="Padding" Value="12,12"/>
             <Setter Property="BorderThickness" Value="0,0,0,1"/>
-            <Setter Property="BorderBrush" Value="#1F1F45"/>
+            <Setter Property="BorderBrush" Value="#2F80ED"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
         </Style>
         <Style x:Key="CenterGridCellStyle" TargetType="TextBlock">
@@ -189,14 +189,14 @@
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="BorderThickness" Value="0,0,0,1"/>
-            <Setter Property="BorderBrush" Value="#151538"/>
+            <Setter Property="BorderBrush" Value="#0d3a5c"/>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#0D0D2D"/>
+                    <Setter Property="Background" Value="#0e3560"/>
                 </Trigger>
                 <Trigger Property="IsSelected" Value="True">
-                    <Setter Property="Background" Value="#1F1F45"/>
-                    <Setter Property="Foreground" Value="#E89A24"/>
+                    <Setter Property="Background" Value="#1a4a7a"/>
+                    <Setter Property="Foreground" Value="#2F80ED"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -231,14 +231,14 @@
         <!-- ══════════════════ INPUT MODERNO ══════════════════ -->
         <Style x:Key="ModernInputStyle" TargetType="TextBox">
             <Setter Property="Height" Value="34"/>
-            <Setter Property="Background" Value="#151538"/>
+            <Setter Property="Background" Value="#0d3a5c"/>
             <Setter Property="Foreground" Value="White"/>
-            <Setter Property="BorderBrush" Value="#3F3F6B"/>
+            <Setter Property="BorderBrush" Value="#1a4a7a"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Padding" Value="8,3"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="FontSize" Value="12"/>
-            <Setter Property="CaretBrush" Value="#E89A24"/>
+            <Setter Property="CaretBrush" Value="#2F80ED"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="TextBox">
@@ -252,10 +252,10 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="B" Property="BorderBrush" Value="#E89A24"/>
+                                <Setter TargetName="B" Property="BorderBrush" Value="#2F80ED"/>
                             </Trigger>
                             <Trigger Property="IsFocused" Value="True">
-                                <Setter TargetName="B" Property="BorderBrush" Value="#E89A24"/>
+                                <Setter TargetName="B" Property="BorderBrush" Value="#2F80ED"/>
                                 <Setter TargetName="B" Property="BorderThickness" Value="1.5"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
@@ -267,9 +267,9 @@
         <!-- ══════════════════ PASSWORD MODERNO ══════════════════ -->
         <Style x:Key="ModernPasswordStyle" TargetType="PasswordBox">
             <Setter Property="Height" Value="34"/>
-            <Setter Property="Background" Value="#151538"/>
+            <Setter Property="Background" Value="#0d3a5c"/>
             <Setter Property="Foreground" Value="White"/>
-            <Setter Property="BorderBrush" Value="#3F3F6B"/>
+            <Setter Property="BorderBrush" Value="#1a4a7a"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Padding" Value="8,3"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -288,7 +288,7 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsFocused" Value="True">
-                                <Setter TargetName="B" Property="BorderBrush" Value="#E89A24"/>
+                                <Setter TargetName="B" Property="BorderBrush" Value="#2F80ED"/>
                                 <Setter TargetName="B" Property="BorderThickness" Value="1.5"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
@@ -311,11 +311,11 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="ItemBorder" Property="Background" Value="#E89A24"/>
-                                <Setter Property="Foreground" Value="#060621"/>
+                                <Setter TargetName="ItemBorder" Property="Background" Value="#2F80ED"/>
+                                <Setter Property="Foreground" Value="#0e3560"/>
                             </Trigger>
                             <Trigger Property="IsSelected" Value="True">
-                                <Setter TargetName="ItemBorder" Property="Background" Value="#3F3F6B"/>
+                                <Setter TargetName="ItemBorder" Property="Background" Value="#0d3a5c"/>
                                 <Setter Property="Foreground" Value="White"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
@@ -324,7 +324,7 @@
             </Setter>
         </Style>
         <ControlTemplate x:Key="ComboToggleBtn" TargetType="ToggleButton">
-            <Border x:Name="Brd" Background="#151538" BorderBrush="#3F3F6B"
+            <Border x:Name="Brd" Background="#0d3a5c" BorderBrush="#1a4a7a"
                     BorderThickness="1" CornerRadius="6">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -338,19 +338,19 @@
             </Border>
             <ControlTemplate.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter TargetName="Brd" Property="BorderBrush" Value="#E89A24"/>
-                    <Setter TargetName="Arrow" Property="Fill" Value="#E89A24"/>
+                    <Setter TargetName="Brd" Property="BorderBrush" Value="#2F80ED"/>
+                    <Setter TargetName="Arrow" Property="Fill" Value="#2F80ED"/>
                 </Trigger>
                 <Trigger Property="IsChecked" Value="True">
-                    <Setter TargetName="Brd" Property="BorderBrush" Value="#E89A24"/>
+                    <Setter TargetName="Brd" Property="BorderBrush" Value="#2F80ED"/>
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
         <Style x:Key="ModernComboStyle" TargetType="ComboBox">
             <Setter Property="Height" Value="34"/>
             <Setter Property="Foreground" Value="White"/>
-            <Setter Property="Background" Value="#151538"/>
-            <Setter Property="BorderBrush" Value="#3F3F6B"/>
+            <Setter Property="Background" Value="#0d3a5c"/>
+            <Setter Property="BorderBrush" Value="#1a4a7a"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Padding" Value="8,0,0,0"/>
             <Setter Property="FontSize" Value="12"/>
@@ -373,7 +373,7 @@
                                 <Grid x:Name="DropDown" SnapsToDevicePixels="True"
                                       MinWidth="{TemplateBinding ActualWidth}"
                                       MaxHeight="200">
-                                    <Border Background="#090924" BorderBrush="#3F3F6B"
+                                    <Border Background="#0d3a5c" BorderBrush="#1a4a7a"
                                             BorderThickness="1" CornerRadius="6" Margin="0,3,0,0">
                                         <ScrollViewer Margin="0,2" SnapsToDevicePixels="True">
                                             <StackPanel IsItemsHost="True"
@@ -391,7 +391,7 @@
         <!-- ══════════════════ LABEL CAMPO ══════════════════ -->
         <Style x:Key="FieldLabelStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="10"/>
-            <Setter Property="Foreground" Value="#3F3F6B"/>
+            <Setter Property="Foreground" Value="#5a8ab0"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="Margin" Value="0,0,0,4"/>
         </Style>
@@ -411,8 +411,8 @@
             <!-- ══════════════════════════════════════════════════════
                  COLUMNA 0 — Panel lateral (detalle / formulario CRUD)
             ══════════════════════════════════════════════════════ -->
-            <Border x:Name="PanelLateralBorder" Grid.Column="0" Background="#090924" CornerRadius="12"
-                    BorderBrush="#151538" BorderThickness="1" Padding="15">
+            <Border x:Name="PanelLateralBorder" Grid.Column="0" Background="#09274c" CornerRadius="12"
+                    BorderBrush="#0d3a5c" BorderThickness="1" Padding="15">
                 <Grid>
 
                     <!-- ══════════ VISTA DETALLE ══════════ -->
@@ -421,8 +421,8 @@
                             <!-- Foto circular -->
                             <Border Width="110" Height="110" CornerRadius="55"
                                     HorizontalAlignment="Center"
-                                    BorderBrush="#E89A24" BorderThickness="2"
-                                    Margin="0,0,0,12" Background="#151538"
+                                    BorderBrush="#fff" BorderThickness="2"
+                                    Margin="0,0,0,12" Background="#071d34"
                                     ClipToBounds="True">
                                 <Grid>
                                     <Grid.OpacityMask>
@@ -433,7 +433,7 @@
                                         </VisualBrush>
                                     </Grid.OpacityMask>
                                     <TextBlock x:Name="TxtAvatarInicial" Text="?"
-                                               FontSize="40" FontWeight="Bold" Foreground="#3F3F6B"
+                                               FontSize="40" FontWeight="Bold" Foreground="White"
                                                HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     <Image x:Name="ImgFotoColaborador" Stretch="UniformToFill"
                                            HorizontalAlignment="Center" VerticalAlignment="Center"
@@ -450,13 +450,13 @@
                                        HorizontalAlignment="Center" Margin="0,0,0,8"/>
 
                             <!-- Badge perfil -->
-                            <Border HorizontalAlignment="Center" Background="#1b1b4a"
+                            <Border HorizontalAlignment="Center" Background="#0d3a5c"
                                     CornerRadius="10" Padding="10,4" Margin="0,0,0,0">
                                 <TextBlock x:Name="TxtPanelPerfil" Text="—"
-                                           FontSize="11" FontWeight="Bold" Foreground="#E89A24"/>
+                                           FontSize="11" FontWeight="Bold" Foreground="#2F80ED"/>
                             </Border>
 
-                            <Separator Background="#1F1F45" Margin="0,10"/>
+                            <Separator Background="#0e3560" Margin="0,10"/>
 
                             <!-- Datos detalle -->
                             <StackPanel Margin="0,0,0,10">
@@ -466,7 +466,7 @@
                             <StackPanel Margin="0,0,0,10">
                                 <TextBlock Text="Correo Corporativo" Style="{StaticResource FieldLabelStyle}"/>
                                 <TextBlock x:Name="TxtPanelCorreo" Text="—" FontSize="12"
-                                           Foreground="#A0A0B8" TextWrapping="Wrap" Margin="0,2,0,0"/>
+                                           Foreground="#fff" TextWrapping="Wrap" Margin="0,2,0,0"/>
                             </StackPanel>
                             <StackPanel Margin="0,0,0,10">
                                 <TextBlock Text="Departamento" Style="{StaticResource FieldLabelStyle}"/>
@@ -474,7 +474,7 @@
                             </StackPanel>
                             <StackPanel Margin="0,0,0,10">
                                 <TextBlock Text="Estado" Style="{StaticResource FieldLabelStyle}"/>
-                                <Border Background="#151538" CornerRadius="6" Padding="8,3"
+                                <Border Background="#0d3a5c" CornerRadius="6" Padding="8,3"
                                         HorizontalAlignment="Left" Margin="0,4,0,0">
                                     <TextBlock x:Name="TxtPanelEstado" Text="—"
                                                FontSize="12" FontWeight="SemiBold" Foreground="#A0A0B8"/>
@@ -490,19 +490,19 @@
                                 <Button x:Name="BtnNuevo"
                                         Content="+ Nuevo Colaborador"
                                         Style="{StaticResource ActionButtonStyle}"
-                                        Background="#E89A24" Foreground="#060621"
+                                        Background="#2F80ED" Foreground="#08213a"
                                         Margin="0,0,0,8"
                                         Click="BtnNuevo_Click"/>
                                 <Button x:Name="BtnEditar"
                                         Content="Editar Colaborador"
                                         Style="{StaticResource ActionButtonStyle}"
-                                        Background="#151538" Foreground="#E89A24"
+                                        Background="#113359" Foreground="#2F80ED"
                                         Margin="0,0,0,8" IsEnabled="False"
                                         Click="BtnEditar_Click"/>
                                 <Button x:Name="BtnEliminar"
                                         Content="Eliminar"
                                         Style="{StaticResource ActionButtonStyle}"
-                                        Background="#2D1A22" Foreground="#E53E3E"
+                                        Background="#113359" Foreground="#E53E3E"
                                         IsEnabled="False"
                                         Click="BtnEliminar_Click"/>
                             </StackPanel>
@@ -521,8 +521,8 @@
                             <!-- Foto preview en formulario -->
                             <Grid HorizontalAlignment="Center" Margin="0,0,0,10">
                                 <Border Width="80" Height="80" CornerRadius="40"
-                                        BorderBrush="#E89A24" BorderThickness="2"
-                                        Background="#151538" ClipToBounds="True">
+                                        BorderBrush="#2F80ED" BorderThickness="2"
+                                        Background="#0d3a5c" ClipToBounds="True">
                                     <Grid>
                                         <Grid.OpacityMask>
                                             <VisualBrush>
@@ -542,7 +542,7 @@
                             <Button x:Name="BtnSeleccionarFoto"
                                     Content="Seleccionar Foto"
                                     Style="{StaticResource ActionButtonStyle}"
-                                    Background="#151538" Foreground="#A0A0B8"
+                                    Background="#0d3a5c" Foreground="#5a8ab0"
                                     Margin="0,0,0,12"
                                     Click="BtnSeleccionarFoto_Click"/>
 
@@ -597,14 +597,14 @@
                             <TextBlock x:Name="LblPassword" Text="Contraseña *" Style="{StaticResource FieldLabelStyle}"/>
                             <PasswordBox x:Name="PbFPassword" Style="{StaticResource ModernPasswordStyle}" Margin="0,0,0,4"/>
                             <TextBlock x:Name="TxtPasswordHint" Text="Dejar vacío para no cambiar"
-                                       FontSize="10" Foreground="#3F3F6B"
+                                       FontSize="10" Foreground="#5a8ab0"
                                        Visibility="Collapsed" Margin="0,0,0,8"/>
 
                             <!-- Botones formulario -->
                             <Button x:Name="BtnGuardar"
                                     Content="Guardar Colaborador"
                                     Style="{StaticResource ActionButtonStyle}"
-                                    Background="#E89A24" Foreground="#060621"
+                                    Background="#2F80ED" Foreground="#060621"
                                     Margin="0,14,0,8"
                                     Click="BtnGuardar_Click"/>
                             <Button x:Name="BtnCancelarForm"
@@ -635,8 +635,8 @@
                                FontSize="18" FontWeight="Bold" Foreground="White"
                                VerticalAlignment="Center" HorizontalAlignment="Left"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                        <Border Width="260" Height="36" Background="#151538"
-                                BorderBrush="#3F3F6B" BorderThickness="1"
+                        <Border Width="260" Height="36" Background="#09274c"
+                                BorderBrush="#0d3a5c" BorderThickness="1"
                                 CornerRadius="6" Margin="0,0,12,0">
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -649,7 +649,7 @@
                                 <TextBox x:Name="TxtBuscarColaborador" Grid.Column="1"
                                          Background="Transparent" BorderThickness="0"
                                          Foreground="White" VerticalContentAlignment="Center"
-                                         FontSize="13" CaretBrush="#E89A24"
+                                         FontSize="13" CaretBrush="#fff"
                                          TextChanged="TxtBuscarColaborador_TextChanged"/>
                             </Grid>
                         </Border>
@@ -687,8 +687,8 @@
                 </StackPanel>
 
                 <!-- DataGrid -->
-                <Border x:Name="GridContainerBorder" Grid.Row="2" Background="#090924" CornerRadius="8"
-                        BorderBrush="#151538" BorderThickness="1" Padding="10">
+                <Border x:Name="GridContainerBorder" Grid.Row="2" Background="#09274c" CornerRadius="8"
+                        BorderBrush="#0d3a5c" BorderThickness="1" Padding="10">
                     <DataGrid x:Name="DgColaboradores"
                               Style="{StaticResource ModernDataGridStyle}"
                               SelectionChanged="DgColaboradores_SelectionChanged">
@@ -697,7 +697,7 @@
                                                Binding="{Binding DocumentoIdentidad}" Width="1.3*">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="TextBlock">
-                                        <Setter Property="Foreground" Value="#E89A24"/>
+                                        <Setter Property="Foreground" Value="#2F80ED"/>
                                         <Setter Property="FontWeight" Value="SemiBold"/>
                                         <Setter Property="HorizontalAlignment" Value="Center"/>
                                         <Setter Property="VerticalAlignment" Value="Center"/>
@@ -731,13 +731,13 @@
                                         <Setter Property="FontWeight" Value="Medium"/>
                                         <Style.Triggers>
                                             <Trigger Property="Text" Value="Administrador">
-                                                <Setter Property="Foreground" Value="#E89A24"/>
+                                                <Setter Property="Foreground" Value="#e7133f"/>
                                             </Trigger>
                                             <Trigger Property="Text" Value="Operador">
-                                                <Setter Property="Foreground" Value="#34AADC"/>
+                                                <Setter Property="Foreground" Value="#3485e2"/>
                                             </Trigger>
                                             <Trigger Property="Text" Value="Empleado">
-                                                <Setter Property="Foreground" Value="#4CD964"/>
+                                                <Setter Property="Foreground" Value="#59e1ab"/>
                                             </Trigger>
                                         </Style.Triggers>
                                     </Style>
@@ -765,7 +765,7 @@
                                                 <Setter Property="Foreground" Value="#4CD964"/>
                                             </Trigger>
                                             <Trigger Property="Text" Value="Inactivo">
-                                                <Setter Property="Foreground" Value="#E53E3E"/>
+                                                <Setter Property="Foreground" Value="#e7133f"/>
                                             </Trigger>
                                         </Style.Triggers>
                                     </Style>

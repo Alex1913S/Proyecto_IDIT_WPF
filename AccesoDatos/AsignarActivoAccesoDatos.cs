@@ -165,5 +165,25 @@ namespace AccesoDatos
             new SqlDataAdapter(cmd).Fill(dt);
             return dt;
         }
+
+        public DataTable ObtenerAsignacionesActivas()
+        {
+            const string sql = @"
+        SELECT 
+            A.AsignacionID,
+            C.Nombres + ' ' + C.Apellidos AS NombreColaborador,
+            ISNULL(AB.EtiquetaActivo, AB.Marca + ' ' + AB.Modelo) AS NombreActivo,
+            A.FechaAsignacion,
+            AB.EstadoOperativo AS Estado,
+            ISNULL(A.Observaciones, '—') AS Observaciones,
+            A.ActivoID,
+            A.ColaboradorID
+        FROM ITAM.Asignaciones A
+        INNER JOIN Core.Colaboradores C ON A.ColaboradorID = C.ColaboradorID
+        INNER JOIN ITAM.ActivosBase AB ON A.ActivoID = AB.ActivoID
+        ORDER BY A.FechaAsignacion DESC";
+
+            return Ejecutar(sql);
+        }
     }
 }

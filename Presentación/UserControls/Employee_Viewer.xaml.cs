@@ -10,6 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using static Presentación.UserControls.Assign_Inventory;
 
 namespace Presentación
 {
@@ -66,23 +67,38 @@ namespace Presentación
         {
             try
             {
-                // Departamentos
                 var dtDeptos = _colaboradorDominio.ListarDepartamentos();
-                CbFDepartamento.DisplayMemberPath = "Nombre";
-                CbFDepartamento.SelectedValuePath = "DepartamentoID";
-                CbFDepartamento.ItemsSource = dtDeptos.DefaultView;
+                CbFDepartamento.Items.Clear();
+                foreach (DataRow row in dtDeptos.Rows)
+                    CbFDepartamento.Items.Add(new ComboItem
+                    {
+                        Display = row["Nombre"]?.ToString() ?? "",
+                        Value = Convert.ToInt32(row["DepartamentoID"])
+                    });
+                CbFDepartamento.DisplayMemberPath = "Display";
+                CbFDepartamento.SelectedValuePath = "Value";
 
-                // Ubicaciones
                 var dtUbics = _colaboradorDominio.ListarUbicaciones();
-                CbFUbicacion.DisplayMemberPath = "NombreNomenclatura";
-                CbFUbicacion.SelectedValuePath = "UbicacionID";
-                CbFUbicacion.ItemsSource = dtUbics.DefaultView;
+                CbFUbicacion.Items.Clear();
+                foreach (DataRow row in dtUbics.Rows)
+                    CbFUbicacion.Items.Add(new ComboItem
+                    {
+                        Display = row["NombreNomenclatura"]?.ToString() ?? "",
+                        Value = Convert.ToInt32(row["UbicacionID"])
+                    });
+                CbFUbicacion.DisplayMemberPath = "Display";
+                CbFUbicacion.SelectedValuePath = "Value";
 
-                // Perfiles
                 var dtPerfiles = _colaboradorDominio.ListarPerfiles();
-                CbFPerfil.DisplayMemberPath = "NombrePerfil";
-                CbFPerfil.SelectedValuePath = "PerfilID";
-                CbFPerfil.ItemsSource = dtPerfiles.DefaultView;
+                CbFPerfil.Items.Clear();
+                foreach (DataRow row in dtPerfiles.Rows)
+                    CbFPerfil.Items.Add(new ComboItem
+                    {
+                        Display = row["NombrePerfil"]?.ToString() ?? "",
+                        Value = Convert.ToInt32(row["PerfilID"])
+                    });
+                CbFPerfil.DisplayMemberPath = "Display";
+                CbFPerfil.SelectedValuePath = "Value";
             }
             catch (Exception ex)
             {
@@ -880,15 +896,12 @@ namespace Presentación
         // ── Seleccionar un item de ComboBox por valor de columna ─────────
         private void SeleccionarComboItem(ComboBox combo, string columna, int valor)
         {
-            if (combo.ItemsSource is System.Data.DataView dv)
+            for (int i = 0; i < combo.Items.Count; i++)
             {
-                for (int i = 0; i < dv.Count; i++)
+                if (combo.Items[i] is ComboItem item && Convert.ToInt32(item.Value) == valor)
                 {
-                    if (Convert.ToInt32(dv[i][columna]) == valor)
-                    {
-                        combo.SelectedIndex = i;
-                        return;
-                    }
+                    combo.SelectedIndex = i;
+                    return;
                 }
             }
             combo.SelectedIndex = -1;
@@ -897,13 +910,8 @@ namespace Presentación
         // ── Obtener el ID seleccionado de un ComboBox ────────────────────
         private int ObtenerIdCombo(ComboBox combo, string columna)
         {
-            if (combo.SelectedIndex < 0) return -1;
-
-            if (combo.ItemsSource is System.Data.DataView dv)
-            {
-                try { return Convert.ToInt32(dv[combo.SelectedIndex][columna]); }
-                catch { return -1; }
-            }
+            if (combo.SelectedItem is ComboItem item)
+                return Convert.ToInt32(item.Value);
             return -1;
         }
 
@@ -948,5 +956,14 @@ namespace Presentación
                                ok ? "Éxito" : "Error",
                                MessageBoxButton.OK,
                                ok ? MessageBoxImage.Information : MessageBoxImage.Error);
+
+        public class ComboItem
+        {
+            public string Display { get; set; }
+            public object Value { get; set; }
+            public override string ToString() => Display;
+        }
+
+
     }
 }

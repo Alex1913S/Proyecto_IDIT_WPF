@@ -40,10 +40,10 @@
                         <Border x:Name="Border" CornerRadius="4" Background="#1a4a7a" Margin="2"/>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Border" Property="Background" Value="#E89A24"/>
+                                <Setter TargetName="Border" Property="Background" Value="#2F80ED"/>
                             </Trigger>
                             <Trigger Property="IsDragging" Value="True">
-                                <Setter TargetName="Border" Property="Background" Value="#C27E1B"/>
+                                <Setter TargetName="Border" Property="Background" Value="#2F80ED"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -147,9 +147,9 @@
                                 <Setter TargetName="TabBorder" Property="BorderBrush" Value="#1a4a7a"/>
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
-                                <Setter Property="Foreground" Value="#E89A24"/>
-                                <Setter TargetName="TabBorder" Property="BorderBrush" Value="#E89A24"/>
-                                <Setter TargetName="BadgeText" Property="Foreground" Value="#E89A24"/>
+                                <Setter Property="Foreground" Value="#2F80ED"/>
+                                <Setter TargetName="TabBorder" Property="BorderBrush" Value="#2F80ED"/>
+                                <Setter TargetName="BadgeText" Property="Foreground" Value="#2F80ED"/>
                                 <Setter TargetName="Badge" Property="Background" Value="#0e3560"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
@@ -229,7 +229,7 @@
                 </Trigger>
                 <Trigger Property="IsSelected" Value="True">
                     <Setter Property="Background" Value="#1a4a7a"/>
-                    <Setter Property="Foreground" Value="#E89A24"/>
+                    <Setter Property="Foreground" Value="#2F80ED"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -244,7 +244,7 @@
             <Setter Property="Padding" Value="10,3"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="FontSize" Value="13"/>
-            <Setter Property="CaretBrush" Value="#E89A24"/>
+            <Setter Property="CaretBrush" Value="#2F80ED"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="TextBox">
@@ -258,10 +258,10 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="B" Property="BorderBrush" Value="#E89A24"/>
+                                <Setter TargetName="B" Property="BorderBrush" Value="#2F80ED"/>
                             </Trigger>
                             <Trigger Property="IsFocused" Value="True">
-                                <Setter TargetName="B" Property="BorderBrush" Value="#E89A24"/>
+                                <Setter TargetName="B" Property="BorderBrush" Value="#2F80ED"/>
                                 <Setter TargetName="B" Property="BorderThickness" Value="1.5"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
@@ -284,7 +284,7 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="ItemBorder" Property="Background" Value="#E89A24"/>
+                                <Setter TargetName="ItemBorder" Property="Background" Value="#2F80ED"/>
                                 <Setter Property="Foreground" Value="#08213a"/>
                             </Trigger>
                             <Trigger Property="IsSelected" Value="True">
@@ -311,11 +311,11 @@
             </Border>
             <ControlTemplate.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter TargetName="Brd" Property="BorderBrush" Value="#E89A24"/>
-                    <Setter TargetName="Arrow" Property="Fill" Value="#E89A24"/>
+                    <Setter TargetName="Brd" Property="BorderBrush" Value="#2F80ED"/>
+                    <Setter TargetName="Arrow" Property="Fill" Value="#2F80ED"/>
                 </Trigger>
                 <Trigger Property="IsChecked" Value="True">
-                    <Setter TargetName="Brd" Property="BorderBrush" Value="#E89A24"/>
+                    <Setter TargetName="Brd" Property="BorderBrush" Value="#2F80ED"/>
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
@@ -407,7 +407,7 @@
                         <StackPanel>
                             <Border Width="60" Height="60" CornerRadius="30"
                                     Background="#071d34" HorizontalAlignment="Center"
-                                    BorderBrush="#E89A24" BorderThickness="2" Margin="0,0,0,12">
+                                    BorderBrush="#fff" BorderThickness="2" Margin="0,0,0,12">
                                 <TextBlock x:Name="TxtIconoServicio" Text="🔑"
                                            FontSize="26" HorizontalAlignment="Center"
                                            VerticalAlignment="Center"/>
@@ -428,7 +428,7 @@
                             <Border x:Name="BadgeVencimiento" Background="#0e3560" CornerRadius="10"
                                     Padding="10,4" HorizontalAlignment="Center" Margin="0,0,0,14">
                                 <TextBlock x:Name="TxtPanelVencimiento" Text="—"
-                                           FontSize="11" FontWeight="Bold" Foreground="#E89A24"/>
+                                           FontSize="11" FontWeight="Bold" Foreground="#2F80ED"/>
                             </Border>
 
                             <Separator Background="#0e3560" Margin="0,0,0,14"/>
@@ -476,12 +476,12 @@
                             <StackPanel Margin="0,16,0,0">
                                 <Button x:Name="BtnEditar" Content="Editar Credencial"
                                         Style="{StaticResource ActionButtonStyle}"
-                                        Background="#0d3a5c" Foreground="#E89A24"
+                                        Background="#0d3a5c" Foreground="#fff"
                                         Margin="0,0,0,8" IsEnabled="False"
                                         Click="BtnEditar_Click"/>
                                 <Button x:Name="BtnEliminar" Content="Eliminar"
                                         Style="{StaticResource ActionButtonStyle}"
-                                        Background="#2D1A22" Foreground="#E53E3E"
+                                        Background="#2D1A22" Foreground="#e7133f"
                                         IsEnabled="False" Click="BtnEliminar_Click"/>
                             </StackPanel>
                         </StackPanel>
@@ -521,7 +521,7 @@
                                                         </Border>
                                                         <ControlTemplate.Triggers>
                                                             <Trigger Property="IsFocused" Value="True">
-                                                                <Setter TargetName="Brd" Property="BorderBrush" Value="#E89A24"/>
+                                                                <Setter TargetName="Brd" Property="BorderBrush" Value="#2F80ED"/>
                                                             </Trigger>
                                                         </ControlTemplate.Triggers>
                                                     </ControlTemplate>
@@ -531,7 +531,7 @@
                                     </PasswordBox.Resources>
                                 </PasswordBox>
                                 <Button Grid.Column="1" x:Name="BtnGenerar" Height="36"
-                                        Background="#E89A24" BorderThickness="0" Cursor="Hand"
+                                        Background="#2F80ED" BorderThickness="0" Cursor="Hand"
                                         ToolTip="Generar contraseña segura" Click="BtnGenerar_Click">
                                     <Button.Template>
                                         <ControlTemplate TargetType="Button">
@@ -565,7 +565,7 @@
 
                             <Button x:Name="BtnGuardar" Content="Guardar Credencial"
                                     Style="{StaticResource ActionButtonStyle}"
-                                    Background="#E89A24" Foreground="#08213a"
+                                    Background="#2F80ED" Foreground="#08213a"
                                     Margin="0,0,0,8" Click="BtnGuardar_Click"/>
                             <Button x:Name="BtnCancelarForm" Content="Cancelar"
                                     Style="{StaticResource ActionButtonStyle}"
@@ -606,12 +606,12 @@
                                 <TextBox x:Name="TxtBuscar" Grid.Column="1"
                                          Background="Transparent" BorderThickness="0"
                                          Foreground="White" VerticalContentAlignment="Center"
-                                         FontSize="13" CaretBrush="#E89A24"
+                                         FontSize="13" CaretBrush="#2F80ED"
                                          TextChanged="TxtBuscar_TextChanged"/>
                             </Grid>
                         </Border>
                         <Button x:Name="BtnNueva" Content="+ Nueva Credencial"
-                                Width="150" Height="36" Background="#E89A24"
+                                Width="150" Height="36" Background="#2F80ED"
                                 Foreground="#08213a" FontWeight="Bold"
                                 BorderThickness="0" Cursor="Hand" Click="BtnNueva_Click">
                             <Button.Template>
@@ -652,7 +652,7 @@
                             <DataGridTextColumn Header="Servicio" Binding="{Binding NombreServicio}" Width="1.4*">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="TextBlock">
-                                        <Setter Property="Foreground" Value="#E89A24"/>
+                                        <Setter Property="Foreground" Value="#2F80ED"/>
                                         <Setter Property="FontWeight" Value="SemiBold"/>
                                         <Setter Property="HorizontalAlignment" Value="Center"/>
                                         <Setter Property="VerticalAlignment" Value="Center"/>

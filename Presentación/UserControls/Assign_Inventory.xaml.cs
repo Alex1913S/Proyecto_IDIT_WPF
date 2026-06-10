@@ -62,17 +62,33 @@ namespace Presentación.UserControls
         {
             try
             {
-                // ── Activos en estado "En Bodega" ─────────────────────────
                 var dtActivos = _dominio.ObtenerActivosDisponibles();
-                CmbActivo.DisplayMemberPath = "EtiquetaActivo";
-                CmbActivo.SelectedValuePath = "ActivoID";
-                CmbActivo.ItemsSource = dtActivos.DefaultView;
+                CmbActivo.ItemsSource = null;
+                CmbActivo.Items.Clear();
+                foreach (DataRow row in dtActivos.Rows)
+                {
+                    CmbActivo.Items.Add(new ComboItem
+                    {
+                        Display = row["EtiquetaActivo"]?.ToString() ?? "Sin etiqueta",
+                        Value = Guid.Parse(row["ActivoID"].ToString())
+                    });
+                }
+                CmbActivo.DisplayMemberPath = "Display";
+                CmbActivo.SelectedValuePath = "Value";
 
-                // ── Colaboradores activos ─────────────────────────────────
                 var dtColaboradores = _dominio.ObtenerColaboradores();
-                CmbColaborador.DisplayMemberPath = "NombreCompleto";
-                CmbColaborador.SelectedValuePath = "ColaboradorID";
-                CmbColaborador.ItemsSource = dtColaboradores.DefaultView;
+                CmbColaborador.ItemsSource = null;
+                CmbColaborador.Items.Clear();
+                foreach (DataRow row in dtColaboradores.Rows)
+                {
+                    CmbColaborador.Items.Add(new ComboItem
+                    {
+                        Display = row["NombreCompleto"]?.ToString() ?? "Sin nombre",
+                        Value = Convert.ToInt32(row["ColaboradorID"])
+                    });
+                }
+                CmbColaborador.DisplayMemberPath = "Display";
+                CmbColaborador.SelectedValuePath = "Value";
             }
             catch (Exception ex)
             {
@@ -109,20 +125,8 @@ namespace Presentación.UserControls
         /// </summary>
         private DataTable ObtenerAsignacionesActivas()
         {
-            var dt = new DataTable();
-            dt.Columns.Add("AsignacionID", typeof(int));
-            dt.Columns.Add("NombreColaborador", typeof(string));
-            dt.Columns.Add("NombreActivo", typeof(string));
-            dt.Columns.Add("FechaAsignacion", typeof(DateTime));
-            dt.Columns.Add("Estado", typeof(string));
-            dt.Columns.Add("Observaciones", typeof(string));
-            dt.Columns.Add("ActivoID", typeof(Guid));
-            dt.Columns.Add("ColaboradorID", typeof(int));
-
-            // TODO: sustituir por:
-            //   var acceso = new AccesoDatos.AsignarActivoAccesoDatos();
-            //   return acceso.ObtenerAsignacionesActivas();
-            return dt;
+            var acceso = new AccesoDatos.AsignarActivoAccesoDatos();
+            return acceso.ObtenerAsignacionesActivas();
         }
 
         // ═════════════════════════════════════════════════════════════════
@@ -324,13 +328,8 @@ namespace Presentación.UserControls
             try
             {
                 // ── Recolección de valores ────────────────────────────────
-                Guid? activoId = null;
-                if (CmbActivo.SelectedValue != null)
-                    activoId = Guid.Parse(CmbActivo.SelectedValue.ToString()!);
-
-                int? colaboradorId = null;
-                if (CmbColaborador.SelectedValue != null)
-                    colaboradorId = Convert.ToInt32(CmbColaborador.SelectedValue);
+                Guid? activoId = (CmbActivo.SelectedItem as ComboItem)?.Value is Guid g ? g : null;
+                int? colaboradorId = (CmbColaborador.SelectedItem as ComboItem)?.Value is int id ? id : (int?)null;
 
                 DateTime fechaAsignacion = DpFechaAsignacion.SelectedDate ?? DateTime.Today;
                 string observaciones = TxtObservaciones.Text.Trim();
@@ -541,5 +540,12 @@ namespace Presentación.UserControls
             h.Setters.Add(new Setter(DataGridColumnHeader.HorizontalContentAlignmentProperty, HorizontalAlignment.Center));
             return h;
         }
+        public class ComboItem
+        {
+            public string Display { get; set; }
+            public object Value { get; set; }
+            public override string ToString() => Display;
+        }
+
     }
 }
