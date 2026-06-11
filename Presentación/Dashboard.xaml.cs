@@ -63,7 +63,6 @@ namespace Presentación
 
             CargarFotoPerfil();
             CargarKPIs();
-            CargarMapaColombia();
         }
 
         private void CargarFotoPerfil()
@@ -132,6 +131,8 @@ namespace Presentación
         // Evento para cargar el módulo de asignación de inventario
         private void BtnAssignInventory_Click(object sender, RoutedEventArgs e) =>
             NavegaA(new Assign_Inventory(), "Asignación de Activos");
+        private void BtnAuditoria_Click(object sender, RoutedEventArgs e)
+    => NavegaA(new Audit_Log(), "Auditoría");
 
         private void BtnToggleSidebar_Click(object sender, RoutedEventArgs e)
         {
@@ -565,24 +566,6 @@ namespace Presentación
                 vals[i].Text = $"{cantidad} Uds";
                 pbs[i].Value = (double)cantidad / maxCantidad * 100;
             }
-        }
-
-        private void CargarMapaColombia()
-        {
-            string rutaHtml = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MapaColombia.html");
-            string rutaSvg = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "colombia.svg");
-
-            if (!System.IO.File.Exists(rutaHtml) || !System.IO.File.Exists(rutaSvg))
-            {
-                System.Diagnostics.Debug.WriteLine("Error: Faltan archivos en el directorio de salida.");
-                return;
-            }
-
-            string htmlContent = System.IO.File.ReadAllText(rutaHtml);
-            string svgContent = System.IO.File.ReadAllText(rutaSvg, System.Text.Encoding.UTF8);
-
-            htmlContent = htmlContent.Replace("%%MUNDO_SVG%%", svgContent);
-            MapaBrowser.NavigateToString(htmlContent);
         }
     }
 }

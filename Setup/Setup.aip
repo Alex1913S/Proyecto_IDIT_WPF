@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DOCUMENT Type="Advanced Installer" CreateVersion="23.7" version="23.7" Modules="simple" RootPath="." Language="en" Id="{B6976FAB-EC72-49C4-8370-6117DE3D7C47}">
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiPropsComponent">
+    <ROW Property="AI_BITMAP_DISPLAY_MODE" Value="0"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_AccesoDatos.dll" Value="..\..\..\Installer"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_Dominio.dll" Value="..\..\..\Installer"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_Microsoft.Bcl.Cryptography.dll" Value="..\..\..\Installer"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_Microsoft.Data.SqlClient.Extensions.Abstractions.dll" Value="..\..\..\Installer"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_Microsoft.Data.SqlClient.Internal.Logging.dll" Value="..\..\..\Installer"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_Microsoft.Data.SqlClient.SNI.dll" Value="..\..\..\Installer\runtimes\win-arm64\native"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_Microsoft.Data.SqlClient.SNI.dll_1" Value="..\..\..\Installer\runtimes\win-x64\native"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_Microsoft.Data.SqlClient.SNI.dll_2" Value="..\..\..\Installer\runtimes\win-x86\native"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_Microsoft.Data.SqlClient.dll" Value="..\..\..\Installer"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_Microsoft.Data.SqlClient.dll_1" Value="..\..\..\Installer\runtimes\unix\lib\net9.0"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_Microsoft.Data.SqlClient.dll_2" Value="..\..\..\Installer\runtimes\win\lib\net9.0"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_Microsoft.Data.SqlClient.resources.dll" Value="..\..\..\Installer\cs"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_Microsoft.Data.SqlClient.resources.dll_1" Value="..\..\..\Installer\de"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_Microsoft.Data.SqlClient.resources.dll_2" Value="..\..\..\Installer\es"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_Microsoft.Data.SqlClient.resources.dll_3" Value="..\..\..\Installer\fr"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_Microsoft.Data.SqlClient.resources.dll_4" Value="..\..\..\Installer\it"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_Microsoft.Data.SqlClient.resources.dll_5" Value="..\..\..\Installer\ja"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_Microsoft.Data.SqlClient.resources.dll_6" Value="..\..\..\Installer\ko"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_Microsoft.Data.SqlClient.resources.dll_7" Value="..\..\..\Installer\pl"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_Microsoft.Data.SqlClient.resources.dll_8" Value="..\..\..\Installer\pt-BR"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_Microsoft.Data.SqlClient.resources.dll_9" Value="..\..\..\Installer\ru"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_Microsoft.Data.SqlClient.resources_10_.dll" Value="..\..\..\Installer\tr"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_Microsoft.Data.SqlClient.resources_11_.dll" Value="..\..\..\Installer\zh-Hans"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_Microsoft.Data.SqlClient.resources_12_.dll" Value="..\..\..\Installer\zh-Hant"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_Microsoft.Extensions.Caching.Abstractions.dll" Value="..\..\..\Installer"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_Microsoft.Extensions.Caching.Memory.dll" Value="..\..\..\Installer"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_Microsoft.Extensions.DependencyInjection.Abstractions.dll" Value="..\..\..\Installer"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_Microsoft.Extensions.Logging.Abstractions.dll" Value="..\..\..\Installer"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_Microsoft.Extensions.Options.dll" Value="..\..\..\Installer"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_Microsoft.Extensions.Primitives.dll" Value="..\..\..\Installer"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_Microsoft.IdentityModel.Abstractions.dll" Value="..\..\..\Installer"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_Microsoft.IdentityModel.JsonWebTokens.dll" Value="..\..\..\Installer"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_Microsoft.IdentityModel.Logging.dll" Value="..\..\..\Installer"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_Microsoft.IdentityModel.Protocols.OpenIdConnect.dll" Value="..\..\..\Installer"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_Microsoft.IdentityModel.Protocols.dll" Value="..\..\..\Installer"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_Microsoft.IdentityModel.Tokens.dll" Value="..\..\..\Installer"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_Microsoft.SqlServer.Server.dll" Value="..\..\..\Installer"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_Presentacin.deps.json" Value="..\..\..\Installer"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_Presentacin.dll" Value="..\..\..\Installer"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_Presentacin.exe" Value="..\..\..\Installer"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_Presentacin.runtimeconfig.json" Value="..\..\..\Installer"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_System.IdentityModel.Tokens.Jwt.dll" Value="..\..\..\Installer"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_AccesoDatos.dll" Value="AccesoDatos.dll"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Dominio.dll" Value="Dominio.dll"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Bcl.Cryptography.dll" Value="Microsoft.Bcl.Cryptography.dll"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.Extensions.Abstractions.dll" Value="Microsoft.Data.SqlClient.Extensions.Abstractions.dll"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.Internal.Logging.dll" Value="Microsoft.Data.SqlClient.Internal.Logging.dll"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.SNI.dll" Value="Microsoft.Data.SqlClient.SNI.dll"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.SNI.dll_1" Value="Microsoft.Data.SqlClient.SNI.dll"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.SNI.dll_2" Value="Microsoft.Data.SqlClient.SNI.dll"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.dll" Value="Microsoft.Data.SqlClient.dll"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.dll_1" Value="Microsoft.Data.SqlClient.dll"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.dll_2" Value="Microsoft.Data.SqlClient.dll"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.resources.dll" Value="Microsoft.Data.SqlClient.resources.dll"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.resources.dll_1" Value="Microsoft.Data.SqlClient.resources.dll"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.resources.dll_2" Value="Microsoft.Data.SqlClient.resources.dll"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.resources.dll_3" Value="Microsoft.Data.SqlClient.resources.dll"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.resources.dll_4" Value="Microsoft.Data.SqlClient.resources.dll"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.resources.dll_5" Value="Microsoft.Data.SqlClient.resources.dll"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.resources.dll_6" Value="Microsoft.Data.SqlClient.resources.dll"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.resources.dll_7" Value="Microsoft.Data.SqlClient.resources.dll"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.resources.dll_8" Value="Microsoft.Data.SqlClient.resources.dll"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.resources.dll_9" Value="Microsoft.Data.SqlClient.resources.dll"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.resources_10_.dll" Value="Microsoft.Data.SqlClient.resources.dll"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.resources_11_.dll" Value="Microsoft.Data.SqlClient.resources.dll"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.resources_12_.dll" Value="Microsoft.Data.SqlClient.resources.dll"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Extensions.Caching.Abstractions.dll" Value="Microsoft.Extensions.Caching.Abstractions.dll"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Extensions.Caching.Memory.dll" Value="Microsoft.Extensions.Caching.Memory.dll"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Extensions.DependencyInjection.Abstractions.dll" Value="Microsoft.Extensions.DependencyInjection.Abstractions.dll"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Extensions.Logging.Abstractions.dll" Value="Microsoft.Extensions.Logging.Abstractions.dll"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Extensions.Options.dll" Value="Microsoft.Extensions.Options.dll"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Extensions.Primitives.dll" Value="Microsoft.Extensions.Primitives.dll"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Microsoft.IdentityModel.Abstractions.dll" Value="Microsoft.IdentityModel.Abstractions.dll"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Microsoft.IdentityModel.JsonWebTokens.dll" Value="Microsoft.IdentityModel.JsonWebTokens.dll"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Microsoft.IdentityModel.Logging.dll" Value="Microsoft.IdentityModel.Logging.dll"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Microsoft.IdentityModel.Protocols.OpenIdConnect.dll" Value="Microsoft.IdentityModel.Protocols.OpenIdConnect.dll"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Microsoft.IdentityModel.Protocols.dll" Value="Microsoft.IdentityModel.Protocols.dll"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Microsoft.IdentityModel.Tokens.dll" Value="Microsoft.IdentityModel.Tokens.dll"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Microsoft.SqlServer.Server.dll" Value="Microsoft.SqlServer.Server.dll"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Presentacin.deps.json" Value="Presentación.deps.json"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Presentacin.dll" Value="Presentación.dll"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Presentacin.exe" Value="Presentación.exe"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Presentacin.runtimeconfig.json" Value="Presentación.runtimeconfig.json"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_System.IdentityModel.Tokens.Jwt.dll" Value="System.IdentityModel.Tokens.Jwt.dll"/>
+    <ROW Property="ALLUSERS" Value="1"/>
+    <ROW Property="ARPCOMMENTS" Value="This installer database contains the logic and data required to install [|ProductName]." ValueLocId="*"/>
+    <ROW Property="ARPPRODUCTICON" Value="Recurso1.exe" Type="8"/>
+    <ROW Property="Manufacturer" Value="Maxfin Financiera SAS"/>
+    <ROW Property="ProductCode" Value="1033:{19F958BE-5010-470D-82B7-FDDB3F2BAF7A} " Type="16"/>
+    <ROW Property="ProductLanguage" Value="1033"/>
+    <ROW Property="ProductName" Value="IDIT"/>
+    <ROW Property="ProductVersion" Value="1.0.0" Options="32"/>
+    <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
+    <ROW Property="UpgradeCode" Value="{E63F903B-B3D1-442E-AF64-AE5D92268BA5}"/>
+    <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
+    <ROW Property="WindowsType9XDisplay" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT40" MultiBuildValue="DefaultBuild:Windows NT 4.0" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT40Display" MultiBuildValue="DefaultBuild:Windows NT 4.0" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT50" MultiBuildValue="DefaultBuild:Windows 2000" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT50Display" MultiBuildValue="DefaultBuild:Windows 2000" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT5X" MultiBuildValue="DefaultBuild:Windows XP/2003" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT5XDisplay" MultiBuildValue="DefaultBuild:Windows XP/2003" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT60" MultiBuildValue="DefaultBuild:Windows Vista/Server 2008" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT60Display" MultiBuildValue="DefaultBuild:Windows Vista/Server 2008" ValueLocId="-"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiDirsComponent">
+    <ROW Directory="APPDIR" Directory_Parent="TARGETDIR" DefaultDir="APPDIR:." IsPseudoRoot="1" DirectoryOptions="3"/>
+    <ROW Directory="Presentacin_Dir" Directory_Parent="APPDIR" DefaultDir="PRESEN~1|Presentación" DirectoryOptions="3"/>
+    <ROW Directory="ProgramMenuFolder" Directory_Parent="TARGETDIR" DefaultDir="PROGRA~1|ProgramMenuFolder" IsPseudoRoot="1"/>
+    <ROW Directory="TARGETDIR" DefaultDir="SourceDir"/>
+    <ROW Directory="cs_Dir" Directory_Parent="Presentacin_Dir" DefaultDir="cs" DirectoryOptions="3"/>
+    <ROW Directory="de_Dir" Directory_Parent="Presentacin_Dir" DefaultDir="de" DirectoryOptions="3"/>
+    <ROW Directory="es_Dir" Directory_Parent="Presentacin_Dir" DefaultDir="es" DirectoryOptions="3"/>
+    <ROW Directory="fr_Dir" Directory_Parent="Presentacin_Dir" DefaultDir="fr" DirectoryOptions="3"/>
+    <ROW Directory="it_Dir" Directory_Parent="Presentacin_Dir" DefaultDir="it" DirectoryOptions="3"/>
+    <ROW Directory="ja_Dir" Directory_Parent="Presentacin_Dir" DefaultDir="ja" DirectoryOptions="3"/>
+    <ROW Directory="ko_Dir" Directory_Parent="Presentacin_Dir" DefaultDir="ko" DirectoryOptions="3"/>
+    <ROW Directory="lib_1_Dir" Directory_Parent="win_Dir" DefaultDir="lib" DirectoryOptions="3"/>
+    <ROW Directory="lib_Dir" Directory_Parent="unix_Dir" DefaultDir="lib" DirectoryOptions="3"/>
+    <ROW Directory="native_1_Dir" Directory_Parent="winx64_Dir" DefaultDir="native" DirectoryOptions="3"/>
+    <ROW Directory="native_2_Dir" Directory_Parent="winx86_Dir" DefaultDir="native" DirectoryOptions="3"/>
+    <ROW Directory="native_Dir" Directory_Parent="winarm64_Dir" DefaultDir="native" DirectoryOptions="3"/>
+    <ROW Directory="net9.0_1_Dir" Directory_Parent="lib_1_Dir" DefaultDir="net9.0" DirectoryOptions="3"/>
+    <ROW Directory="net9.0_Dir" Directory_Parent="lib_Dir" DefaultDir="net9.0" DirectoryOptions="3"/>
+    <ROW Directory="pl_Dir" Directory_Parent="Presentacin_Dir" DefaultDir="pl" DirectoryOptions="3"/>
+    <ROW Directory="ptBR_Dir" Directory_Parent="Presentacin_Dir" DefaultDir="pt-BR" DirectoryOptions="3"/>
+    <ROW Directory="ru_Dir" Directory_Parent="Presentacin_Dir" DefaultDir="ru" DirectoryOptions="3"/>
+    <ROW Directory="runtimes_Dir" Directory_Parent="Presentacin_Dir" DefaultDir="runtimes" DirectoryOptions="3"/>
+    <ROW Directory="tr_Dir" Directory_Parent="Presentacin_Dir" DefaultDir="tr" DirectoryOptions="3"/>
+    <ROW Directory="unix_Dir" Directory_Parent="runtimes_Dir" DefaultDir="unix" DirectoryOptions="3"/>
+    <ROW Directory="win_Dir" Directory_Parent="runtimes_Dir" DefaultDir="win" DirectoryOptions="3"/>
+    <ROW Directory="winarm64_Dir" Directory_Parent="runtimes_Dir" DefaultDir="WIN-AR~1|win-arm64" DirectoryOptions="3"/>
+    <ROW Directory="winx64_Dir" Directory_Parent="runtimes_Dir" DefaultDir="win-x64" DirectoryOptions="3"/>
+    <ROW Directory="winx86_Dir" Directory_Parent="runtimes_Dir" DefaultDir="win-x86" DirectoryOptions="3"/>
+    <ROW Directory="zhHans_Dir" Directory_Parent="Presentacin_Dir" DefaultDir="zh-Hans" DirectoryOptions="3"/>
+    <ROW Directory="zhHant_Dir" Directory_Parent="Presentacin_Dir" DefaultDir="zh-Hant" DirectoryOptions="3"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.SideBySideGuidComponent">
+    <ROW Component="APPDIR" Value="{0FE0D418-0421-4080-BA05-A9492D7EDF37}"/>
+    <ROW Component="ProductInformation" Value="{437B5C04-9D10-4C31-86B6-70D07A7A1BA4}"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
+    <ROW Component="AI_PROPPATH_FILENAME_PERBUILD_Presentacin.exe" ComponentId="{AC23F8D9-1B01-48FF-9063-519C79A67B3B}" Directory_="Presentacin_Dir" Attributes="256" KeyPath="Presentacin.exe"/>
+    <ROW Component="APPDIR" ComponentId="{0FE0D418-0421-4080-BA05-A9492D7EDF37}" Directory_="APPDIR" Attributes="0"/>
+    <ROW Component="Presentacin_PrimaryOutput" ComponentId="{2F23566C-EA93-4542-8B71-CF0092F7B835}" Directory_="Presentacin_Dir" Attributes="0" KeyPath="Presentacin.dll"/>
+    <ROW Component="Presentacin_PublishOutput" ComponentId="{8676DAE1-64DF-4BE4-AC54-6D3BE2A82573}" Directory_="Presentacin_Dir" Attributes="0" KeyPath="System.IdentityModel.Tokens.Jwt.dll"/>
+    <ROW Component="Presentacin_PublishOutput_cs" ComponentId="{BBA73C42-8E71-4CAC-8F36-BA7CF491941D}" Directory_="cs_Dir" Attributes="0" KeyPath="Microsoft.Data.SqlClient.resources.dll"/>
+    <ROW Component="Presentacin_PublishOutput_de" ComponentId="{5FCCAA27-4D50-4E95-83EA-346060FB4889}" Directory_="de_Dir" Attributes="0" KeyPath="Microsoft.Data.SqlClient.resources.dll_1"/>
+    <ROW Component="Presentacin_PublishOutput_es" ComponentId="{ABFE6048-2306-4424-8F82-82364D654775}" Directory_="es_Dir" Attributes="0" KeyPath="Microsoft.Data.SqlClient.resources.dll_2"/>
+    <ROW Component="Presentacin_PublishOutput_fr" ComponentId="{5B1D1AD1-F4FA-4FB9-BB7C-ED0A3871E5A8}" Directory_="fr_Dir" Attributes="0" KeyPath="Microsoft.Data.SqlClient.resources.dll_3"/>
+    <ROW Component="Presentacin_PublishOutput_it" ComponentId="{6740F0AA-5110-4327-8ADF-B32A1E4D2416}" Directory_="it_Dir" Attributes="0" KeyPath="Microsoft.Data.SqlClient.resources.dll_4"/>
+    <ROW Component="Presentacin_PublishOutput_ja" ComponentId="{D9570888-D37B-4ACC-BA43-C617A6E9E2FF}" Directory_="ja_Dir" Attributes="0" KeyPath="Microsoft.Data.SqlClient.resources.dll_5"/>
+    <ROW Component="Presentacin_PublishOutput_ko" ComponentId="{89824D60-EA95-41CA-8CAF-81852B7215B7}" Directory_="ko_Dir" Attributes="0" KeyPath="Microsoft.Data.SqlClient.resources.dll_6"/>
+    <ROW Component="Presentacin_PublishOutput_pl" ComponentId="{45258146-93B3-4D09-A1B6-937DDFB55345}" Directory_="pl_Dir" Attributes="0" KeyPath="Microsoft.Data.SqlClient.resources.dll_7"/>
+    <ROW Component="Presentacin_PublishOutput_ptBR" ComponentId="{C8FA5DB7-E49A-4E11-BC1C-78B88415A386}" Directory_="ptBR_Dir" Attributes="0" KeyPath="Microsoft.Data.SqlClient.resources.dll_8"/>
+    <ROW Component="Presentacin_PublishOutput_ru" ComponentId="{E20E28EE-048A-4DE7-853A-6EE77039F7DD}" Directory_="ru_Dir" Attributes="0" KeyPath="Microsoft.Data.SqlClient.resources.dll_9"/>
+    <ROW Component="Presentacin_PublishOutput_runtimes_unix_lib_net9.0" ComponentId="{2CDE558C-62AF-4853-916C-2E11973D6778}" Directory_="net9.0_Dir" Attributes="0" KeyPath="Microsoft.Data.SqlClient.dll_1"/>
+    <ROW Component="Presentacin_PublishOutput_runtimes_win_lib_net9.0" ComponentId="{34D43574-645B-49C1-BA23-7D1035AC7310}" Directory_="net9.0_1_Dir" Attributes="0" KeyPath="Microsoft.Data.SqlClient.dll_2"/>
+    <ROW Component="Presentacin_PublishOutput_runtimes_winarm64_native" ComponentId="{8EEDF78C-EFDB-4D93-8CC7-2A547E81DF12}" Directory_="native_Dir" Attributes="256" KeyPath="Microsoft.Data.SqlClient.SNI.dll"/>
+    <ROW Component="Presentacin_PublishOutput_runtimes_winx64_native" ComponentId="{79E8AF3A-CF0E-42DF-84A5-BBA70856EB15}" Directory_="native_1_Dir" Attributes="256" KeyPath="Microsoft.Data.SqlClient.SNI.dll_1"/>
+    <ROW Component="Presentacin_PublishOutput_runtimes_winx86_native" ComponentId="{C29EB7FD-0FD3-4563-BE55-7B5E6CC3DF89}" Directory_="native_2_Dir" Attributes="0" KeyPath="Microsoft.Data.SqlClient.SNI.dll_2"/>
+    <ROW Component="Presentacin_PublishOutput_tr" ComponentId="{0C62994A-C1FC-4A2A-A7B1-AE941E2944BE}" Directory_="tr_Dir" Attributes="0" KeyPath="Microsoft.Data.SqlClient.resources_10_.dll"/>
+    <ROW Component="Presentacin_PublishOutput_zhHans" ComponentId="{28BC3150-D547-4A48-B1F3-5B46894C7CD5}" Directory_="zhHans_Dir" Attributes="0" KeyPath="Microsoft.Data.SqlClient.resources_11_.dll"/>
+    <ROW Component="Presentacin_PublishOutput_zhHant" ComponentId="{8C274F88-67E8-45B3-AB39-4FEEFC6B9E50}" Directory_="zhHant_Dir" Attributes="0" KeyPath="Microsoft.Data.SqlClient.resources_12_.dll"/>
+    <ROW Component="ProductInformation" ComponentId="{437B5C04-9D10-4C31-86B6-70D07A7A1BA4}" Directory_="APPDIR" Attributes="4" KeyPath="Version"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatsComponent">
+    <ROW Feature="MainFeature" Title="MainFeature" Description="Description" Display="1" Level="1" Directory_="APPDIR" Attributes="0"/>
+    <ATTRIBUTE name="CurrentFeature" value="MainFeature"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiFilesComponent">
+    <ROW File="Presentacin.dll" Component_="Presentacin_PrimaryOutput" FileName="PRESEN~2.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_Presentacin.dll]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Presentacin.dll&gt;" SelfReg="false"/>
+    <ROW File="AccesoDatos.dll" Component_="Presentacin_PublishOutput" FileName="ACCESO~2.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_AccesoDatos.dll]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_AccesoDatos.dll&gt;" SelfReg="false"/>
+    <ROW File="Dominio.dll" Component_="Presentacin_PublishOutput" FileName="[|AI_PROPPATH_FILENAME_PERBUILD_Dominio.dll]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Dominio.dll&gt;" SelfReg="false"/>
+    <ROW File="Microsoft.Bcl.Cryptography.dll" Component_="Presentacin_PublishOutput" FileName="MICROS~2.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Bcl.Cryptography.dll]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Microsoft.Bcl.Cryptography.dll&gt;" SelfReg="false"/>
+    <ROW File="Microsoft.Data.SqlClient.dll" Component_="Presentacin_PublishOutput" FileName="MICROS~3.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.dll]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Microsoft.Data.SqlClient.dll&gt;" SelfReg="false"/>
+    <ROW File="Microsoft.Data.SqlClient.Extensions.Abstractions.dll" Component_="Presentacin_PublishOutput" FileName="MICROS~4.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.Extensions.Abstractions.dll]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Microsoft.Data.SqlClient.Extensions.Abstractions.dll&gt;" SelfReg="false"/>
+    <ROW File="Microsoft.Data.SqlClient.Internal.Logging.dll" Component_="Presentacin_PublishOutput" FileName="MICROS~5.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.Internal.Logging.dll]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Microsoft.Data.SqlClient.Internal.Logging.dll&gt;" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Caching.Abstractions.dll" Component_="Presentacin_PublishOutput" FileName="MICROS~6.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Extensions.Caching.Abstractions.dll]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Microsoft.Extensions.Caching.Abstractions.dll&gt;" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Caching.Memory.dll" Component_="Presentacin_PublishOutput" FileName="MICROS~7.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Extensions.Caching.Memory.dll]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Microsoft.Extensions.Caching.Memory.dll&gt;" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.DependencyInjection.Abstractions.dll" Component_="Presentacin_PublishOutput" FileName="MICROS~8.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Extensions.DependencyInjection.Abstractions.dll]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Microsoft.Extensions.DependencyInjection.Abstractions.dll&gt;" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Logging.Abstractions.dll" Component_="Presentacin_PublishOutput" FileName="MICROS~9.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Extensions.Logging.Abstractions.dll]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Microsoft.Extensions.Logging.Abstractions.dll&gt;" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Options.dll" Component_="Presentacin_PublishOutput" FileName="MICRO~10.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Extensions.Options.dll]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Microsoft.Extensions.Options.dll&gt;" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Primitives.dll" Component_="Presentacin_PublishOutput" FileName="MICRO~11.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Extensions.Primitives.dll]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Microsoft.Extensions.Primitives.dll&gt;" SelfReg="false"/>
+    <ROW File="Microsoft.IdentityModel.Abstractions.dll" Component_="Presentacin_PublishOutput" FileName="MICRO~12.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.IdentityModel.Abstractions.dll]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Microsoft.IdentityModel.Abstractions.dll&gt;" SelfReg="false"/>
+    <ROW File="Microsoft.IdentityModel.JsonWebTokens.dll" Component_="Presentacin_PublishOutput" FileName="MICRO~13.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.IdentityModel.JsonWebTokens.dll]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Microsoft.IdentityModel.JsonWebTokens.dll&gt;" SelfReg="false"/>
+    <ROW File="Microsoft.IdentityModel.Logging.dll" Component_="Presentacin_PublishOutput" FileName="MICRO~14.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.IdentityModel.Logging.dll]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Microsoft.IdentityModel.Logging.dll&gt;" SelfReg="false"/>
+    <ROW File="Microsoft.IdentityModel.Protocols.dll" Component_="Presentacin_PublishOutput" FileName="MICRO~15.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.IdentityModel.Protocols.dll]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Microsoft.IdentityModel.Protocols.dll&gt;" SelfReg="false"/>
+    <ROW File="Microsoft.IdentityModel.Protocols.OpenIdConnect.dll" Component_="Presentacin_PublishOutput" FileName="MICRO~16.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.IdentityModel.Protocols.OpenIdConnect.dll]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Microsoft.IdentityModel.Protocols.OpenIdConnect.dll&gt;" SelfReg="false"/>
+    <ROW File="Microsoft.IdentityModel.Tokens.dll" Component_="Presentacin_PublishOutput" FileName="MICRO~17.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.IdentityModel.Tokens.dll]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Microsoft.IdentityModel.Tokens.dll&gt;" SelfReg="false"/>
+    <ROW File="Microsoft.SqlServer.Server.dll" Component_="Presentacin_PublishOutput" FileName="MICRO~18.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.SqlServer.Server.dll]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Microsoft.SqlServer.Server.dll&gt;" SelfReg="false"/>
+    <ROW File="Presentacin.deps.json" Component_="Presentacin_PublishOutput" FileName="PRESEN~2.JSO|[|AI_PROPPATH_FILENAME_PERBUILD_Presentacin.deps.json]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Presentacin.deps.json&gt;" SelfReg="false"/>
+    <ROW File="Presentacin.exe" Component_="AI_PROPPATH_FILENAME_PERBUILD_Presentacin.exe" FileName="PRESEN~2.EXE|[|AI_PROPPATH_FILENAME_PERBUILD_Presentacin.exe]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Presentacin.exe&gt;" SelfReg="false" DigSign="true"/>
+    <ROW File="Presentacin.runtimeconfig.json" Component_="Presentacin_PublishOutput" FileName="PRESEN~3.JSO|[|AI_PROPPATH_FILENAME_PERBUILD_Presentacin.runtimeconfig.json]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Presentacin.runtimeconfig.json&gt;" SelfReg="false"/>
+    <ROW File="System.IdentityModel.Tokens.Jwt.dll" Component_="Presentacin_PublishOutput" FileName="SYSTEM~2.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_System.IdentityModel.Tokens.Jwt.dll]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_System.IdentityModel.Tokens.Jwt.dll&gt;" SelfReg="false"/>
+    <ROW File="Microsoft.Data.SqlClient.resources.dll" Component_="Presentacin_PublishOutput_cs" FileName="MICROS~2.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.resources.dll]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Microsoft.Data.SqlClient.resources.dll&gt;" SelfReg="false"/>
+    <ROW File="Microsoft.Data.SqlClient.resources.dll_1" Component_="Presentacin_PublishOutput_de" FileName="MICROS~2.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.resources.dll_1]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Microsoft.Data.SqlClient.resources.dll_1&gt;" SelfReg="false"/>
+    <ROW File="Microsoft.Data.SqlClient.resources.dll_2" Component_="Presentacin_PublishOutput_es" FileName="MICROS~2.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.resources.dll_2]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Microsoft.Data.SqlClient.resources.dll_2&gt;" SelfReg="false"/>
+    <ROW File="Microsoft.Data.SqlClient.resources.dll_3" Component_="Presentacin_PublishOutput_fr" FileName="MICROS~2.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.resources.dll_3]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Microsoft.Data.SqlClient.resources.dll_3&gt;" SelfReg="false"/>
+    <ROW File="Microsoft.Data.SqlClient.resources.dll_4" Component_="Presentacin_PublishOutput_it" FileName="MICROS~2.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.resources.dll_4]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Microsoft.Data.SqlClient.resources.dll_4&gt;" SelfReg="false"/>
+    <ROW File="Microsoft.Data.SqlClient.resources.dll_5" Component_="Presentacin_PublishOutput_ja" FileName="MICROS~2.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.resources.dll_5]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Microsoft.Data.SqlClient.resources.dll_5&gt;" SelfReg="false"/>
+    <ROW File="Microsoft.Data.SqlClient.resources.dll_6" Component_="Presentacin_PublishOutput_ko" FileName="MICROS~2.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.resources.dll_6]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Microsoft.Data.SqlClient.resources.dll_6&gt;" SelfReg="false"/>
+    <ROW File="Microsoft.Data.SqlClient.resources.dll_7" Component_="Presentacin_PublishOutput_pl" FileName="MICROS~2.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.resources.dll_7]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Microsoft.Data.SqlClient.resources.dll_7&gt;" SelfReg="false"/>
+    <ROW File="Microsoft.Data.SqlClient.resources.dll_8" Component_="Presentacin_PublishOutput_ptBR" FileName="MICROS~2.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.resources.dll_8]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Microsoft.Data.SqlClient.resources.dll_8&gt;" SelfReg="false"/>
+    <ROW File="Microsoft.Data.SqlClient.resources.dll_9" Component_="Presentacin_PublishOutput_ru" FileName="MICROS~2.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.resources.dll_9]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Microsoft.Data.SqlClient.resources.dll_9&gt;" SelfReg="false"/>
+    <ROW File="Microsoft.Data.SqlClient.resources_10_.dll" Component_="Presentacin_PublishOutput_tr" FileName="MICROS~2.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.resources_10_.dll]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Microsoft.Data.SqlClient.resources_10_.dll&gt;" SelfReg="false"/>
+    <ROW File="Microsoft.Data.SqlClient.resources_11_.dll" Component_="Presentacin_PublishOutput_zhHans" FileName="MICROS~2.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.resources_11_.dll]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Microsoft.Data.SqlClient.resources_11_.dll&gt;" SelfReg="false"/>
+    <ROW File="Microsoft.Data.SqlClient.resources_12_.dll" Component_="Presentacin_PublishOutput_zhHant" FileName="MICROS~2.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.resources_12_.dll]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Microsoft.Data.SqlClient.resources_12_.dll&gt;" SelfReg="false"/>
+    <ROW File="Microsoft.Data.SqlClient.SNI.dll" Component_="Presentacin_PublishOutput_runtimes_winarm64_native" FileName="MICROS~2.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.SNI.dll]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Microsoft.Data.SqlClient.SNI.dll&gt;" SelfReg="false"/>
+    <ROW File="Microsoft.Data.SqlClient.SNI.dll_1" Component_="Presentacin_PublishOutput_runtimes_winx64_native" FileName="MICROS~2.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.SNI.dll_1]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Microsoft.Data.SqlClient.SNI.dll_1&gt;" SelfReg="false"/>
+    <ROW File="Microsoft.Data.SqlClient.SNI.dll_2" Component_="Presentacin_PublishOutput_runtimes_winx86_native" FileName="MICROS~2.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.SNI.dll_2]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Microsoft.Data.SqlClient.SNI.dll_2&gt;" SelfReg="false"/>
+    <ROW File="Microsoft.Data.SqlClient.dll_1" Component_="Presentacin_PublishOutput_runtimes_unix_lib_net9.0" FileName="MICROS~2.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.dll_1]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Microsoft.Data.SqlClient.dll_1&gt;" SelfReg="false"/>
+    <ROW File="Microsoft.Data.SqlClient.dll_2" Component_="Presentacin_PublishOutput_runtimes_win_lib_net9.0" FileName="MICROS~2.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.dll_2]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Microsoft.Data.SqlClient.dll_2&gt;" SelfReg="false"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.AppPathsComponent">
+    <ROW Name="AI_APPPATH_PERBUILD_AccesoDatos.dll" Path="[|AI_PROPPATH_DIR_PERBUILD_AccesoDatos.dll]\[|AI_PROPPATH_FILENAME_PERBUILD_AccesoDatos.dll]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_Dominio.dll" Path="[|AI_PROPPATH_DIR_PERBUILD_Dominio.dll]\[|AI_PROPPATH_FILENAME_PERBUILD_Dominio.dll]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_Microsoft.Bcl.Cryptography.dll" Path="[|AI_PROPPATH_DIR_PERBUILD_Microsoft.Bcl.Cryptography.dll]\[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Bcl.Cryptography.dll]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_Microsoft.Data.SqlClient.Extensions.Abstractions.dll" Path="[|AI_PROPPATH_DIR_PERBUILD_Microsoft.Data.SqlClient.Extensions.Abstractions.dll]\[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.Extensions.Abstractions.dll]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_Microsoft.Data.SqlClient.Internal.Logging.dll" Path="[|AI_PROPPATH_DIR_PERBUILD_Microsoft.Data.SqlClient.Internal.Logging.dll]\[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.Internal.Logging.dll]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_Microsoft.Data.SqlClient.SNI.dll" Path="[|AI_PROPPATH_DIR_PERBUILD_Microsoft.Data.SqlClient.SNI.dll]\[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.SNI.dll]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_Microsoft.Data.SqlClient.SNI.dll_1" Path="[|AI_PROPPATH_DIR_PERBUILD_Microsoft.Data.SqlClient.SNI.dll_1]\[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.SNI.dll_1]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_Microsoft.Data.SqlClient.SNI.dll_2" Path="[|AI_PROPPATH_DIR_PERBUILD_Microsoft.Data.SqlClient.SNI.dll_2]\[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.SNI.dll_2]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_Microsoft.Data.SqlClient.dll" Path="[|AI_PROPPATH_DIR_PERBUILD_Microsoft.Data.SqlClient.dll]\[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.dll]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_Microsoft.Data.SqlClient.dll_1" Path="[|AI_PROPPATH_DIR_PERBUILD_Microsoft.Data.SqlClient.dll_1]\[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.dll_1]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_Microsoft.Data.SqlClient.dll_2" Path="[|AI_PROPPATH_DIR_PERBUILD_Microsoft.Data.SqlClient.dll_2]\[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.dll_2]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_Microsoft.Data.SqlClient.resources.dll" Path="[|AI_PROPPATH_DIR_PERBUILD_Microsoft.Data.SqlClient.resources.dll]\[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.resources.dll]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_Microsoft.Data.SqlClient.resources.dll_1" Path="[|AI_PROPPATH_DIR_PERBUILD_Microsoft.Data.SqlClient.resources.dll_1]\[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.resources.dll_1]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_Microsoft.Data.SqlClient.resources.dll_2" Path="[|AI_PROPPATH_DIR_PERBUILD_Microsoft.Data.SqlClient.resources.dll_2]\[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.resources.dll_2]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_Microsoft.Data.SqlClient.resources.dll_3" Path="[|AI_PROPPATH_DIR_PERBUILD_Microsoft.Data.SqlClient.resources.dll_3]\[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.resources.dll_3]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_Microsoft.Data.SqlClient.resources.dll_4" Path="[|AI_PROPPATH_DIR_PERBUILD_Microsoft.Data.SqlClient.resources.dll_4]\[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.resources.dll_4]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_Microsoft.Data.SqlClient.resources.dll_5" Path="[|AI_PROPPATH_DIR_PERBUILD_Microsoft.Data.SqlClient.resources.dll_5]\[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.resources.dll_5]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_Microsoft.Data.SqlClient.resources.dll_6" Path="[|AI_PROPPATH_DIR_PERBUILD_Microsoft.Data.SqlClient.resources.dll_6]\[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.resources.dll_6]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_Microsoft.Data.SqlClient.resources.dll_7" Path="[|AI_PROPPATH_DIR_PERBUILD_Microsoft.Data.SqlClient.resources.dll_7]\[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.resources.dll_7]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_Microsoft.Data.SqlClient.resources.dll_8" Path="[|AI_PROPPATH_DIR_PERBUILD_Microsoft.Data.SqlClient.resources.dll_8]\[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.resources.dll_8]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_Microsoft.Data.SqlClient.resources.dll_9" Path="[|AI_PROPPATH_DIR_PERBUILD_Microsoft.Data.SqlClient.resources.dll_9]\[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.resources.dll_9]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_Microsoft.Data.SqlClient.resources_10_.dll" Path="[|AI_PROPPATH_DIR_PERBUILD_Microsoft.Data.SqlClient.resources_10_.dll]\[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.resources_10_.dll]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_Microsoft.Data.SqlClient.resources_11_.dll" Path="[|AI_PROPPATH_DIR_PERBUILD_Microsoft.Data.SqlClient.resources_11_.dll]\[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.resources_11_.dll]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_Microsoft.Data.SqlClient.resources_12_.dll" Path="[|AI_PROPPATH_DIR_PERBUILD_Microsoft.Data.SqlClient.resources_12_.dll]\[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Data.SqlClient.resources_12_.dll]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_Microsoft.Extensions.Caching.Abstractions.dll" Path="[|AI_PROPPATH_DIR_PERBUILD_Microsoft.Extensions.Caching.Abstractions.dll]\[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Extensions.Caching.Abstractions.dll]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_Microsoft.Extensions.Caching.Memory.dll" Path="[|AI_PROPPATH_DIR_PERBUILD_Microsoft.Extensions.Caching.Memory.dll]\[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Extensions.Caching.Memory.dll]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_Microsoft.Extensions.DependencyInjection.Abstractions.dll" Path="[|AI_PROPPATH_DIR_PERBUILD_Microsoft.Extensions.DependencyInjection.Abstractions.dll]\[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Extensions.DependencyInjection.Abstractions.dll]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_Microsoft.Extensions.Logging.Abstractions.dll" Path="[|AI_PROPPATH_DIR_PERBUILD_Microsoft.Extensions.Logging.Abstractions.dll]\[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Extensions.Logging.Abstractions.dll]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_Microsoft.Extensions.Options.dll" Path="[|AI_PROPPATH_DIR_PERBUILD_Microsoft.Extensions.Options.dll]\[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Extensions.Options.dll]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_Microsoft.Extensions.Primitives.dll" Path="[|AI_PROPPATH_DIR_PERBUILD_Microsoft.Extensions.Primitives.dll]\[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.Extensions.Primitives.dll]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_Microsoft.IdentityModel.Abstractions.dll" Path="[|AI_PROPPATH_DIR_PERBUILD_Microsoft.IdentityModel.Abstractions.dll]\[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.IdentityModel.Abstractions.dll]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_Microsoft.IdentityModel.JsonWebTokens.dll" Path="[|AI_PROPPATH_DIR_PERBUILD_Microsoft.IdentityModel.JsonWebTokens.dll]\[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.IdentityModel.JsonWebTokens.dll]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_Microsoft.IdentityModel.Logging.dll" Path="[|AI_PROPPATH_DIR_PERBUILD_Microsoft.IdentityModel.Logging.dll]\[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.IdentityModel.Logging.dll]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_Microsoft.IdentityModel.Protocols.OpenIdConnect.dll" Path="[|AI_PROPPATH_DIR_PERBUILD_Microsoft.IdentityModel.Protocols.OpenIdConnect.dll]\[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.IdentityModel.Protocols.OpenIdConnect.dll]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_Microsoft.IdentityModel.Protocols.dll" Path="[|AI_PROPPATH_DIR_PERBUILD_Microsoft.IdentityModel.Protocols.dll]\[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.IdentityModel.Protocols.dll]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_Microsoft.IdentityModel.Tokens.dll" Path="[|AI_PROPPATH_DIR_PERBUILD_Microsoft.IdentityModel.Tokens.dll]\[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.IdentityModel.Tokens.dll]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_Microsoft.SqlServer.Server.dll" Path="[|AI_PROPPATH_DIR_PERBUILD_Microsoft.SqlServer.Server.dll]\[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.SqlServer.Server.dll]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_Presentacin.deps.json" Path="[|AI_PROPPATH_DIR_PERBUILD_Presentacin.deps.json]\[|AI_PROPPATH_FILENAME_PERBUILD_Presentacin.deps.json]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_Presentacin.dll" Path="[|AI_PROPPATH_DIR_PERBUILD_Presentacin.dll]\[|AI_PROPPATH_FILENAME_PERBUILD_Presentacin.dll]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_Presentacin.exe" Path="[|AI_PROPPATH_DIR_PERBUILD_Presentacin.exe]\[|AI_PROPPATH_FILENAME_PERBUILD_Presentacin.exe]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_Presentacin.runtimeconfig.json" Path="[|AI_PROPPATH_DIR_PERBUILD_Presentacin.runtimeconfig.json]\[|AI_PROPPATH_FILENAME_PERBUILD_Presentacin.runtimeconfig.json]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_System.IdentityModel.Tokens.Jwt.dll" Path="[|AI_PROPPATH_DIR_PERBUILD_System.IdentityModel.Tokens.Jwt.dll]\[|AI_PROPPATH_FILENAME_PERBUILD_System.IdentityModel.Tokens.Jwt.dll]" Type="2" Content="0"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.BuildComponent">
+    <ROW BuildKey="DefaultBuild" BuildName="DefaultBuild" BuildOrder="1" BuildType="0" PackageFolder="[|AI_AIP_FOLDER][|AI_AIP_FILENAME]-SetupFiles" PackageFileName="[|AI_AIP_FILENAME]" Languages="en" InstallationType="4" UseLargeSchema="true"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.DictionaryComponent">
+    <ROW Path="&lt;AI_DICTS&gt;ui.ail"/>
+    <ROW Path="&lt;AI_DICTS&gt;ui_en.ail"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.FragmentComponent">
+    <ROW Fragment="CommonUI.aip" Path="&lt;AI_FRAGS&gt;CommonUI.aip"/>
+    <ROW Fragment="FolderDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\FolderDlg.aip"/>
+    <ROW Fragment="MaintenanceTypeDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\MaintenanceTypeDlg.aip"/>
+    <ROW Fragment="MaintenanceWelcomeDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\MaintenanceWelcomeDlg.aip"/>
+    <ROW Fragment="SequenceDialogs.aip" Path="&lt;AI_THEMES&gt;classic\fragments\SequenceDialogs.aip"/>
+    <ROW Fragment="Sequences.aip" Path="&lt;AI_FRAGS&gt;Sequences.aip"/>
+    <ROW Fragment="StaticUIStrings.aip" Path="&lt;AI_FRAGS&gt;StaticUIStrings.aip"/>
+    <ROW Fragment="Themes.aip" Path="&lt;AI_FRAGS&gt;Themes.aip"/>
+    <ROW Fragment="UI.aip" Path="&lt;AI_THEMES&gt;classic\fragments\UI.aip"/>
+    <ROW Fragment="Validation.aip" Path="&lt;AI_FRAGS&gt;Validation.aip"/>
+    <ROW Fragment="VerifyRemoveDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\VerifyRemoveDlg.aip"/>
+    <ROW Fragment="VerifyRepairDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\VerifyRepairDlg.aip"/>
+    <ROW Fragment="WelcomeDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\WelcomeDlg.aip"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiBinaryComponent">
+    <ROW Name="aicustact.dll" SourcePath="&lt;AI_CUSTACTS&gt;aicustact.dll"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiControlEventComponent">
+    <ROW Dialog_="WelcomeDlg" Control_="Next" Event="NewDialog" Argument="FolderDlg" Condition="AI_INSTALL" Ordering="1"/>
+    <ROW Dialog_="FolderDlg" Control_="Next" Event="NewDialog" Argument="VerifyReadyDlg" Condition="AI_INSTALL" Ordering="201"/>
+    <ROW Dialog_="FolderDlg" Control_="Back" Event="NewDialog" Argument="WelcomeDlg" Condition="AI_INSTALL" Ordering="1"/>
+    <ROW Dialog_="MaintenanceWelcomeDlg" Control_="Next" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT" Ordering="99"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_MAINT" Ordering="198"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Back" Event="NewDialog" Argument="CustomizeDlg" Condition="AI_MAINT" Ordering="202"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_INSTALL" Ordering="197"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Back" Event="NewDialog" Argument="FolderDlg" Condition="AI_INSTALL" Ordering="201"/>
+    <ROW Dialog_="CustomizeDlg" Control_="Next" Event="NewDialog" Argument="VerifyReadyDlg" Condition="AI_MAINT" Ordering="101"/>
+    <ROW Dialog_="CustomizeDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT" Ordering="1"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="ChangeButton" Event="NewDialog" Argument="CustomizeDlg" Condition="AI_MAINT" Ordering="501"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceWelcomeDlg" Condition="AI_MAINT" Ordering="1"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="RemoveButton" Event="NewDialog" Argument="VerifyRemoveDlg" Condition="AI_MAINT AND InstallMode=&quot;Remove&quot;" Ordering="601"/>
+    <ROW Dialog_="VerifyRemoveDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT AND InstallMode=&quot;Remove&quot;" Ordering="1"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="RepairButton" Event="NewDialog" Argument="VerifyRepairDlg" Condition="AI_MAINT AND InstallMode=&quot;Repair&quot;" Ordering="601"/>
+    <ROW Dialog_="VerifyRepairDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT AND InstallMode=&quot;Repair&quot;" Ordering="1"/>
+    <ROW Dialog_="VerifyRepairDlg" Control_="Repair" Event="EndDialog" Argument="Return" Condition="AI_MAINT AND InstallMode=&quot;Repair&quot;" Ordering="399" Options="1"/>
+    <ROW Dialog_="VerifyRemoveDlg" Control_="Remove" Event="EndDialog" Argument="Return" Condition="AI_MAINT AND InstallMode=&quot;Remove&quot;" Ordering="299" Options="1"/>
+    <ROW Dialog_="PatchWelcomeDlg" Control_="Next" Event="NewDialog" Argument="VerifyReadyDlg" Condition="AI_PATCH" Ordering="201"/>
+    <ROW Dialog_="ResumeDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_RESUME" Ordering="299"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_PATCH" Ordering="199"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Back" Event="NewDialog" Argument="PatchWelcomeDlg" Condition="AI_PATCH" Ordering="203"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiCreateFolderComponent">
+    <ROW Directory_="APPDIR" Component_="APPDIR" ManualDelete="true"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiCustActComponent">
+    <ROW Action="AI_DOWNGRADE" Type="19" Target="4010"/>
+    <ROW Action="AI_DpiContentScale" Type="1" Source="aicustact.dll" Target="DpiContentScale"/>
+    <ROW Action="AI_EnableDebugLog" Type="321" Source="aicustact.dll" Target="EnableDebugLog"/>
+    <ROW Action="AI_InstallModeCheck" Type="1" Source="aicustact.dll" Target="UpdateInstallMode" WithoutSeq="true"/>
+    <ROW Action="AI_PREPARE_UPGRADE" Type="65" Source="aicustact.dll" Target="PrepareUpgrade"/>
+    <ROW Action="AI_PRESERVE_INSTALL_TYPE" Type="65" Source="aicustact.dll" Target="PreserveInstallType"/>
+    <ROW Action="AI_RESTORE_LOCATION" Type="65" Source="aicustact.dll" Target="RestoreLocation"/>
+    <ROW Action="AI_ResolveKnownFolders" Type="1" Source="aicustact.dll" Target="AI_ResolveKnownFolders"/>
+    <ROW Action="AI_SHOW_LOG" Type="65" Source="aicustact.dll" Target="LaunchLogFile" WithoutSeq="true"/>
+    <ROW Action="AI_STORE_LOCATION" Type="51" Source="ARPINSTALLLOCATION" Target="[APPDIR]"/>
+    <ROW Action="SET_APPDIR" Type="307" Source="APPDIR" Target="[ProgramFilesFolder][Manufacturer]\[ProductName]"/>
+    <ROW Action="SET_SHORTCUTDIR" Type="307" Source="SHORTCUTDIR" Target="[ProgramMenuFolder][ProductName]"/>
+    <ROW Action="SET_TARGETDIR_TO_APPDIR" Type="51" Source="TARGETDIR" Target="[APPDIR]"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatCompsComponent">
+    <ROW Feature_="MainFeature" Component_="APPDIR"/>
+    <ROW Feature_="MainFeature" Component_="ProductInformation"/>
+    <ROW Feature_="MainFeature" Component_="Presentacin_PrimaryOutput"/>
+    <ROW Feature_="MainFeature" Component_="Presentacin_PublishOutput"/>
+    <ROW Feature_="MainFeature" Component_="Presentacin_PublishOutput_cs"/>
+    <ROW Feature_="MainFeature" Component_="Presentacin_PublishOutput_de"/>
+    <ROW Feature_="MainFeature" Component_="Presentacin_PublishOutput_es"/>
+    <ROW Feature_="MainFeature" Component_="Presentacin_PublishOutput_fr"/>
+    <ROW Feature_="MainFeature" Component_="Presentacin_PublishOutput_it"/>
+    <ROW Feature_="MainFeature" Component_="Presentacin_PublishOutput_ja"/>
+    <ROW Feature_="MainFeature" Component_="Presentacin_PublishOutput_ko"/>
+    <ROW Feature_="MainFeature" Component_="Presentacin_PublishOutput_pl"/>
+    <ROW Feature_="MainFeature" Component_="Presentacin_PublishOutput_ptBR"/>
+    <ROW Feature_="MainFeature" Component_="Presentacin_PublishOutput_ru"/>
+    <ROW Feature_="MainFeature" Component_="Presentacin_PublishOutput_tr"/>
+    <ROW Feature_="MainFeature" Component_="Presentacin_PublishOutput_zhHans"/>
+    <ROW Feature_="MainFeature" Component_="Presentacin_PublishOutput_zhHant"/>
+    <ROW Feature_="MainFeature" Component_="Presentacin_PublishOutput_runtimes_winarm64_native"/>
+    <ROW Feature_="MainFeature" Component_="Presentacin_PublishOutput_runtimes_winx64_native"/>
+    <ROW Feature_="MainFeature" Component_="Presentacin_PublishOutput_runtimes_winx86_native"/>
+    <ROW Feature_="MainFeature" Component_="Presentacin_PublishOutput_runtimes_unix_lib_net9.0"/>
+    <ROW Feature_="MainFeature" Component_="Presentacin_PublishOutput_runtimes_win_lib_net9.0"/>
+    <ROW Feature_="MainFeature" Component_="AI_PROPPATH_FILENAME_PERBUILD_Presentacin.exe"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
+    <ROW Name="Recurso1.exe" SourcePath="..\Presentación\Assets\Recurso-1.ico" Index="0"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiInstExSeqComponent">
+    <ROW Action="AI_DOWNGRADE" Condition="AI_NEWERPRODUCTFOUND AND (UILevel &lt;&gt; 5)" Sequence="210"/>
+    <ROW Action="AI_RESTORE_LOCATION" Condition="APPDIR=&quot;&quot;" Sequence="749"/>
+    <ROW Action="AI_STORE_LOCATION" Condition="(Not Installed) OR REINSTALL" Sequence="1501"/>
+    <ROW Action="AI_PREPARE_UPGRADE" Condition="AI_UPGRADE=&quot;No&quot; AND (Not Installed)" Sequence="1399"/>
+    <ROW Action="AI_ResolveKnownFolders" Sequence="52"/>
+    <ROW Action="AI_EnableDebugLog" Sequence="51"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiInstallUISequenceComponent">
+    <ROW Action="AI_PRESERVE_INSTALL_TYPE" Sequence="199"/>
+    <ROW Action="AI_RESTORE_LOCATION" Condition="APPDIR=&quot;&quot;" Sequence="749"/>
+    <ROW Action="AI_ResolveKnownFolders" Sequence="53"/>
+    <ROW Action="AI_DpiContentScale" Sequence="52"/>
+    <ROW Action="AI_EnableDebugLog" Sequence="51"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiLaunchConditionsComponent">
+    <ROW Condition="((VersionNT &lt;&gt; 501) AND (VersionNT &lt;&gt; 502))" Description="[ProductName] cannot be installed on [WindowsTypeNT5XDisplay]." DescriptionLocId="AI.LaunchCondition.NoNT5X" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="(VersionNT &lt;&gt; 400)" Description="[ProductName] cannot be installed on [WindowsTypeNT40Display]." DescriptionLocId="AI.LaunchCondition.NoNT40" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="(VersionNT &lt;&gt; 500)" Description="[ProductName] cannot be installed on [WindowsTypeNT50Display]." DescriptionLocId="AI.LaunchCondition.NoNT50" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="(VersionNT &lt;&gt; 600)" Description="[ProductName] cannot be installed on [WindowsTypeNT60Display]." DescriptionLocId="AI.LaunchCondition.NoNT60" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="VersionNT" Description="[ProductName] cannot be installed on [WindowsType9XDisplay]." DescriptionLocId="AI.LaunchCondition.No9X" IsPredefined="true" Builds="DefaultBuild"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiRegsComponent">
+    <ROW Registry="Manufacturer" Root="-1" Key="Software\[Manufacturer]" Name="\"/>
+    <ROW Registry="Path" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Path" Value="[APPDIR]" Component_="ProductInformation"/>
+    <ROW Registry="ProductName" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="\"/>
+    <ROW Registry="Software" Root="-1" Key="Software" Name="\"/>
+    <ROW Registry="Version" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Version" Value="[ProductVersion]" Component_="ProductInformation"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiShortsComponent">
+    <ROW Shortcut="AI_PROPPATH_FILENAME_PERBUILD_Prese" Directory_="ProgramMenuFolder" Name="Idit" Component_="AI_PROPPATH_FILENAME_PERBUILD_Presentacin.exe" Target="[#Presentacin.exe]" Hotkey="0" Icon_="Recurso1.exe" IconIndex="0" ShowCmd="1" WkDir="Presentacin_Dir"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiThemeComponent">
+    <ATTRIBUTE name="UsedTheme" value="classic"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiUpgradeComponent">
+    <ROW UpgradeCode="[|UpgradeCode]" VersionMin="0.0.1" VersionMax="[|ProductVersion]" Attributes="257" ActionProperty="OLDPRODUCTS"/>
+    <ROW UpgradeCode="[|UpgradeCode]" VersionMin="[|ProductVersion]" Attributes="2" ActionProperty="AI_NEWERPRODUCTFOUND"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.VsProjectComponent">
+    <ROW ProjectId="{a82def18-88fa-e9f6-d524-ef83c7a395c4}" ProjectName="Presentación" OutputGroup="PublishOutput" OutputFile="AccesoDatos.dll"/>
+    <ROW ProjectId="{a82def18-88fa-e9f6-d524-ef83c7a395c4}" ProjectName="Presentación" OutputGroup="PublishOutput" OutputFile="Dominio.dll"/>
+    <ROW ProjectId="{a82def18-88fa-e9f6-d524-ef83c7a395c4}" ProjectName="Presentación" OutputGroup="PublishOutput" OutputFile="Microsoft.Bcl.Cryptography.dll"/>
+    <ROW ProjectId="{a82def18-88fa-e9f6-d524-ef83c7a395c4}" ProjectName="Presentación" OutputGroup="PublishOutput" OutputFile="Microsoft.Data.SqlClient.dll"/>
+    <ROW ProjectId="{a82def18-88fa-e9f6-d524-ef83c7a395c4}" ProjectName="Presentación" OutputGroup="PublishOutput" OutputFile="Microsoft.Data.SqlClient.Extensions.Abstractions.dll"/>
+    <ROW ProjectId="{a82def18-88fa-e9f6-d524-ef83c7a395c4}" ProjectName="Presentación" OutputGroup="PublishOutput" OutputFile="Microsoft.Data.SqlClient.Internal.Logging.dll"/>
+    <ROW ProjectId="{a82def18-88fa-e9f6-d524-ef83c7a395c4}" ProjectName="Presentación" OutputGroup="PublishOutput" OutputFile="Microsoft.Extensions.Caching.Abstractions.dll"/>
+    <ROW ProjectId="{a82def18-88fa-e9f6-d524-ef83c7a395c4}" ProjectName="Presentación" OutputGroup="PublishOutput" OutputFile="Microsoft.Extensions.Caching.Memory.dll"/>
+    <ROW ProjectId="{a82def18-88fa-e9f6-d524-ef83c7a395c4}" ProjectName="Presentación" OutputGroup="PublishOutput" OutputFile="Microsoft.Extensions.DependencyInjection.Abstractions.dll"/>
+    <ROW ProjectId="{a82def18-88fa-e9f6-d524-ef83c7a395c4}" ProjectName="Presentación" OutputGroup="PublishOutput" OutputFile="Microsoft.Extensions.Logging.Abstractions.dll"/>
+    <ROW ProjectId="{a82def18-88fa-e9f6-d524-ef83c7a395c4}" ProjectName="Presentación" OutputGroup="PublishOutput" OutputFile="Microsoft.Extensions.Options.dll"/>
+    <ROW ProjectId="{a82def18-88fa-e9f6-d524-ef83c7a395c4}" ProjectName="Presentación" OutputGroup="PublishOutput" OutputFile="Microsoft.Extensions.Primitives.dll"/>
+    <ROW ProjectId="{a82def18-88fa-e9f6-d524-ef83c7a395c4}" ProjectName="Presentación" OutputGroup="PublishOutput" OutputFile="Microsoft.IdentityModel.Abstractions.dll"/>
+    <ROW ProjectId="{a82def18-88fa-e9f6-d524-ef83c7a395c4}" ProjectName="Presentación" OutputGroup="PublishOutput" OutputFile="Microsoft.IdentityModel.JsonWebTokens.dll"/>
+    <ROW ProjectId="{a82def18-88fa-e9f6-d524-ef83c7a395c4}" ProjectName="Presentación" OutputGroup="PublishOutput" OutputFile="Microsoft.IdentityModel.Logging.dll"/>
+    <ROW ProjectId="{a82def18-88fa-e9f6-d524-ef83c7a395c4}" ProjectName="Presentación" OutputGroup="PublishOutput" OutputFile="Microsoft.IdentityModel.Protocols.dll"/>
+    <ROW ProjectId="{a82def18-88fa-e9f6-d524-ef83c7a395c4}" ProjectName="Presentación" OutputGroup="PublishOutput" OutputFile="Microsoft.IdentityModel.Protocols.OpenIdConnect.dll"/>
+    <ROW ProjectId="{a82def18-88fa-e9f6-d524-ef83c7a395c4}" ProjectName="Presentación" OutputGroup="PublishOutput" OutputFile="Microsoft.IdentityModel.Tokens.dll"/>
+    <ROW ProjectId="{a82def18-88fa-e9f6-d524-ef83c7a395c4}" ProjectName="Presentación" OutputGroup="PublishOutput" OutputFile="Microsoft.SqlServer.Server.dll"/>
+    <ROW ProjectId="{a82def18-88fa-e9f6-d524-ef83c7a395c4}" ProjectName="Presentación" OutputGroup="PublishOutput" OutputFile="Presentacin.deps.json"/>
+    <ROW ProjectId="{a82def18-88fa-e9f6-d524-ef83c7a395c4}" ProjectName="Presentación" OutputGroup="PublishOutput" OutputFile="Presentacin.dll"/>
+    <ROW ProjectId="{a82def18-88fa-e9f6-d524-ef83c7a395c4}" ProjectName="Presentación" OutputGroup="PublishOutput" OutputFile="Presentacin.exe"/>
+    <ROW ProjectId="{a82def18-88fa-e9f6-d524-ef83c7a395c4}" ProjectName="Presentación" OutputGroup="PublishOutput" OutputFile="Presentacin.runtimeconfig.json"/>
+    <ROW ProjectId="{a82def18-88fa-e9f6-d524-ef83c7a395c4}" ProjectName="Presentación" OutputGroup="PublishOutput" OutputFile="System.IdentityModel.Tokens.Jwt.dll"/>
+    <ROW ProjectId="{a82def18-88fa-e9f6-d524-ef83c7a395c4}" ProjectName="Presentación" OutputGroup="PublishOutput" OutputFile="Microsoft.Data.SqlClient.resources.dll"/>
+    <ROW ProjectId="{a82def18-88fa-e9f6-d524-ef83c7a395c4}" ProjectName="Presentación" OutputGroup="PublishOutput" OutputFile="Microsoft.Data.SqlClient.resources.dll_1"/>
+    <ROW ProjectId="{a82def18-88fa-e9f6-d524-ef83c7a395c4}" ProjectName="Presentación" OutputGroup="PublishOutput" OutputFile="Microsoft.Data.SqlClient.resources.dll_2"/>
+    <ROW ProjectId="{a82def18-88fa-e9f6-d524-ef83c7a395c4}" ProjectName="Presentación" OutputGroup="PublishOutput" OutputFile="Microsoft.Data.SqlClient.resources.dll_3"/>
+    <ROW ProjectId="{a82def18-88fa-e9f6-d524-ef83c7a395c4}" ProjectName="Presentación" OutputGroup="PublishOutput" OutputFile="Microsoft.Data.SqlClient.resources.dll_4"/>
+    <ROW ProjectId="{a82def18-88fa-e9f6-d524-ef83c7a395c4}" ProjectName="Presentación" OutputGroup="PublishOutput" OutputFile="Microsoft.Data.SqlClient.resources.dll_5"/>
+    <ROW ProjectId="{a82def18-88fa-e9f6-d524-ef83c7a395c4}" ProjectName="Presentación" OutputGroup="PublishOutput" OutputFile="Microsoft.Data.SqlClient.resources.dll_6"/>
+    <ROW ProjectId="{a82def18-88fa-e9f6-d524-ef83c7a395c4}" ProjectName="Presentación" OutputGroup="PublishOutput" OutputFile="Microsoft.Data.SqlClient.resources.dll_7"/>
+    <ROW ProjectId="{a82def18-88fa-e9f6-d524-ef83c7a395c4}" ProjectName="Presentación" OutputGroup="PublishOutput" OutputFile="Microsoft.Data.SqlClient.resources.dll_8"/>
+    <ROW ProjectId="{a82def18-88fa-e9f6-d524-ef83c7a395c4}" ProjectName="Presentación" OutputGroup="PublishOutput" OutputFile="Microsoft.Data.SqlClient.resources.dll_9"/>
+    <ROW ProjectId="{a82def18-88fa-e9f6-d524-ef83c7a395c4}" ProjectName="Presentación" OutputGroup="PublishOutput" OutputFile="Microsoft.Data.SqlClient.resources_10_.dll"/>
+    <ROW ProjectId="{a82def18-88fa-e9f6-d524-ef83c7a395c4}" ProjectName="Presentación" OutputGroup="PublishOutput" OutputFile="Microsoft.Data.SqlClient.resources_11_.dll"/>
+    <ROW ProjectId="{a82def18-88fa-e9f6-d524-ef83c7a395c4}" ProjectName="Presentación" OutputGroup="PublishOutput" OutputFile="Microsoft.Data.SqlClient.resources_12_.dll"/>
+    <ROW ProjectId="{a82def18-88fa-e9f6-d524-ef83c7a395c4}" ProjectName="Presentación" OutputGroup="PublishOutput" OutputFile="Microsoft.Data.SqlClient.SNI.dll"/>
+    <ROW ProjectId="{a82def18-88fa-e9f6-d524-ef83c7a395c4}" ProjectName="Presentación" OutputGroup="PublishOutput" OutputFile="Microsoft.Data.SqlClient.SNI.dll_1"/>
+    <ROW ProjectId="{a82def18-88fa-e9f6-d524-ef83c7a395c4}" ProjectName="Presentación" OutputGroup="PublishOutput" OutputFile="Microsoft.Data.SqlClient.SNI.dll_2"/>
+    <ROW ProjectId="{a82def18-88fa-e9f6-d524-ef83c7a395c4}" ProjectName="Presentación" OutputGroup="PublishOutput" OutputFile="Microsoft.Data.SqlClient.dll_1"/>
+    <ROW ProjectId="{a82def18-88fa-e9f6-d524-ef83c7a395c4}" ProjectName="Presentación" OutputGroup="PublishOutput" OutputFile="Microsoft.Data.SqlClient.dll_2"/>
+  </COMPONENT>
+</DOCUMENT>

@@ -218,7 +218,7 @@
 
                             </Button>
 
-                            <Button Content="Auditoría" Style="{StaticResource SidebarButtonStyle}">
+                            <Button Content="Auditoría" Style="{StaticResource SidebarButtonStyle}" Click="BtnAuditoria_Click">
                                 <Button.ContentTemplate>
 
                                     <DataTemplate>

@@ -3,6 +3,7 @@ using System.Data;
 using System.IO;
 using Microsoft.Data.SqlClient;
 
+
 namespace AccesoDatos
 {
     public class ConexionSql
