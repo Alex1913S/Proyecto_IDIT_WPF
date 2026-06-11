@@ -132,7 +132,8 @@ namespace Presentación
         private void BtnAssignInventory_Click(object sender, RoutedEventArgs e) =>
             NavegaA(new Assign_Inventory(), "Asignación de Activos");
         private void BtnAuditoria_Click(object sender, RoutedEventArgs e)
-    => NavegaA(new Audit_Log(), "Auditoría");
+            => NavegaA(new Audit_Log(), "Auditoría");
+
 
         private void BtnToggleSidebar_Click(object sender, RoutedEventArgs e)
         {
@@ -217,10 +218,31 @@ namespace Presentación
 
                 if (txtCurrent != null && txtSub != null)
                 {
+                    // Ajuste para leer el texto interno del StackPanel si existe, manteniendo tu variable original
                     string content = btn.Content.ToString();
+                    if (btn.Content is StackPanel panel)
+                    {
+                        content = "";
+                        foreach (var child in panel.Children) if (child is TextBlock tb) content += tb.Text + " ";
+                    }
+
+                    // Tu estructura original de condiciones
                     if (content.Contains("Finanzas")) { txtCurrent.Text = "Finanzas & Control"; txtSub.Text = "Área Contable"; }
                     else if (content.Contains("Seguridad")) { txtCurrent.Text = "Seguridad SGSI"; txtSub.Text = "Auditoría de Riesgos"; }
                     else if (content.Contains("Soporte")) { txtCurrent.Text = "Soporte Técnico"; txtSub.Text = "Mantenimiento TI"; }
+                    // ─── Nueva condición agregada siguiendo tu mismo estilo ───
+                    else if (content.Contains("Gobernanza"))
+                    {
+                        txtCurrent.Text = "Gobernanza TI";
+                        txtSub.Text = "Control de Accesos";
+
+                        // Validación para no recargar el control si ya está abierto
+                        if (PanelInicioView.Children.Count == 0 || !(PanelInicioView.Children[0] is PermisosPanel))
+                        {
+                            PanelInicioView.Children.Clear();
+                            PanelInicioView.Children.Add(new PermisosPanel());
+                        }
+                    }
                 }
                 PopupWorkspace.IsOpen = false;
             }

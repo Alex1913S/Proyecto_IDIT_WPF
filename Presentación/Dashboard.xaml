@@ -385,7 +385,7 @@
                                         <TextBlock x:Name="TxtPopupHeader" Text="Permisos Avanzados" FontSize="11" FontWeight="Bold" Foreground="#A0A0B8" Margin="12,8,0,8"/>
 
                                         <Button Style="{StaticResource MenuWorkspaceButtonStyle}" 
-  
+                                                
                                                Height="48" 
                                                 Click="WorkspaceItem_Click">
 
