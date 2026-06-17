@@ -236,11 +236,15 @@ namespace Presentación
                         txtCurrent.Text = "Gobernanza TI";
                         txtSub.Text = "Control de Accesos";
 
-                        // Validación para no recargar el control si ya está abierto
-                        if (PanelInicioView.Children.Count == 0 || !(PanelInicioView.Children[0] is PermisosPanel))
+                        if (!(PanelInicioView.Children.Count > 0 && PanelInicioView.Children[0] is PermisosPanel))
                         {
                             PanelInicioView.Children.Clear();
-                            PanelInicioView.Children.Add(new PermisosPanel());
+                            PanelInicioView.Children.Add(new PermisosPanel()); // Loaded dispara solo
+                        }
+                        else
+                        {
+                            // Si ya existe, solo hacerlo visible
+                            ((PermisosPanel)PanelInicioView.Children[0]).Visibility = Visibility.Visible;
                         }
                     }
                 }

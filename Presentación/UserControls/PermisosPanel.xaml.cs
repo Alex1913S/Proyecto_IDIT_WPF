@@ -8,6 +8,9 @@ using System.Windows.Shapes;
 
 namespace Presentación
 {
+
+
+
     // ═══════════════════════════════════════════════════════════════════
     // MODELO DE DATOS — Permiso atómico
     // ═══════════════════════════════════════════════════════════════════
@@ -178,6 +181,16 @@ namespace Presentación
         {
             InitializeComponent();
         }
+        private void PermisosPanel_Loaded(object sender, RoutedEventArgs e)
+        {
+            // ✅ Aquí sí están disponibles PnlGrupos, PnlPermisos, etc.
+            CargarCopiaTrabajo();
+            _moduloIndex = 0;
+            RenderizarGrupos();
+            ActualizarContadores();
+            this.Visibility = Visibility.Visible;
+        }
+
 
         // ─────────────────────────────────────────────────────────────
         // APERTURA DEL PANEL
