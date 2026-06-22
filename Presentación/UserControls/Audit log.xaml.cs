@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks; // 🔥 REQUISITO: Para dar soporte a Task
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -44,7 +45,8 @@ namespace Presentación
         // ─────────────────────────────────────────────────────────────────
         // CONSULTAR LOGS
         // ─────────────────────────────────────────────────────────────────
-        private void BtnConsultar_Click(object sender, RoutedEventArgs e)
+        // 🔥 CAMBIO: Convertido a 'async void' para liberar el hilo de UI durante la consulta pesada
+        private async void BtnConsultar_Click(object sender, RoutedEventArgs e)
         {
             if (DpDesde.SelectedDate == null || DpHasta.SelectedDate == null)
             {
@@ -62,9 +64,12 @@ namespace Presentación
 
             try
             {
-                _tablaCompleta = _dominio.ListarLogsAuditoria(
+                // Opcional: Mostrar aquí un spinner o ProgressBar si lo tienes en el XAML
+
+                // 🔥 CAMBIO: Ejecutamos la consulta a la BD de fondo con Task.Run y await
+                _tablaCompleta = await Task.Run(() => _dominio.ListarLogsAuditoria(
                     DpDesde.SelectedDate.Value,
-                    DpHasta.SelectedDate.Value);
+                    DpHasta.SelectedDate.Value));
 
                 _paginaActual = 1;
                 CargarPagina();
@@ -74,6 +79,10 @@ namespace Presentación
             {
                 MessageBox.Show($"Error al consultar los logs de auditoría:\n\n{ex.Message}",
                     "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                // Opcional: Ocultar aquí el spinner o ProgressBar
             }
         }
 

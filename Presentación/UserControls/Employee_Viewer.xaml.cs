@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks; // 🔥 REQUISITO: Para el soporte de operaciones con Task
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -54,20 +55,22 @@ namespace Presentación
         // ═════════════════════════════════════════════════════════════════
         // CARGA INICIAL
         // ═════════════════════════════════════════════════════════════════
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        // 🔥 CAMBIO: Convertido a 'async void' para cargar los combos y la grilla sin congelar la interfaz
+        private async void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            CargarCombosFormulario();
-            CargarDatos();
+            await CargarCombosFormularioAsync();
+            await CargarDatosAsync();
         }
 
         // ═════════════════════════════════════════════════════════════════
         // CARGA DE COMBOS (Departamentos, Ubicaciones, Perfiles)
         // ═════════════════════════════════════════════════════════════════
-        private void CargarCombosFormulario()
+        // 🔥 CAMBIO: Consulta los catálogos en hilos secundarios mediante Task.Run
+        private async Task CargarCombosFormularioAsync()
         {
             try
             {
-                var dtDeptos = _colaboradorDominio.ListarDepartamentos();
+                var dtDeptos = await Task.Run(() => _colaboradorDominio.ListarDepartamentos());
                 CbFDepartamento.Items.Clear();
                 foreach (DataRow row in dtDeptos.Rows)
                     CbFDepartamento.Items.Add(new ComboItem
@@ -78,7 +81,7 @@ namespace Presentación
                 CbFDepartamento.DisplayMemberPath = "Display";
                 CbFDepartamento.SelectedValuePath = "Value";
 
-                var dtUbics = _colaboradorDominio.ListarUbicaciones();
+                var dtUbics = await Task.Run(() => _colaboradorDominio.ListarUbicaciones());
                 CbFUbicacion.Items.Clear();
                 foreach (DataRow row in dtUbics.Rows)
                     CbFUbicacion.Items.Add(new ComboItem
@@ -89,7 +92,7 @@ namespace Presentación
                 CbFUbicacion.DisplayMemberPath = "Display";
                 CbFUbicacion.SelectedValuePath = "Value";
 
-                var dtPerfiles = _colaboradorDominio.ListarPerfiles();
+                var dtPerfiles = await Task.Run(() => _colaboradorDominio.ListarPerfiles());
                 CbFPerfil.Items.Clear();
                 foreach (DataRow row in dtPerfiles.Rows)
                     CbFPerfil.Items.Add(new ComboItem
@@ -110,11 +113,12 @@ namespace Presentación
         // ═════════════════════════════════════════════════════════════════
         // CARGA Y FILTRADO DE DATOS
         // ═════════════════════════════════════════════════════════════════
-        private void CargarDatos()
+        // 🔥 CAMBIO: La lectura de colaboradores ahora es asíncrona para que el buscador en vivo no cause tirones visuales
+        private async Task CargarDatosAsync()
         {
             try
             {
-                object resultado = _cnColaboradores.MostrarColaboradores(_filtroBusqueda);
+                object resultado = await Task.Run(() => _cnColaboradores.MostrarColaboradores(_filtroBusqueda));
 
                 if (resultado is DataTable dt)
                     _tablaCompleta = dt;
@@ -355,10 +359,11 @@ namespace Presentación
         // ═════════════════════════════════════════════════════════════════
         // BÚSQUEDA EN VIVO
         // ═════════════════════════════════════════════════════════════════
-        private void TxtBuscarColaborador_TextChanged(object sender, TextChangedEventArgs e)
+        // 🔥 CAMBIO: Marcado como asíncrono para que la grilla filtre dinámicamente con fluidez
+        private async void TxtBuscarColaborador_TextChanged(object sender, TextChangedEventArgs e)
         {
             _filtroBusqueda = TxtBuscarColaborador.Text.Trim();
-            AplicarFiltros();
+            await CargarDatosAsync();
         }
 
         // ═════════════════════════════════════════════════════════════════
@@ -477,7 +482,8 @@ namespace Presentación
         // ═════════════════════════════════════════════════════════════════
         // CRUD — GUARDAR (crear o actualizar)
         // ═════════════════════════════════════════════════════════════════
-        private void BtnGuardar_Click(object sender, RoutedEventArgs e)
+        // 🔥 CAMBIO: Convertido a 'async void' para transaccionar con la BD sin colgar las animaciones WPF
+        private async void BtnGuardar_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -546,22 +552,18 @@ namespace Presentación
 
                 if (_modoEdicion)
                 {
-                    // En edición: si no se escribió nueva contraseña, pasamos la existente vacía
-                    // El método ModificarColaborador espera el texto plano (será hasheado de nuevo)
-                    // Si password está vacío, pasamos un placeholder para que no cambie
-                    // NOTA: si tu BD requiere siempre actualizar el hash, se recomienda una lógica
-                    //       adicional en AccesoDatos; aquí enviamos lo que el usuario escribió.
                     string passParaActualizar = string.IsNullOrWhiteSpace(password)
-                        ? "##SIN_CAMBIO##"   // Valor especial — manejar en AccesoDatos si se desea
+                        ? "##SIN_CAMBIO##"
                         : password;
 
-                    ok = _cnColaboradores.EditarColaborador(
+                    // 🔥 CAMBIO: Ejecución asíncrona de la edición en SQL Server
+                    ok = await Task.Run(() => _cnColaboradores.EditarColaborador(
                         cedula, nombres, apellidos, correo,
                         departamentoId, ubicacionId,
                         fechaIngreso.Value, estado, perfilId,
                         usuario, passParaActualizar,
-                        _fotoFueModificada ? fotoFinal : null, // null = no cambiar foto
-                        cargo);
+                        _fotoFueModificada ? fotoFinal : null,
+                        cargo));
 
                     MostrarResultado(ok,
                         "Colaborador actualizado correctamente.",
@@ -569,11 +571,12 @@ namespace Presentación
                 }
                 else
                 {
-                    var resultado = _colaboradorDominio.RegistrarColaborador(
+                    // 🔥 CAMBIO: Ejecución asíncrona de la inserción con cifrado
+                    var resultado = await Task.Run(() => _colaboradorDominio.RegistrarColaborador(
                         cedula, nombres, apellidos, correo,
                         departamentoId, ubicacionId,
                         fechaIngreso.Value, estado, perfilId,
-                        usuario, password, fotoFinal, cargo);
+                        usuario, password, fotoFinal, cargo));
 
                     ok = resultado.Exitoso;
                     MostrarResultado(ok, resultado.Mensaje, resultado.Mensaje);
@@ -582,7 +585,7 @@ namespace Presentación
                 if (ok)
                 {
                     OcultarFormulario();
-                    CargarDatos();
+                    await CargarDatosAsync(); // Recarga fluida de la grilla
                 }
             }
             catch (Exception ex)
@@ -595,7 +598,8 @@ namespace Presentación
         // ═════════════════════════════════════════════════════════════════
         // CRUD — ELIMINAR COLABORADOR
         // ═════════════════════════════════════════════════════════════════
-        private void BtnEliminar_Click(object sender, RoutedEventArgs e)
+        // 🔥 CAMBIO: Convertido a 'async void' para remover registros de manera asíncrona sin frenar el render
+        private async void BtnEliminar_Click(object sender, RoutedEventArgs e)
         {
             if (DgColaboradores.SelectedItem == null) return;
 
@@ -613,12 +617,13 @@ namespace Presentación
 
             try
             {
-                bool ok = _cnColaboradores.EliminarColaborador(cedula);
+                // 🔥 CAMBIO: Borrado asíncrono
+                bool ok = await Task.Run(() => _cnColaboradores.EliminarColaborador(cedula));
                 MostrarResultado(ok,
                     "Colaborador eliminado correctamente.",
                     "No se pudo completar la eliminación.");
 
-                if (ok) CargarDatos();
+                if (ok) await CargarDatosAsync();
             }
             catch (Exception ex)
             {
@@ -963,7 +968,5 @@ namespace Presentación
             public object Value { get; set; }
             public override string ToString() => Display;
         }
-
-
     }
 }

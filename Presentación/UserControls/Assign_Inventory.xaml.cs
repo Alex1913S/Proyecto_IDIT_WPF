@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks; // 🔥 REQUISITO: Para el soporte de Task
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -48,21 +49,25 @@ namespace Presentación.UserControls
         // CARGA INICIAL
         // ═════════════════════════════════════════════════════════════════
 
-        private void Assign_Inventory_Loaded(object sender, RoutedEventArgs e)
+        // 🔥 CAMBIO: Modificado a 'async void' para permitir await dentro
+        private async void Assign_Inventory_Loaded(object sender, RoutedEventArgs e)
         {
-            CargarCombos();
-            CargarDatos();
+            await CargarCombosAsync();
+            await CargarDatosAsync();
         }
 
         // ═════════════════════════════════════════════════════════════════
         // CARGA DE COMBOS (Activos disponibles y Colaboradores)
         // ═════════════════════════════════════════════════════════════════
 
-        private void CargarCombos()
+        // 🔥 CAMBIO: Convertido a 'async Task' y procesado en hilos secundarios
+        private async Task CargarCombosAsync()
         {
             try
             {
-                var dtActivos = _dominio.ObtenerActivosDisponibles();
+                // Traemos los datos de la base de datos de fondo
+                var dtActivos = await Task.Run(() => _dominio.ObtenerActivosDisponibles());
+
                 CmbActivo.ItemsSource = null;
                 CmbActivo.Items.Clear();
                 foreach (DataRow row in dtActivos.Rows)
@@ -76,7 +81,9 @@ namespace Presentación.UserControls
                 CmbActivo.DisplayMemberPath = "Display";
                 CmbActivo.SelectedValuePath = "Value";
 
-                var dtColaboradores = _dominio.ObtenerColaboradores();
+                // Segunda consulta en segundo plano
+                var dtColaboradores = await Task.Run(() => _dominio.ObtenerColaboradores());
+
                 CmbColaborador.ItemsSource = null;
                 CmbColaborador.Items.Clear();
                 foreach (DataRow row in dtColaboradores.Rows)
@@ -101,11 +108,14 @@ namespace Presentación.UserControls
         // CARGA DEL DATAGRID (Asignaciones activas)
         // ═════════════════════════════════════════════════════════════════
 
-        private void CargarDatos()
+        // 🔥 CAMBIO: Convertido a 'async Task' para evitar congelamientos al recargar
+        private async Task CargarDatosAsync()
         {
             try
             {
-                _tablaCompleta = ObtenerAsignacionesActivas();
+                // La consulta pesada se va a un hilo de fondo
+                _tablaCompleta = await Task.Run(() => ObtenerAsignacionesActivas());
+
                 _filtroBusqueda = "";
                 TxtBuscar.Text = "";
                 _paginaActual = 1;
@@ -118,11 +128,6 @@ namespace Presentación.UserControls
             }
         }
 
-        /// <summary>
-        /// Obtiene la tabla de asignaciones activas.
-        /// Reemplaza el cuerpo con una consulta real a ITAM.Asignaciones
-        /// JOIN Core.Colaboradores JOIN ITAM.ActivosBase cuando dispongas de esa vista o SP.
-        /// </summary>
         private DataTable ObtenerAsignacionesActivas()
         {
             var acceso = new AccesoDatos.AsignarActivoAccesoDatos();
@@ -217,10 +222,6 @@ namespace Presentación.UserControls
             }
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        // PAGINADOR — botones anterior / siguiente
-        // ═════════════════════════════════════════════════════════════════
-
         private void BtnPaginaAnterior_Click(object sender, RoutedEventArgs e)
         {
             if (_paginaActual > 1) { _paginaActual--; RenderizarPagina(); }
@@ -230,10 +231,6 @@ namespace Presentación.UserControls
         {
             if (_paginaActual < _totalPaginas) { _paginaActual++; RenderizarPagina(); }
         }
-
-        // ═════════════════════════════════════════════════════════════════
-        // BÚSQUEDA EN VIVO
-        // ═════════════════════════════════════════════════════════════════
 
         private void TxtBuscar_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -323,19 +320,20 @@ namespace Presentación.UserControls
         // CRUD — GUARDAR (crear o actualizar)
         // ═════════════════════════════════════════════════════════════════
 
-        private void BtnGuardar_Click(object sender, RoutedEventArgs e)
+        // 🔥 CAMBIO: Evento marcado como 'async void' para poder usar await en el guardado
+        private async void BtnGuardar_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                // ── Recolección de valores ────────────────────────────────
+                // Recolección de valores
                 Guid? activoId = (CmbActivo.SelectedItem as ComboItem)?.Value is Guid g ? g : null;
                 int? colaboradorId = (CmbColaborador.SelectedItem as ComboItem)?.Value is int id ? id : (int?)null;
 
                 DateTime fechaAsignacion = DpFechaAsignacion.SelectedDate ?? DateTime.Today;
                 string observaciones = TxtObservaciones.Text.Trim();
 
-                // ── Enviar a Dominio (validaciones incluidas) ─────────────
-                var resultado = _dominio.Registrar(activoId, colaboradorId, fechaAsignacion, observaciones);
+                // 🔥 CAMBIO: El comando INSERT / UPDATE de SQL se ejecuta de fondo sin colgar la UI
+                var resultado = await Task.Run(() => _dominio.Registrar(activoId, colaboradorId, fechaAsignacion, observaciones));
 
                 MessageBox.Show(resultado.Mensaje,
                     resultado.Exitoso ? "Asignación Registrada" : "Error de Validación",
@@ -344,9 +342,9 @@ namespace Presentación.UserControls
 
                 if (resultado.Exitoso)
                 {
-                    // Recargar combos: el activo ya no estará disponible
-                    CargarCombos();
-                    CargarDatos();
+                    // 🔥 CAMBIO: Al usar await aquí, garantizamos la recarga en orden correcto de forma fluida
+                    await CargarCombosAsync();
+                    await CargarDatosAsync();
                     OcultarFormulario();
                 }
             }
@@ -356,10 +354,6 @@ namespace Presentación.UserControls
                                 "Error del Sistema", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
-        // ═════════════════════════════════════════════════════════════════
-        // CANCELAR FORMULARIO
-        // ═════════════════════════════════════════════════════════════════
 
         private void BtnCancelar_Click(object sender, RoutedEventArgs e)
         {
@@ -411,7 +405,6 @@ namespace Presentación.UserControls
             _colaboradorIdSeleccionado = null;
         }
 
-        /// <summary>Selecciona item del combo por valor Guid.</summary>
         private void SeleccionarComboItem(ComboBox combo, string columna, object valor)
         {
             if (combo.ItemsSource is DataView dv)
@@ -425,7 +418,6 @@ namespace Presentación.UserControls
             combo.SelectedIndex = -1;
         }
 
-        /// <summary>Selecciona item del combo por valor int.</summary>
         private void SeleccionarComboItemInt(ComboBox combo, string columna, int valor)
         {
             if (combo.ItemsSource is DataView dv)
@@ -540,12 +532,12 @@ namespace Presentación.UserControls
             h.Setters.Add(new Setter(DataGridColumnHeader.HorizontalContentAlignmentProperty, HorizontalAlignment.Center));
             return h;
         }
+
         public class ComboItem
         {
             public string Display { get; set; }
             public object Value { get; set; }
             public override string ToString() => Display;
         }
-
     }
 }

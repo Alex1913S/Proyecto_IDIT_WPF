@@ -177,18 +177,17 @@ namespace Presentación
         // ─────────────────────────────────────────────────────────────
         // CONSTRUCTOR
         // ─────────────────────────────────────────────────────────────
+        private bool _inicializado = false;
+
         public PermisosPanel()
         {
             InitializeComponent();
         }
+
         private void PermisosPanel_Loaded(object sender, RoutedEventArgs e)
         {
-            // ✅ Aquí sí están disponibles PnlGrupos, PnlPermisos, etc.
-            CargarCopiaTrabajo();
-            _moduloIndex = 0;
-            RenderizarGrupos();
-            ActualizarContadores();
-            this.Visibility = Visibility.Visible;
+            _inicializado = true; // <── Aquí das luz verde a la interfaz
+            Abrir();
         }
 
 
@@ -197,6 +196,12 @@ namespace Presentación
         // ─────────────────────────────────────────────────────────────
         public void Abrir()
         {
+            if (!_inicializado)
+            {
+                // Aún no está cargado; espera al evento Loaded
+                return;
+            }
+
             CargarCopiaTrabajo();
             _moduloIndex = 0;
             RenderizarGrupos();
@@ -224,6 +229,11 @@ namespace Presentación
         // ─────────────────────────────────────────────────────────────
         private void RolChanged(object sender, RoutedEventArgs e)
         {
+            // Si el XAML no se ha terminado de cargar, salimos inmediatamente
+            if (!_inicializado) return;
+
+            if (RbOperador == null) return; // Salvaguarda extra por si acaso
+
             _rolActual = RbOperador.IsChecked == true ? "Operador" : "Empleado";
             CargarCopiaTrabajo();
             RenderizarGrupos();
@@ -232,6 +242,9 @@ namespace Presentación
 
         private void TabModulo_Checked(object sender, RoutedEventArgs e)
         {
+            // Si el XAML no se ha terminado de cargar, salimos inmediatamente
+            if (!_inicializado) return;
+
             if (sender is RadioButton rb)
             {
                 _moduloIndex = rb.Name switch
@@ -255,6 +268,9 @@ namespace Presentación
         // ─────────────────────────────────────────────────────────────
         private void RenderizarGrupos()
         {
+            // Si por alguna razón mística se invoca antes de tiempo o PnlGrupos no existe, frena el código
+            if (!_inicializado || PnlGrupos == null) return;
+
             PnlGrupos.Children.Clear();
             PnlPermisos.Children.Clear();
 

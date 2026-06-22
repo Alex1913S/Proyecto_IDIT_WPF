@@ -41,7 +41,7 @@ namespace Presentación
         {
         }
 
-        private void Dashboard_Loaded(object sender, RoutedEventArgs e)
+        private async void Dashboard_Loaded(object sender, RoutedEventArgs e)
         {
             if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(this)) return;
 
@@ -60,9 +60,180 @@ namespace Presentación
             BtnThemeToggle.IsEnabled = false;
             BtnThemeToggle.Visibility = Visibility.Collapsed;
 
-
             CargarFotoPerfil();
-            CargarKPIs();
+
+            // 🔥 Como este método (Dashboard_Loaded) ya es 'async void', 
+            // ahora sí te dejará usar el 'await' aquí sin ningún error de compilación.
+            await CargarKPIsAsync();
+
+            ConfigurarInterfazPorPerfil();
+        }
+
+        private async Task CargarKPIsAsync()
+        {
+            try
+            {
+                var activos = new UsuarioDominio.ActivosDominio();
+                var colaboradores = new ColaboradorDominio();
+
+                // Ejecutamos las consultas pesadas en un hilo secundario
+                decimal valorTotal = await Task.Run(() => activos.ObtenerValorTotalInventario());
+                int totalActivos = await Task.Run(() => activos.ObtenerTotalActivos());
+                int totalColaboradores = await Task.Run(() => colaboradores.ObtenerTotalColaboradores());
+                decimal pctGarantias = await Task.Run(() => activos.ObtenerPorcentajeGarantiasVigentes());
+                DataTable dtCategorias = await Task.Run(() => activos.ObtenerTop5CategoriasPorCantidad());
+
+                // Asignamos al hilo de la UI de forma segura e inmediata
+                NumC1.Text = "$" + valorTotal.ToString("N0", new System.Globalization.CultureInfo("es-CO"));
+                NumC2.Text = $"{totalActivos} Unidades";
+                NumC3.Text = $"{totalColaboradores} Colaboradores";
+                NumC4.Text = $"{pctGarantias}%";
+
+                RenderizarDistribucionCategorias(dtCategorias);
+            }
+            catch (Exception)
+            {
+                // Manejo de excepciones silencioso o log estructurado
+            }
+        }
+
+        private void RenderizarDistribucionCategorias(DataTable dt)
+        {
+            var txts = new[] { TxtT1, TxtT2, TxtT3, TxtT4, TxtT5, TxtT6 };
+            var vals = new[] { ValT1, ValT2, ValT3, ValT4, ValT5, ValT6 };
+            var pbs = new[] { PbT1, PbT2, PbT3, PbT4, PbT5, PbT6 };
+
+            int maxCantidad = 1;
+            foreach (DataRow row in dt.Rows)
+            {
+                int qty = Convert.ToInt32(row["Cantidad"]);
+                if (qty > maxCantidad) maxCantidad = qty;
+            }
+
+            for (int i = 0; i < Math.Min(dt.Rows.Count, 6); i++)
+            {
+                int cantidad = Convert.ToInt32(dt.Rows[i]["Cantidad"]);
+                txts[i].Text = dt.Rows[i]["Categoria"].ToString();
+                vals[i].Text = $"{cantidad} Uds";
+                pbs[i].Value = (double)cantidad / maxCantidad * 100;
+            }
+        }
+
+        /// <summary>
+        /// Centraliza la visibilidad de los componentes usando búsquedas dinámicas seguras por palabras clave.
+        /// Evita errores si los botones no tienen un x:Name directo en el XAML.
+        /// </summary>
+        private void ConfigurarInterfazPorPerfil()
+        {
+            if (string.IsNullOrWhiteSpace(_rol)) return;
+
+            string rolFormateado = _rol.Trim().ToUpper();
+
+            if (rolFormateado == "EMPLEADO")
+            {
+                // Ocultar opciones operativas y administrativas para Empleados
+                EstablecerVisibilidadBoton("Nuevo", Visibility.Collapsed);
+                EstablecerVisibilidadBoton("Asign", Visibility.Collapsed);
+                EstablecerVisibilidadBoton("Assign", Visibility.Collapsed);
+                EstablecerVisibilidadBoton("Empleado", Visibility.Collapsed);
+                EstablecerVisibilidadBoton("Colaborador", Visibility.Collapsed);
+                EstablecerVisibilidadBoton("Auditor", Visibility.Collapsed);
+                EstablecerVisibilidadBoton("Auditoria", Visibility.Collapsed);
+
+                if (SubmenuActivos != null) SubmenuActivos.Visibility = Visibility.Collapsed;
+            }
+            else if (rolFormateado == "OPERADOR")
+            {
+                // El operador ve la gestión de activos pero no colaboradores ni auditorías
+                EstablecerVisibilidadBoton("Nuevo", Visibility.Visible);
+                EstablecerVisibilidadBoton("Asign", Visibility.Visible);
+                EstablecerVisibilidadBoton("Assign", Visibility.Visible);
+                EstablecerVisibilidadBoton("Empleado", Visibility.Collapsed);
+                EstablecerVisibilidadBoton("Colaborador", Visibility.Collapsed);
+                EstablecerVisibilidadBoton("Auditor", Visibility.Collapsed);
+                EstablecerVisibilidadBoton("Auditoria", Visibility.Collapsed);
+            }
+            else // ADMINISTRADOR
+            {
+                // Acceso completo libre de restricciones
+                EstablecerVisibilidadBoton("Nuevo", Visibility.Visible);
+                EstablecerVisibilidadBoton("Asign", Visibility.Visible);
+                EstablecerVisibilidadBoton("Assign", Visibility.Visible);
+                EstablecerVisibilidadBoton("Empleado", Visibility.Visible);
+                EstablecerVisibilidadBoton("Colaborador", Visibility.Visible);
+                EstablecerVisibilidadBoton("Auditor", Visibility.Visible);
+                EstablecerVisibilidadBoton("Auditoria", Visibility.Visible);
+            }
+        }
+
+        /// <summary>
+        /// Busca botones en el árbol visual del menú lateral y aplica visibilidad por coincidencias.
+        /// </summary>
+        private void EstablecerVisibilidadBoton(string palabraClave, Visibility visibilidad)
+        {
+            if (MenuStackPanel != null)
+            {
+                foreach (var child in MenuStackPanel.Children)
+                {
+                    if (VerificarYAplicarBoton(child, palabraClave, visibilidad)) continue;
+
+                    if (child is Border border && border.Child is Panel subPanel)
+                    {
+                        foreach (var subChild in subPanel.Children)
+                        {
+                            VerificarYAplicarBoton(subChild, palabraClave, visibilidad);
+                        }
+                    }
+                }
+            }
+
+            if (SubmenuActivos != null)
+            {
+                if (SubmenuActivos.Child is Panel panelInterno)
+                {
+                    foreach (var child in panelInterno.Children)
+                    {
+                        VerificarYAplicarBoton(child, palabraClave, visibilidad);
+                    }
+                }
+                else
+                {
+                    VerificarYAplicarBoton(SubmenuActivos.Child, palabraClave, visibilidad);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Compara el x:Name o el contenido de texto interno de un control con la palabra clave.
+        /// </summary>
+        private bool VerificarYAplicarBoton(object element, string palabraClave, Visibility visibilidad)
+        {
+            if (element is Button btn)
+            {
+                string nombre = btn.Name ?? "";
+                string contenido = "";
+
+                if (btn.Content != null)
+                {
+                    contenido = btn.Content.ToString();
+                    if (btn.Content is StackPanel panel)
+                    {
+                        contenido = "";
+                        foreach (var child in panel.Children)
+                        {
+                            if (child is TextBlock tb) contenido += " " + tb.Text;
+                        }
+                    }
+                }
+
+                if (nombre.IndexOf(palabraClave, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    contenido.IndexOf(palabraClave, StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    btn.Visibility = visibilidad;
+                    return true;
+                }
+            }
+            return false;
         }
 
         private void CargarFotoPerfil()
@@ -95,8 +266,36 @@ namespace Presentación
             }
         }
 
+        /// <summary>
+        /// Control de Navegación con capa de Seguridad Perimetral integrada.
+        /// </summary>
         private void NavegaA(UserControl control, string tituloSeccion = "Panel de Control")
         {
+            if (control != null)
+            {
+                string rolFormateado = (!string.IsNullOrEmpty(_rol)) ? _rol.Trim().ToUpper() : "EMPLEADO";
+
+                bool esControlAdmin = control is PermisosPanel || control is Employee_Viewer || control is Audit_Log;
+                bool esControlOperador = control is View_Create_Assets || control is Assign_Inventory;
+
+                if (rolFormateado != "ADMINISTRADOR")
+                {
+                    if (esControlAdmin)
+                    {
+                        MessageBox.Show("Acceso denegado. Este módulo está reservado exclusivamente para perfiles de nivel Administrador.",
+                            "Seguridad del Sistema", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
+
+                    if (rolFormateado == "EMPLEADO" && esControlOperador)
+                    {
+                        MessageBox.Show("Acceso restringido. No cuenta con los privilegios operativos necesarios para acceder a esta sección.",
+                            "Seguridad del Sistema", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
+                }
+            }
+
             if (LblMainTitle != null) LblMainTitle.Text = tituloSeccion;
 
             if (control == null)
@@ -128,9 +327,9 @@ namespace Presentación
         private void BtnGestorContrasenas_Click(object sender, RoutedEventArgs e)
             => NavegaA(new GestorContrasenas(_colaboradorId), "Gestor de Contraseñas Seguras");
 
-        // Evento para cargar el módulo de asignación de inventario
-        private void BtnAssignInventory_Click(object sender, RoutedEventArgs e) =>
-            NavegaA(new Assign_Inventory(), "Asignación de Activos");
+        private void BtnAssignInventory_Click(object sender, RoutedEventArgs e)
+            => NavegaA(new Assign_Inventory(), "Asignación de Activos");
+
         private void BtnAuditoria_Click(object sender, RoutedEventArgs e)
             => NavegaA(new Audit_Log(), "Auditoría");
 
@@ -218,7 +417,6 @@ namespace Presentación
 
                 if (txtCurrent != null && txtSub != null)
                 {
-                    // Ajuste para leer el texto interno del StackPanel si existe, manteniendo tu variable original
                     string content = btn.Content.ToString();
                     if (btn.Content is StackPanel panel)
                     {
@@ -226,41 +424,32 @@ namespace Presentación
                         foreach (var child in panel.Children) if (child is TextBlock tb) content += tb.Text + " ";
                     }
 
-                    // Tu estructura original de condiciones
                     if (content.Contains("Finanzas")) { txtCurrent.Text = "Finanzas & Control"; txtSub.Text = "Área Contable"; }
                     else if (content.Contains("Seguridad")) { txtCurrent.Text = "Seguridad SGSI"; txtSub.Text = "Auditoría de Riesgos"; }
                     else if (content.Contains("Soporte")) { txtCurrent.Text = "Soporte Técnico"; txtSub.Text = "Mantenimiento TI"; }
-                    // ─── Nueva condición agregada siguiendo tu mismo estilo ───
                     else if (content.Contains("Gobernanza"))
                     {
+                        string rolFormateado = (!string.IsNullOrEmpty(_rol)) ? _rol.Trim().ToUpper() : "EMPLEADO";
+
+                        if (rolFormateado != "ADMINISTRADOR")
+                        {
+                            MessageBox.Show("El entorno de Gobernanza TI y Control de Permisos está restringido para Administradores.",
+                                "Acceso Denegado", MessageBoxButton.OK, MessageBoxImage.Stop);
+                            PopupWorkspace.IsOpen = false;
+                            return;
+                        }
+
                         txtCurrent.Text = "Gobernanza TI";
                         txtSub.Text = "Control de Accesos";
 
-                        if (!(PanelInicioView.Children.Count > 0 && PanelInicioView.Children[0] is PermisosPanel))
-                        {
-                            PanelInicioView.Children.Clear();
-                            PanelInicioView.Children.Add(new PermisosPanel()); // Loaded dispara solo
-                        }
-                        else
-                        {
-                            // Si ya existe, solo hacerlo visible
-                            ((PermisosPanel)PanelInicioView.Children[0]).Visibility = Visibility.Visible;
-                        }
+                        var permisosPanel = new PermisosPanel();
+                        NavegaA(permisosPanel, "Control de Permisos");
                     }
                 }
                 PopupWorkspace.IsOpen = false;
             }
         }
 
-        // ═══════════════════════════════════════════════════════════════════════════
-        // MODO CLARO / OSCURO
-        // Cambios aplicados:
-        //   - Sidebar → azul #4B93FF (modo claro) con botones blancos + texto azul
-        //   - Cards (1-4) → efecto relieve blanco semitransparente
-        //   - GridContainerBorder, TypesContainerBorder, MapContainerBorder → mismo relieve
-        //   - TxtC1-TxtC4 → color oscuro visible en modo claro
-        //   - Zona del contenedor principal sigue blanca (#F4F6F9)
-        // ═══════════════════════════════════════════════════════════════════════════
         private void ThemeToggle_Click(object sender, RoutedEventArgs e)
         {
             var themeIcon = (Path)BtnThemeToggle.Template.FindName("ThemeIcon", BtnThemeToggle);
@@ -277,11 +466,9 @@ namespace Presentación
 
             if (isDarkMode)
             {
-                // ════════════ MODO CLARO ════════════
-
+                // MODO CLARO
                 MainWindowBorder.Background = (SolidColorBrush)bc.ConvertFromString("#F4F6F9");
                 MainWindowBorder.BorderBrush = (SolidColorBrush)bc.ConvertFromString("#CBD5E1");
-
                 SidebarBorder.Background = (SolidColorBrush)bc.ConvertFromString("#4B93FF");
 
                 TxtUserName.Foreground = Brushes.White;
@@ -363,7 +550,6 @@ namespace Presentación
                 if (txtSel != null) txtSel.Foreground = darkText;
                 if (txtSelSub != null) txtSelSub.Foreground = greyText;
 
-                // ── Propagar tema a UserControls activos ─────────────────────
                 if (NavWorkspaceContent.Content is Employee_Viewer ev)
                     ev.AplicarTema(true);
 
@@ -371,11 +557,9 @@ namespace Presentación
             }
             else
             {
-                // ════════════ MODO OSCURO (restaurar) ════════════
-
+                // MODO OSCURO
                 MainWindowBorder.Background = (SolidColorBrush)bc.ConvertFromString("#08213a");
                 MainWindowBorder.BorderBrush = Brushes.White;
-
                 SidebarBorder.Background = (SolidColorBrush)bc.ConvertFromString("#09274c");
 
                 TxtUserName.Foreground = Brushes.White;
@@ -451,7 +635,6 @@ namespace Presentación
                 if (txtSel != null) txtSel.Foreground = Brushes.White;
                 if (txtSelSub != null) txtSelSub.Foreground = (SolidColorBrush)bc.ConvertFromString("#A0A0B8");
 
-                // ── Propagar tema a UserControls activos ─────────────────────
                 if (NavWorkspaceContent.Content is Employee_Viewer ev)
                     ev.AplicarTema(false);
 
@@ -459,12 +642,6 @@ namespace Presentación
             }
         }
 
-
-        // ═══════════════════════════════════════════════════════════════════════════
-        // HELPER: Aplica estilos visuales a los botones del sidebar según el modo
-        // En modo claro: fondo blanco semitransparente, texto/ícono en azul oscuro
-        // En modo oscuro: restaura transparente con foreground #A0A0B8
-        // ═══════════════════════════════════════════════════════════════════════════
         private void AplicarEstilosBotonesSidebar(StackPanel container, bool modoClaro)
         {
             var bc = new BrushConverter();
@@ -475,7 +652,6 @@ namespace Presentación
                 {
                     if (modoClaro)
                     {
-                        // Fondo: blanco semitransparente para dar sensación de botón sobre fondo azul
                         btn.Background = (SolidColorBrush)bc.ConvertFromString("#20FFFFFF");
                         btn.Foreground = Brushes.White;
                     }
@@ -486,7 +662,6 @@ namespace Presentación
                     }
                 }
 
-                // Submenú también
                 if (child is Border border && border.Child is StackPanel subPanel)
                 {
                     if (modoClaro)
@@ -504,21 +679,15 @@ namespace Presentación
             }
         }
 
-        // ═══════════════════════════════════════════════════════════════════════════
-        // HELPER: Cambia el color de los íconos (Path) dentro de los botones del sidebar
-        // Usa reflection sobre el ContentTemplate del botón para encontrar el Path
-        // ═══════════════════════════════════════════════════════════════════════════
         private void AplicarColorIconosSidebar(StackPanel container, Brush color)
         {
             foreach (var child in container.Children)
             {
                 if (child is Button btn && btn.IsLoaded)
                 {
-                    // Buscar el ContentPresenter nombrado "IconPresenter" en el template
                     var iconPresenter = btn.Template?.FindName("IconPresenter", btn) as ContentPresenter;
                     if (iconPresenter != null)
                     {
-                        // Recorrer el visual tree del ContentPresenter buscando Path
                         var path = EncontrarPath(iconPresenter);
                         if (path != null) path.Fill = color;
                     }
