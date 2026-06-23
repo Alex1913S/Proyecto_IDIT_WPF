@@ -92,6 +92,9 @@ namespace Dominio
             public int ObtenerTotalActivos() => _datos.ObtenerTotalActivos();
             public decimal ObtenerPorcentajeGarantiasVigentes() => _datos.ObtenerPorcentajeGarantiasVigentes();
 
+            public DataTable ObtenerIngresosPorDia() => _datos.ObtenerIngresosPorDia();
+            public DataTable ObtenerIngresosPorMes() => _datos.ObtenerIngresosPorMes();
+            public DataTable ObtenerIngresosPorAnio() => _datos.ObtenerIngresosPorAnio();
 
             // Métodos nuevos para soportar el DataGrid y los filtros
             public DataTable ListarActivos() => _datos.ObtenerTodosLosActivos();

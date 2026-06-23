@@ -62,15 +62,18 @@ namespace Presentación
                 return;
             }
 
+            // 🔥 SOLUCIÓN: Extraemos los valores de los controles WPF en el hilo principal
+            DateTime fechaDesde = DpDesde.SelectedDate.Value;
+            DateTime fechaHasta = DpHasta.SelectedDate.Value;
+
             try
             {
                 // Opcional: Mostrar aquí un spinner o ProgressBar si lo tienes en el XAML
 
-                // 🔥 CAMBIO: Ejecutamos la consulta a la BD de fondo con Task.Run y await
-                _tablaCompleta = await Task.Run(() => _dominio.ListarLogsAuditoria(
-                    DpDesde.SelectedDate.Value,
-                    DpHasta.SelectedDate.Value));
+                // 🔥 CAMBIO: Pasamos las variables locales seguras al hilo secundario sin tocar la UI
+                _tablaCompleta = await Task.Run(() => _dominio.ListarLogsAuditoria(fechaDesde, fechaHasta));
 
+                // Al usar 'await', el código de abajo regresa automáticamente al hilo principal (UI) de forma segura
                 _paginaActual = 1;
                 CargarPagina();
                 LimpiarPanelDetalle();

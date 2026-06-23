@@ -233,6 +233,69 @@ namespace AccesoDatos
                     return dt;
                 }
             }
+
+
+        }
+
+        public DataTable ObtenerIngresosPorDia()
+        {
+            const string sql = @"
+                SELECT CAST(FechaRegistro AS DATE) AS Periodo, COUNT(*) AS Cantidad
+                FROM ITAM.ActivosBase
+                WHERE FechaRegistro >= DATEADD(DAY, -5, CAST(GETDATE() AS DATE))
+                GROUP BY CAST(FechaRegistro AS DATE)";
+
+            using (var conn = GetConnection())
+            {
+                conn.Open();
+                using (var cmd = new SqlCommand(sql, conn))
+                {
+                    var dt = new DataTable();
+                    using (var adapter = new SqlDataAdapter(cmd)) adapter.Fill(dt);
+                    return dt;
+                }
+            }
+        }
+
+        public DataTable ObtenerIngresosPorMes()
+        {
+            const string sql = @"
+                SELECT DATEFROMPARTS(YEAR(FechaRegistro), MONTH(FechaRegistro), 1) AS Periodo,
+                       COUNT(*) AS Cantidad
+                FROM ITAM.ActivosBase
+                WHERE FechaRegistro >= DATEADD(MONTH, -5, DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1))
+                GROUP BY DATEFROMPARTS(YEAR(FechaRegistro), MONTH(FechaRegistro), 1)";
+
+            using (var conn = GetConnection())
+            {
+                conn.Open();
+                using (var cmd = new SqlCommand(sql, conn))
+                {
+                    var dt = new DataTable();
+                    using (var adapter = new SqlDataAdapter(cmd)) adapter.Fill(dt);
+                    return dt;
+                }
+            }
+        }
+
+        public DataTable ObtenerIngresosPorAnio()
+        {
+            const string sql = @"
+                SELECT YEAR(FechaRegistro) AS Periodo, COUNT(*) AS Cantidad
+                FROM ITAM.ActivosBase
+                WHERE FechaRegistro >= DATEFROMPARTS(YEAR(GETDATE()) - 5, 1, 1)
+                GROUP BY YEAR(FechaRegistro)";
+
+            using (var conn = GetConnection())
+            {
+                conn.Open();
+                using (var cmd = new SqlCommand(sql, conn))
+                {
+                    var dt = new DataTable();
+                    using (var adapter = new SqlDataAdapter(cmd)) adapter.Fill(dt);
+                    return dt;
+                }
+            }
         }
 
         public DataTable ObtenerCategorias()

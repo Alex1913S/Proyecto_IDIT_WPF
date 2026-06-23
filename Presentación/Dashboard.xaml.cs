@@ -1,4 +1,5 @@
 ﻿using Dominio;
+using Microsoft.Data.SqlClient;
 using Presentación.UserControls;
 using System;
 using System.Data;
@@ -8,6 +9,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Linq;
+using System.Globalization;
 
 namespace Presentación
 {
@@ -19,6 +22,11 @@ namespace Presentación
         private readonly string _cargo;
         private readonly byte[] _foto;
         private readonly int _colaboradorId;
+
+        private DataTable _dtIngresosDia;
+        private DataTable _dtIngresosMes;
+        private DataTable _dtIngresosAnio;
+        private string _filtroGraficoActual = "Día";
 
         private bool isDarkMode = true;
         private bool isSidebarCollapsed = false;
@@ -76,20 +84,24 @@ namespace Presentación
                 var activos = new UsuarioDominio.ActivosDominio();
                 var colaboradores = new ColaboradorDominio();
 
-                // Ejecutamos las consultas pesadas en un hilo secundario
                 decimal valorTotal = await Task.Run(() => activos.ObtenerValorTotalInventario());
                 int totalActivos = await Task.Run(() => activos.ObtenerTotalActivos());
                 int totalColaboradores = await Task.Run(() => colaboradores.ObtenerTotalColaboradores());
                 decimal pctGarantias = await Task.Run(() => activos.ObtenerPorcentajeGarantiasVigentes());
                 DataTable dtCategorias = await Task.Run(() => activos.ObtenerTop5CategoriasPorCantidad());
 
-                // Asignamos al hilo de la UI de forma segura e inmediata
-                NumC1.Text = "$" + valorTotal.ToString("N0", new System.Globalization.CultureInfo("es-CO"));
+                // 🔥 NUEVO: ingresos por período para el gráfico
+                _dtIngresosDia = await Task.Run(() => activos.ObtenerIngresosPorDia());
+                _dtIngresosMes = await Task.Run(() => activos.ObtenerIngresosPorMes());
+                _dtIngresosAnio = await Task.Run(() => activos.ObtenerIngresosPorAnio());
+
+                NumC1.Text = "$" + valorTotal.ToString("N0", new CultureInfo("es-CO"));
                 NumC2.Text = $"{totalActivos} Unidades";
                 NumC3.Text = $"{totalColaboradores} Colaboradores";
                 NumC4.Text = $"{pctGarantias}%";
 
                 RenderizarDistribucionCategorias(dtCategorias);
+                RenderizarGraficoIngresos(_filtroGraficoActual); // 🔥 pinta el gráfico con datos reales
             }
             catch (Exception)
             {
@@ -119,6 +131,94 @@ namespace Presentación
             }
         }
 
+        private void RenderizarGraficoIngresos(string filtro)
+        {
+            _filtroGraficoActual = filtro;
+
+            var bars = new[] { Bar1, Bar2, Bar3, Bar4, Bar5, Bar6 };
+            var labels = new[] { AxisL1, AxisL2, AxisL3, AxisL4, AxisL5, AxisL6 };
+
+            string[] etiquetas = new string[6];
+            int[] valores = new int[6];
+            var culturaEs = new CultureInfo("es-ES");
+
+            if (filtro == "Día")
+            {
+                DateTime hoy = DateTime.Today;
+                var nombresDias = culturaEs.DateTimeFormat.AbbreviatedDayNames;
+                for (int i = 0; i < 6; i++)
+                {
+                    DateTime fecha = hoy.AddDays(-5 + i);
+                    etiquetas[i] = CapitalizarPrimera(nombresDias[(int)fecha.DayOfWeek]);
+                    valores[i] = ObtenerCantidadPorFecha(_dtIngresosDia, fecha);
+                }
+            }
+            else if (filtro == "Mes")
+            {
+                DateTime mesActual = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+                var nombresMeses = culturaEs.DateTimeFormat.AbbreviatedMonthNames;
+                for (int i = 0; i < 6; i++)
+                {
+                    DateTime mes = mesActual.AddMonths(-5 + i);
+                    etiquetas[i] = CapitalizarPrimera(nombresMeses[mes.Month - 1]);
+                    valores[i] = ObtenerCantidadPorFecha(_dtIngresosMes, mes);
+                }
+            }
+            else // "Año"
+            {
+                int anioActual = DateTime.Today.Year;
+                for (int i = 0; i < 6; i++)
+                {
+                    int anio = anioActual - 5 + i;
+                    etiquetas[i] = anio == anioActual ? $"{anio}*" : anio.ToString();
+                    valores[i] = ObtenerCantidadPorAnio(_dtIngresosAnio, anio);
+                }
+            }
+
+            int maxValor = Math.Max(1, valores.Max());
+            const double alturaMaxima = 140;
+
+            for (int i = 0; i < 6; i++)
+            {
+                labels[i].Text = etiquetas[i];
+                bars[i].Height = valores[i] == 0 ? 4 : Math.Max(8, (valores[i] / (double)maxValor) * alturaMaxima);
+                bars[i].Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4B93FF"));
+                bars[i].ToolTip = $"{etiquetas[i]}: {valores[i]} activo(s) ingresado(s)";
+            }
+
+            // El año en curso solo refleja datos reales hasta el mes presente
+            AxisL6.ToolTip = filtro == "Año"
+                ? "* Año en curso: cifra parcial hasta el mes actual"
+                : null;
+        }
+
+        private int ObtenerCantidadPorFecha(DataTable dt, DateTime fechaBuscada)
+        {
+            if (dt == null) return 0;
+            foreach (DataRow row in dt.Rows)
+            {
+                if (row["Periodo"] == DBNull.Value) continue;
+                if (Convert.ToDateTime(row["Periodo"]).Date == fechaBuscada.Date)
+                    return Convert.ToInt32(row["Cantidad"]);
+            }
+            return 0;
+        }
+
+        private int ObtenerCantidadPorAnio(DataTable dt, int anio)
+        {
+            if (dt == null) return 0;
+            foreach (DataRow row in dt.Rows)
+            {
+                if (row["Periodo"] == DBNull.Value) continue;
+                if (Convert.ToInt32(row["Periodo"]) == anio)
+                    return Convert.ToInt32(row["Cantidad"]);
+            }
+            return 0;
+        }
+
+        private string CapitalizarPrimera(string s)
+            => string.IsNullOrEmpty(s) ? s : char.ToUpper(s[0]) + s.Substring(1).TrimEnd('.');
+
         /// <summary>
         /// Centraliza la visibilidad de los componentes usando búsquedas dinámicas seguras por palabras clave.
         /// Evita errores si los botones no tienen un x:Name directo en el XAML.
@@ -129,33 +229,9 @@ namespace Presentación
 
             string rolFormateado = _rol.Trim().ToUpper();
 
-            if (rolFormateado == "EMPLEADO")
+            // El Administrador SIEMPRE tiene acceso total; no pasa por el motor de permisos.
+            if (rolFormateado == "ADMINISTRADOR")
             {
-                // Ocultar opciones operativas y administrativas para Empleados
-                EstablecerVisibilidadBoton("Nuevo", Visibility.Collapsed);
-                EstablecerVisibilidadBoton("Asign", Visibility.Collapsed);
-                EstablecerVisibilidadBoton("Assign", Visibility.Collapsed);
-                EstablecerVisibilidadBoton("Empleado", Visibility.Collapsed);
-                EstablecerVisibilidadBoton("Colaborador", Visibility.Collapsed);
-                EstablecerVisibilidadBoton("Auditor", Visibility.Collapsed);
-                EstablecerVisibilidadBoton("Auditoria", Visibility.Collapsed);
-
-                if (SubmenuActivos != null) SubmenuActivos.Visibility = Visibility.Collapsed;
-            }
-            else if (rolFormateado == "OPERADOR")
-            {
-                // El operador ve la gestión de activos pero no colaboradores ni auditorías
-                EstablecerVisibilidadBoton("Nuevo", Visibility.Visible);
-                EstablecerVisibilidadBoton("Asign", Visibility.Visible);
-                EstablecerVisibilidadBoton("Assign", Visibility.Visible);
-                EstablecerVisibilidadBoton("Empleado", Visibility.Collapsed);
-                EstablecerVisibilidadBoton("Colaborador", Visibility.Collapsed);
-                EstablecerVisibilidadBoton("Auditor", Visibility.Collapsed);
-                EstablecerVisibilidadBoton("Auditoria", Visibility.Collapsed);
-            }
-            else // ADMINISTRADOR
-            {
-                // Acceso completo libre de restricciones
                 EstablecerVisibilidadBoton("Nuevo", Visibility.Visible);
                 EstablecerVisibilidadBoton("Asign", Visibility.Visible);
                 EstablecerVisibilidadBoton("Assign", Visibility.Visible);
@@ -163,7 +239,28 @@ namespace Presentación
                 EstablecerVisibilidadBoton("Colaborador", Visibility.Visible);
                 EstablecerVisibilidadBoton("Auditor", Visibility.Visible);
                 EstablecerVisibilidadBoton("Auditoria", Visibility.Visible);
+                return;
             }
+
+            // Operador y Empleado: la visibilidad depende EXCLUSIVAMENTE
+            // de lo configurado en el Panel de Permisos (PermisosService).
+            string rolPermiso = NormalizarRolPermiso(_rol);
+
+            bool puedeNuevoActivo = PermisosService.Tiene(rolPermiso, "act_crear_acceso");
+            bool puedeAsignaciones = PermisosService.Tiene(rolPermiso, "asi_menu_ver");
+            bool puedeColaboradores = PermisosService.Tiene(rolPermiso, "col_menu_ver");
+            bool puedeAuditoria = PermisosService.Tiene(rolPermiso, "aud_menu_ver");
+
+            EstablecerVisibilidadBoton("Nuevo", puedeNuevoActivo ? Visibility.Visible : Visibility.Collapsed);
+            EstablecerVisibilidadBoton("Asign", puedeAsignaciones ? Visibility.Visible : Visibility.Collapsed);
+            EstablecerVisibilidadBoton("Assign", puedeAsignaciones ? Visibility.Visible : Visibility.Collapsed);
+            EstablecerVisibilidadBoton("Empleado", puedeColaboradores ? Visibility.Visible : Visibility.Collapsed);
+            EstablecerVisibilidadBoton("Colaborador", puedeColaboradores ? Visibility.Visible : Visibility.Collapsed);
+            EstablecerVisibilidadBoton("Auditor", puedeAuditoria ? Visibility.Visible : Visibility.Collapsed);
+            EstablecerVisibilidadBoton("Auditoria", puedeAuditoria ? Visibility.Visible : Visibility.Collapsed);
+
+            if (SubmenuActivos != null && !puedeNuevoActivo)
+                SubmenuActivos.Visibility = Visibility.Collapsed;
         }
 
         /// <summary>
@@ -201,6 +298,15 @@ namespace Presentación
                     VerificarYAplicarBoton(SubmenuActivos.Child, palabraClave, visibilidad);
                 }
             }
+        }
+
+        private string NormalizarRolPermiso(string rol)
+        {
+            if (string.IsNullOrWhiteSpace(rol)) return "Empleado";
+            string r = rol.Trim().ToUpper();
+            if (r == "OPERADOR") return "Operador";
+            if (r == "EMPLEADO") return "Empleado";
+            return rol.Trim();
         }
 
         /// <summary>
@@ -275,21 +381,33 @@ namespace Presentación
             {
                 string rolFormateado = (!string.IsNullOrEmpty(_rol)) ? _rol.Trim().ToUpper() : "EMPLEADO";
 
-                bool esControlAdmin = control is PermisosPanel || control is Employee_Viewer || control is Audit_Log;
-                bool esControlOperador = control is View_Create_Assets || control is Assign_Inventory;
-
-                if (rolFormateado != "ADMINISTRADOR")
+                // El Panel de Permisos es EXCLUSIVO del Administrador, sin excepción.
+                if (control is PermisosPanel && rolFormateado != "ADMINISTRADOR")
                 {
-                    if (esControlAdmin)
-                    {
-                        MessageBox.Show("Acceso denegado. Este módulo está reservado exclusivamente para perfiles de nivel Administrador.",
-                            "Seguridad del Sistema", MessageBoxButton.OK, MessageBoxImage.Warning);
-                        return;
-                    }
+                    MessageBox.Show("Acceso denegado. Este módulo está reservado exclusivamente para perfiles de nivel Administrador.",
+                        "Seguridad del Sistema", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
 
-                    if (rolFormateado == "EMPLEADO" && esControlOperador)
+                // Administrador tiene acceso total y no pasa por el motor de permisos.
+                if (rolFormateado != "ADMINISTRADOR" && control is not PermisosPanel)
+                {
+                    string rolPermiso = NormalizarRolPermiso(_rol);
+
+                    string permisoRequerido = control switch
                     {
-                        MessageBox.Show("Acceso restringido. No cuenta con los privilegios operativos necesarios para acceder a esta sección.",
+                        Employee_Viewer => "col_menu_ver",
+                        Audit_Log => "aud_acceso_modulo",
+                        View_Create_Assets => "act_crear_acceso",
+                        Assign_Inventory => "asi_menu_ver",
+                        See_Assets => "act_ver_lista",
+                        GestorContrasenas => "cred_menu_ver",
+                        _ => null
+                    };
+
+                    if (permisoRequerido != null && !PermisosService.Tiene(rolPermiso, permisoRequerido))
+                    {
+                        MessageBox.Show("Acceso restringido. No cuenta con los privilegios necesarios para acceder a esta sección.",
                             "Seguridad del Sistema", MessageBoxButton.OK, MessageBoxImage.Warning);
                         return;
                     }
@@ -311,6 +429,7 @@ namespace Presentación
                 NavWorkspaceContent.Visibility = Visibility.Visible;
             }
         }
+
 
         private void BtnInicio_Click(object sender, RoutedEventArgs e)
             => NavegaA(null, "Panel de Control");
@@ -377,31 +496,9 @@ namespace Presentación
         private void TimeFilter_Checked(object sender, RoutedEventArgs e)
         {
             if (!IsInitialized) return;
-
             if (sender is RadioButton rb)
             {
-                string f = rb.Content.ToString();
-                if (f == "Día")
-                {
-                    Bar1.Height = 70; Bar2.Height = 110; Bar3.Height = 45;
-                    Bar4.Height = 130; Bar5.Height = 85; Bar6.Height = 100;
-                    AxisL1.Text = "Lun"; AxisL2.Text = "Mar"; AxisL3.Text = "Mié";
-                    AxisL4.Text = "Jue"; AxisL5.Text = "Vie"; AxisL6.Text = "Sáb";
-                }
-                else if (f == "Mes")
-                {
-                    Bar1.Height = 120; Bar2.Height = 60; Bar3.Height = 95;
-                    Bar4.Height = 40; Bar5.Height = 115; Bar6.Height = 135;
-                    AxisL1.Text = "Ene"; AxisL2.Text = "Feb"; AxisL3.Text = "Mar";
-                    AxisL4.Text = "Abr"; AxisL5.Text = "May"; AxisL6.Text = "Jun";
-                }
-                else if (f == "Año")
-                {
-                    Bar1.Height = 40; Bar2.Height = 80; Bar3.Height = 130;
-                    Bar4.Height = 90; Bar5.Height = 60; Bar6.Height = 120;
-                    AxisL1.Text = "2024"; AxisL2.Text = "2025"; AxisL3.Text = "2026";
-                    AxisL4.Text = "2027"; AxisL5.Text = "2028"; AxisL6.Text = "En curso";
-                }
+                RenderizarGraficoIngresos(rb.Content.ToString());
             }
         }
 
@@ -458,7 +555,6 @@ namespace Presentación
             var txtCategorias = new[] { TxtT1, TxtT2, TxtT3, TxtT4, TxtT5, TxtT6 };
             var valCategorias = new[] { ValT1, ValT2, ValT3, ValT4, ValT5, ValT6 };
             var axisLabels = new[] { AxisL1, AxisL2, AxisL3, AxisL4, AxisL5, AxisL6 };
-            var whiteBars = new[] { Bar1, Bar3, Bar5 };
             var kpiCards = new[] { Card1, Card2, Card3, Card4 };
             var kpiTitles = new[] { TxtC1, TxtC2, TxtC3, TxtC4 };
             var kpiNumbers = new[] { NumC1, NumC2, NumC3, NumC4 };
@@ -535,7 +631,6 @@ namespace Presentación
                 foreach (var t in txtCategorias) if (t != null) t.Foreground = darkText;
                 foreach (var v in valCategorias) if (v != null) v.Foreground = greyText;
                 foreach (var axis in axisLabels) if (axis != null) axis.Foreground = greyText;
-                foreach (var bar in whiteBars) if (bar != null) bar.Background = darkGreyBars;
 
                 TimeFilterPanel.Background = (SolidColorBrush)bc.ConvertFromString("#D6E4FF");
 
@@ -620,7 +715,6 @@ namespace Presentación
                 foreach (var t in txtCategorias) if (t != null) t.Foreground = Brushes.White;
                 foreach (var v in valCategorias) if (v != null) v.Foreground = (SolidColorBrush)bc.ConvertFromString("#A0A0B8");
                 foreach (var axis in axisLabels) if (axis != null) axis.Foreground = (SolidColorBrush)bc.ConvertFromString("#A0A0B8");
-                foreach (var bar in whiteBars) if (bar != null) bar.Background = Brushes.White;
 
                 TimeFilterPanel.Background = (SolidColorBrush)bc.ConvertFromString("#0d3a5c");
 

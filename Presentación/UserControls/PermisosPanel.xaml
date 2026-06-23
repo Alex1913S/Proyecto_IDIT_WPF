@@ -176,7 +176,7 @@
 
     <!-- Fondo semitransparente de overlay -->
     <Grid>
-        <Rectangle Fill="#B0000000" MouseLeftButtonDown="Overlay_Click"/>
+        <Rectangle Fill="#113359" MouseLeftButtonDown="Overlay_Click"/>
 
         <!-- Panel central -->
         <Border Background="#08213a"

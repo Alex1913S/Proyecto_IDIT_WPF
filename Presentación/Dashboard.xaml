@@ -117,7 +117,8 @@
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition x:Name="SidebarColumn" Width="240"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="22*"/>
+                <ColumnDefinition Width="457*"/>
             </Grid.ColumnDefinitions>
 
             <Border x:Name="SidebarBorder" Grid.Column="0" Background="#09274c" CornerRadius="16,0,0,16">
@@ -252,7 +253,7 @@
 
             </Border>
 
-            <Grid x:Name="ContenedorPrincipal" Grid.Column="1" Margin="25,20,25,20">
+            <Grid x:Name="ContenedorPrincipal" Grid.Column="1" Margin="25,20,25,20" Grid.ColumnSpan="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="60"/>
                     <RowDefinition Height="*"/>
@@ -573,33 +574,18 @@
                                         </StackPanel>
 
                                         <UniformGrid x:Name="ChartBarsGrid" Grid.Row="0" Columns="6" VerticalAlignment="Bottom" Height="140" Margin="20,0,20,10">
-                                            <Grid VerticalAlignment="Bottom" Height="70">
-
-                                                <Border x:Name="Bar1" Background="#FFF" Width="24" CornerRadius="4,4,0,0" HorizontalAlignment="Center"/>
-                                            </Grid>
-
-                                            <Grid VerticalAlignment="Bottom" Height="110">
-                                                <Border x:Name="Bar2" Background="#4B93FF" Width="24" CornerRadius="4,4,0,0" HorizontalAlignment="Center"/>
-
-                                            </Grid>
-                                            <Grid VerticalAlignment="Bottom" Height="45">
-
-                                                <Border x:Name="Bar3" Background="#FFF" Width="24" CornerRadius="4,4,0,0" HorizontalAlignment="Center"/>
-                                            </Grid>
-
-                                            <Grid VerticalAlignment="Bottom" Height="130">
-                                                <Border x:Name="Bar4" Background="#4B93FF" Width="24" CornerRadius="4,4,0,0" HorizontalAlignment="Center"/>
-
-                                            </Grid>
-                                            <Grid VerticalAlignment="Bottom" Height="85">
-
-                                                <Border x:Name="Bar5" Background="#FFF" Width="24" CornerRadius="4,4,0,0" HorizontalAlignment="Center"/>
-                                            </Grid>
-
-                                            <Grid VerticalAlignment="Bottom" Height="100">
-                                                <Border x:Name="Bar6" Background="#e7133f" Width="24" CornerRadius="4,4,0,0" HorizontalAlignment="Center"/>
-
-                                            </Grid>
+                                            <Border x:Name="Bar1" Background="#4B93FF" Width="24" CornerRadius="4,4,0,0"
+                                                    HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="70"/>
+                                            <Border x:Name="Bar2" Background="#4B93FF" Width="24" CornerRadius="4,4,0,0"
+                                                    HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="110"/>
+                                            <Border x:Name="Bar3" Background="#4B93FF" Width="24" CornerRadius="4,4,0,0"
+                                                    HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="45"/>
+                                            <Border x:Name="Bar4" Background="#4B93FF" Width="24" CornerRadius="4,4,0,0"
+                                                    HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="130"/>
+                                            <Border x:Name="Bar5" Background="#4B93FF" Width="24" CornerRadius="4,4,0,0"
+                                                    HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="85"/>
+                                            <Border x:Name="Bar6" Background="#4B93FF" Width="24" CornerRadius="4,4,0,0"
+                                                     HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="100"/>
                                         </UniformGrid>
                                         <UniformGrid x:Name="ChartLabelsGrid" Grid.Row="1" Columns="6" Margin="20,0,20,0">
 
