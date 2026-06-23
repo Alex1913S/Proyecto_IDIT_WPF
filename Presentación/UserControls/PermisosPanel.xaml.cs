@@ -481,6 +481,8 @@ namespace Presentación
             }
         }
 
+
+
         // ─────────────────────────────────────────────────────────────
         // ACCIONES MASIVAS
         // ─────────────────────────────────────────────────────────────
@@ -538,20 +540,23 @@ namespace Presentación
         // ─────────────────────────────────────────────────────────────
         private void BtnGuardar_Click(object sender, RoutedEventArgs e)
         {
-            PermisosService.CargarDesdeDict(_rolActual, _copiaTrabajo);
-            _copiaTrabajoCopiaOriginal = new Dictionary<string, bool>(_copiaTrabajo);
+            try
+            {
+                PermisosService.CargarDesdeDict(_rolActual, _copiaTrabajo);
+                _copiaTrabajoCopiaOriginal = new Dictionary<string, bool>(_copiaTrabajo);
 
-            // TODO: persistir en BD → tabla Seguridad.PermisosRol
-            // INSERT/UPDATE Seguridad.PermisosRol (PerfilID, PermisoID, Activo)
+                MessageBox.Show(
+                    $"Configuración de permisos guardada para el rol '{_rolActual}'.\n\n" +
+                    "Los cambios se aplicarán en el próximo inicio de sesión de los usuarios afectados.",
+                    "Permisos actualizados", MessageBoxButton.OK, MessageBoxImage.Information);
 
-            MessageBox.Show(
-                $"Configuración de permisos guardada para el rol '{_rolActual}'.\n\n" +
-                $"Los cambios se aplicarán en el próximo inicio de sesión de los usuarios afectados.",
-                "Permisos actualizados",
-                MessageBoxButton.OK,
-                MessageBoxImage.Information);
-
-            this.Visibility = Visibility.Collapsed;
+                this.Visibility = Visibility.Collapsed;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"No se pudieron guardar los permisos en la base de datos:\n{ex.Message}",
+                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void BtnCerrar_Click(object sender, RoutedEventArgs e)

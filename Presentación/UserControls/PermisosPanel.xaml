@@ -185,9 +185,8 @@
                 CornerRadius="14"
                 MaxWidth="980"
                 MaxHeight="680"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Margin="40">
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch">
 
             <Grid>
                 <Grid.RowDefinitions>

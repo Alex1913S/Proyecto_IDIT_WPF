@@ -540,6 +540,8 @@ namespace Dominio
             byte[] cifrado = encryptor.TransformFinalBlock(plain, 0, plain.Length);
             return Convert.ToBase64String(cifrado);
         }
+
+
     }
 
 
