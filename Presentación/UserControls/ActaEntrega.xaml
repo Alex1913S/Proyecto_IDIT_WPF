@@ -1,0 +1,332 @@
+﻿<UserControl x:Class="Presentación.UserControls.ActaEntrega"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="650" d:DesignWidth="1100"
+             Background="Transparent"
+             Loaded="UserControl_Loaded">
+
+    <UserControl.Resources>
+
+        <Style x:Key="ModernInputStyle" TargetType="TextBox">
+            <Setter Property="Height" Value="34"/>
+            <Setter Property="Background" Value="#0d3a5c"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#1a4a7a"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="8,3"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="CaretBrush" Value="#2F80ED"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="B" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6">
+                            <ScrollViewer x:Name="PART_ContentHost" Focusable="false"
+                                          HorizontalScrollBarVisibility="Hidden"
+                                          VerticalScrollBarVisibility="Hidden"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter TargetName="B" Property="BorderBrush" Value="#2F80ED"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="FieldLabelStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="Foreground" Value="#5a8ab0"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="0,0,0,4"/>
+        </Style>
+
+        <Style x:Key="ActionButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="38"/>
+            <Setter Property="Padding" Value="16,0"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bg" Background="{TemplateBinding Background}"
+                                CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bg" Property="Opacity" Value="0.85"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Bg" Property="Opacity" Value="0.4"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ModernDataGridStyle" TargetType="DataGrid">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="GridLinesVisibility" Value="None"/>
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="CanUserAddRows" Value="False"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+            <Setter Property="RowHeight" Value="42"/>
+            <Setter Property="SelectionUnit" Value="FullRow"/>
+        </Style>
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#A0C4E0"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Padding" Value="10,10"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="BorderBrush" Value="#0e3560"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="DataGridRow">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="BorderBrush" Value="#0d3a5c"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#0D0D2D"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="DataGridCell">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="6,0"/>
+        </Style>
+
+    </UserControl.Resources>
+
+    <Grid Background="Transparent">
+        <Grid Margin="15,10,15,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="15"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- ══ PANEL IZQUIERDO — Formulario del acta ══ -->
+            <Border Grid.Column="0" Background="#09274c" CornerRadius="12"
+                    BorderBrush="#0d3a5c" BorderThickness="1" Padding="16">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+
+                        <!-- Encabezado del panel -->
+                        <StackPanel Margin="0,0,0,16">
+                            <TextBlock Text="📋  Acta de Entrega"
+                                       FontSize="15" FontWeight="Bold" Foreground="White"/>
+                            <TextBlock Text="Genera el documento de entrega formal de equipos"
+                                       FontSize="10" Foreground="#A0C4E0" TextWrapping="Wrap"
+                                       Margin="0,4,0,0"/>
+                        </StackPanel>
+
+                        <TextBlock Text="Colaborador *" Style="{StaticResource FieldLabelStyle}"/>
+                        <ComboBox x:Name="CbColaborador"
+                                  DisplayMemberPath="NombreCompleto"
+                                  SelectedValuePath="ColaboradorID"
+                                  Height="34" Margin="0,0,0,14"
+                                  SelectionChanged="CbColaborador_SelectionChanged"/>
+
+                        <!-- Vista previa del colaborador seleccionado -->
+                        <Border Background="#071d34" CornerRadius="8" Padding="12"
+                                Margin="0,0,0,16">
+                            <StackPanel>
+                                <TextBlock Text="COLABORADOR RECEPTOR"
+                                           FontSize="9" FontWeight="Bold"
+                                           Foreground="#2F80ED" Margin="0,0,0,8"/>
+
+                                <Grid Margin="0,0,0,6">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="80"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Nombre" Style="{StaticResource FieldLabelStyle}"
+                                               VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="TxtNombrePreview" Grid.Column="1"
+                                               Text="—" FontSize="11" Foreground="White"
+                                               TextWrapping="Wrap" FontWeight="Medium"/>
+                                </Grid>
+
+                                <Grid Margin="0,0,0,6">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="80"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Cédula" Style="{StaticResource FieldLabelStyle}"
+                                               VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="TxtCedulaPreview" Grid.Column="1"
+                                               Text="—" FontSize="11" Foreground="White"
+                                               FontWeight="Medium"/>
+                                </Grid>
+
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="80"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Cargo" Style="{StaticResource FieldLabelStyle}"
+                                               VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="TxtCargoPreview" Grid.Column="1"
+                                               Text="—" FontSize="11" Foreground="White"
+                                               FontWeight="Medium" TextWrapping="Wrap"/>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <TextBlock Text="Lugar *" Style="{StaticResource FieldLabelStyle}"/>
+                        <TextBox x:Name="TxtLugar" Style="{StaticResource ModernInputStyle}"
+                                 Text="Bogotá D.C." Margin="0,0,0,12"/>
+
+                        <TextBlock Text="Fecha del acta *" Style="{StaticResource FieldLabelStyle}"/>
+                        <DatePicker x:Name="DpFecha" Height="34" Margin="0,0,0,12"/>
+
+                        <TextBlock Text="Firma Coordinador" Style="{StaticResource FieldLabelStyle}"/>
+                        <TextBox x:Name="TxtCoordinador" Style="{StaticResource ModernInputStyle}"
+                                 Margin="0,0,0,12"/>
+
+                        <TextBlock Text="Firma Líder TI / Quien entrega"
+                                   Style="{StaticResource FieldLabelStyle}"/>
+                        <TextBox x:Name="TxtLiderTI" Style="{StaticResource ModernInputStyle}"
+                                 Margin="0,0,0,12"/>
+
+                        <TextBlock Text="Observaciones" Style="{StaticResource FieldLabelStyle}"/>
+                        <TextBox x:Name="TxtObservaciones" Style="{StaticResource ModernInputStyle}"
+                                 Height="64" AcceptsReturn="True" TextWrapping="Wrap"
+                                 VerticalContentAlignment="Top" Padding="8,6"
+                                 Margin="0,0,0,20"/>
+
+                        <!-- Separador -->
+                        <Separator Background="#0e3560" Margin="0,0,0,16"/>
+
+                        <!-- Botón principal: generar acta individual -->
+                        <Button x:Name="BtnGenerarActa"
+                                Content="📄  Generar Acta PDF"
+                                Style="{StaticResource ActionButtonStyle}"
+                                Background="#2F80ED" Foreground="#08213a"
+                                Margin="0,0,0,10"
+                                Click="BtnGenerarActa_Click"/>
+
+                        <!-- Botón secundario: exportar todos -->
+                        <Button x:Name="BtnExportarTodos"
+                                Content="📁  Exportar Actas de Todos"
+                                Style="{StaticResource ActionButtonStyle}"
+                                Background="#f59924" Foreground="#3a1c00"
+                                Click="BtnExportarTodos_Click"/>
+
+                        <!-- Barra de progreso (visible sólo durante exportación masiva) -->
+                        <ProgressBar x:Name="ProgressExport"
+                                     Height="6" Margin="0,12,0,0"
+                                     Background="#0d3a5c" Foreground="#2F80ED"
+                                     BorderThickness="0" Minimum="0" Maximum="100"
+                                     Value="0" Visibility="Collapsed"/>
+
+                        <TextBlock x:Name="TxtProgreso" Text=""
+                                   FontSize="10" Foreground="#A0C4E0"
+                                   Margin="0,4,0,0" Visibility="Collapsed"/>
+
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+
+            <!-- ══ PANEL DERECHO — Equipos del colaborador ══ -->
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Encabezado -->
+                <StackPanel Grid.Row="0" Margin="0,0,0,14">
+                    <TextBlock Text="Equipos asignados al colaborador"
+                               FontSize="15" FontWeight="Bold" Foreground="White"/>
+                    <TextBlock Text="Desmarca los que NO deban incluirse en esta acta · Ajusta el estado (1-10) de cada equipo"
+                               FontSize="10" Foreground="#A0C4E0" Margin="0,4,0,0"/>
+                </StackPanel>
+
+                <!-- DataGrid de equipos -->
+                <Border Grid.Row="1" Background="#09274c" CornerRadius="10"
+                        BorderBrush="#0d3a5c" BorderThickness="1" Padding="10">
+                    <DataGrid x:Name="DgActivos" Style="{StaticResource ModernDataGridStyle}">
+                        <DataGrid.Columns>
+
+                            <DataGridCheckBoxColumn Header="✓ Incluir"
+                                                    Binding="{Binding Incluido, Mode=TwoWay}"
+                                                    Width="72"/>
+
+                            <DataGridTextColumn Header="Categoría"
+                                                Binding="{Binding Categoria}"
+                                                Width="1.2*" IsReadOnly="True">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="#2F80ED"/>
+                                        <Setter Property="FontWeight" Value="SemiBold"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+
+                            <DataGridTextColumn Header="Marca / Modelo"
+                                                Binding="{Binding MarcaModelo}"
+                                                Width="1.6*" IsReadOnly="True">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="Foreground" Value="White"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+
+                            <DataGridTextColumn Header="N° Serie"
+                                                Binding="{Binding NumeroSerie}"
+                                                Width="1.2*" IsReadOnly="True">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="Foreground" Value="#A0C4E0"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+
+                            <DataGridTextColumn Header="Estado (1-10)"
+                                                Binding="{Binding Estado, Mode=TwoWay}"
+                                                Width="0.9*">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="Foreground" Value="#4CD964"/>
+                                        <Setter Property="FontWeight" Value="Bold"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Border>
+
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

@@ -102,9 +102,6 @@ namespace AccesoDatos
             DaDM.Fill(DsDM, Tabla);
         }
 
-        // =================================================================
-        // MÉTODO NUEVO RECOMENDADO: INSERCIÓN SEGURA PARAMETRIZADA (SGSI)
-        // =================================================================
         public bool InsertarParametrizado(string query, SqlParameter[] parametros)
         {
             using (var Conn = GetConnection())

@@ -8,9 +8,8 @@ namespace AccesoDatos
 {
     public class GestorCredencialesAccesoDatos : ConexionSql
     {
-        // ─────────────────────────────────────────────────────────────
-        // LISTAR credenciales del colaborador autenticado
-        // ─────────────────────────────────────────────────────────────
+        // credenciales del colaborador autenticado
+
         public DataTable ObtenerCredencialesDeColaborador(int colaboradorId)
         {
             const string sql = @"
@@ -38,9 +37,8 @@ namespace AccesoDatos
                 cmd.Parameters.AddWithValue("@ColaboradorID", colaboradorId));
         }
 
-        // ─────────────────────────────────────────────────────────────
-        // BUSCAR dentro de las credenciales del usuario
-        // ─────────────────────────────────────────────────────────────
+        //  dentro de las credenciales del usuario
+
         public DataTable BuscarCredenciales(int colaboradorId, string termino)
         {
             const string sql = @"
@@ -72,9 +70,9 @@ namespace AccesoDatos
             });
         }
 
-        // ─────────────────────────────────────────────────────────────
-        // INSERTAR nueva credencial (CON MANEJO DE ERRORES)
-        // ─────────────────────────────────────────────────────────────
+
+        //  nueva credencial (CON MANEJO DE ERRORES)
+
         public bool InsertarCredencial(
     string nombreServicio, string urlAcceso, string usuario,
     string contrasenaCifrada, string categoria,
@@ -135,9 +133,7 @@ namespace AccesoDatos
                 throw new Exception("Ocurrió un error inesperado al procesar la solicitud.", ex);
             }
         }
-        // ─────────────────────────────────────────────────────────────
-        // ACTUALIZAR credencial (SOLUCIÓN AL VARBINARY EN UPDATE)
-        // ─────────────────────────────────────────────────────────────
+        // credencial (SOLUCIÓN AL VARBINARY EN UPDATE)
         public bool ActualizarCredencial(
             int credencialId, string nombreServicio, string urlAcceso, string usuario,
             string contrasenaCifrada, string categoria, int? departamentoId,
@@ -167,9 +163,9 @@ namespace AccesoDatos
                 cmd.Parameters.Add("@URL", SqlDbType.VarChar).Value = string.IsNullOrWhiteSpace(urlAcceso) ? DBNull.Value : urlAcceso;
                 cmd.Parameters.Add("@Usuario", SqlDbType.VarChar).Value = (object)usuario ?? DBNull.Value;
 
-                // ─────────────────────────────────────────────────────────────────────────────
+
                 // CORRECCIÓN AQUÍ: Convertir el string de la contraseña a bytes para VARBINARY
-                // ─────────────────────────────────────────────────────────────────────────────
+
                 object valorContrasena = DBNull.Value;
                 if (!string.IsNullOrEmpty(contrasenaCifrada))
                 {
@@ -201,9 +197,8 @@ namespace AccesoDatos
             }
         }
 
-        // ─────────────────────────────────────────────────────────────
-        // ELIMINAR credencial (física — el usuario la borra intencionalmente)
-        // ─────────────────────────────────────────────────────────────
+
+        // credencial (física — el usuario la borra intencionalmente)
         public bool EliminarCredencial(int credencialId, int colaboradorId)
         {
             // La condición de colaboradorId evita borrar credenciales ajenas
@@ -220,10 +215,7 @@ namespace AccesoDatos
 
             return cmd.ExecuteNonQuery() > 0;
         }
-
-        // ─────────────────────────────────────────────────────────────
         // Helper privado
-        // ─────────────────────────────────────────────────────────────
         private DataTable Ejecutar(string sql, Action<SqlCommand>? parametros = null)
         {
             using var conn = GetConnection();

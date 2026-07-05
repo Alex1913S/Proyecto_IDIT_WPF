@@ -8,6 +8,7 @@ using AccesoDatos;
 
 namespace Dominio
 {
+
     public class ResultadoLogin
     {
         public bool Exitoso { get; set; }
@@ -387,11 +388,7 @@ namespace Dominio
 
         public DataTable MostrarColaboradores(string busqueda = "") => objetoCD.ListarColaboradores(busqueda);
     }
-
-
-    // ─────────────────────────────────────────────────────────────────────
     // DTO de resultado genérico para operaciones de credenciales
-    // ─────────────────────────────────────────────────────────────────────
     public class ResultadoCredencial
     {
         public bool Exitoso { get; set; }

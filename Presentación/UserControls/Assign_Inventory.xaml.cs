@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Threading.Tasks; // 🔥 REQUISITO: Para el soporte de Task
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -35,9 +35,6 @@ namespace Presentación.UserControls
         private Guid? _activoIdSeleccionado = null;
         private int? _colaboradorIdSeleccionado = null;
 
-        // ═════════════════════════════════════════════════════════════════
-        // CONSTRUCTOR
-        // ═════════════════════════════════════════════════════════════════
 
         public Assign_Inventory()
         {
@@ -45,22 +42,12 @@ namespace Presentación.UserControls
             this.Loaded += Assign_Inventory_Loaded;
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        // CARGA INICIAL
-        // ═════════════════════════════════════════════════════════════════
-
-        // 🔥 CAMBIO: Modificado a 'async void' para permitir await dentro
         private async void Assign_Inventory_Loaded(object sender, RoutedEventArgs e)
         {
             await CargarCombosAsync();
             await CargarDatosAsync();
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        // CARGA DE COMBOS (Activos disponibles y Colaboradores)
-        // ═════════════════════════════════════════════════════════════════
-
-        // 🔥 CAMBIO: Convertido a 'async Task' y procesado en hilos secundarios
         private async Task CargarCombosAsync()
         {
             try
@@ -104,11 +91,6 @@ namespace Presentación.UserControls
             }
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        // CARGA DEL DATAGRID (Asignaciones activas)
-        // ═════════════════════════════════════════════════════════════════
-
-        // 🔥 CAMBIO: Convertido a 'async Task' para evitar congelamientos al recargar
         private async Task CargarDatosAsync()
         {
             try
@@ -133,10 +115,6 @@ namespace Presentación.UserControls
             var acceso = new AccesoDatos.AsignarActivoAccesoDatos();
             return acceso.ObtenerAsignacionesActivas();
         }
-
-        // ═════════════════════════════════════════════════════════════════
-        // FILTRADO Y PAGINACIÓN
-        // ═════════════════════════════════════════════════════════════════
 
         private void AplicarFiltros()
         {
@@ -238,10 +216,6 @@ namespace Presentación.UserControls
             AplicarFiltros();
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        // SELECCIÓN EN DATAGRID → Panel lateral detalle
-        // ═════════════════════════════════════════════════════════════════
-
         private void DgAsignaciones_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (DgAsignaciones.SelectedItem == null)
@@ -278,10 +252,6 @@ namespace Presentación.UserControls
             }
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        // CRUD — NUEVA ASIGNACIÓN
-        // ═════════════════════════════════════════════════════════════════
-
         private void BtnNuevaAsignacion_Click(object sender, RoutedEventArgs e)
         {
             _modoEdicion = false;
@@ -290,10 +260,6 @@ namespace Presentación.UserControls
             LimpiarFormulario();
             MostrarFormulario();
         }
-
-        // ═════════════════════════════════════════════════════════════════
-        // CRUD — EDITAR ASIGNACIÓN
-        // ═════════════════════════════════════════════════════════════════
 
         private void BtnEditarAsignacion_Click(object sender, RoutedEventArgs e)
         {
@@ -316,11 +282,6 @@ namespace Presentación.UserControls
             MostrarFormulario();
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        // CRUD — GUARDAR (crear o actualizar)
-        // ═════════════════════════════════════════════════════════════════
-
-        // 🔥 CAMBIO: Evento marcado como 'async void' para poder usar await en el guardado
         private async void BtnGuardar_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -342,7 +303,6 @@ namespace Presentación.UserControls
 
                 if (resultado.Exitoso)
                 {
-                    // 🔥 CAMBIO: Al usar await aquí, garantizamos la recarga en orden correcto de forma fluida
                     await CargarCombosAsync();
                     await CargarDatosAsync();
                     OcultarFormulario();
@@ -359,10 +319,6 @@ namespace Presentación.UserControls
         {
             OcultarFormulario();
         }
-
-        // ═════════════════════════════════════════════════════════════════
-        // HELPERS DE UI
-        // ═════════════════════════════════════════════════════════════════
 
         private void MostrarFormulario()
         {
@@ -430,10 +386,6 @@ namespace Presentación.UserControls
             }
             combo.SelectedIndex = -1;
         }
-
-        // ═════════════════════════════════════════════════════════════════
-        // TEMA CLARO / OSCURO
-        // ═════════════════════════════════════════════════════════════════
 
         public void AplicarTema(bool modoClaro)
         {

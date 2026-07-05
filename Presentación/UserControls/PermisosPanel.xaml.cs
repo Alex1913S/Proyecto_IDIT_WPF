@@ -371,9 +371,7 @@ namespace Presentación
             }
         }
 
-        // ─────────────────────────────────────────────────────────────
         // RENDERIZAR PERMISOS (panel derecho)
-        // ─────────────────────────────────────────────────────────────
         private void RenderizarPermisos()
         {
             PnlPermisos.Children.Clear();
@@ -481,11 +479,7 @@ namespace Presentación
             }
         }
 
-
-
-        // ─────────────────────────────────────────────────────────────
         // ACCIONES MASIVAS
-        // ─────────────────────────────────────────────────────────────
         private void BtnPermitirTodo_Click(object sender, RoutedEventArgs e)
         {
             foreach (var modulo in _modulos)
@@ -535,9 +529,8 @@ namespace Presentación
             RenderizarPermisos();
         }
 
-        // ─────────────────────────────────────────────────────────────
         // GUARDAR / CERRAR
-        // ─────────────────────────────────────────────────────────────
+
         private void BtnGuardar_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -573,9 +566,8 @@ namespace Presentación
                 BtnCerrar_Click(sender, e);
         }
 
-        // ─────────────────────────────────────────────────────────────
         // CONTADORES
-        // ─────────────────────────────────────────────────────────────
+
         private void ActualizarContadores()
         {
             var todosLosIds = _modulos

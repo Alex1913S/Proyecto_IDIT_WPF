@@ -193,7 +193,7 @@
                                     <Button Content="• Ver Todos" Style="{StaticResource SubmenuButtonStyle}" Click="BtnVerTodosActivos_Click"/>
                                     <Button Content="• Nuevo Activo" Style="{StaticResource SubmenuButtonStyle}" Click="BtnNuevoActivo_Click"/>
                                     <Button Content="• Categoría Activos" Style="{StaticResource SubmenuButtonStyle}"/>
-
+                                    <Button Content="• Actas de Entrega" Style="{StaticResource SubmenuButtonStyle}" Click="BtnActaEntrega_Click"/>
                                     <Button Content="• Licencias" Style="{StaticResource SubmenuButtonStyle}"/>
                                 </StackPanel>
                             </Border>

@@ -493,6 +493,9 @@ namespace Presentación
             }
         }
 
+        private void BtnActaEntrega_Click(object sender, RoutedEventArgs e)
+    => NavegaA(new Presentación.UserControls.ActaEntrega(), "Actas de Entrega de Equipos");
+
         private void TimeFilter_Checked(object sender, RoutedEventArgs e)
         {
             if (!IsInitialized) return;
