@@ -36,8 +36,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Assets\idit_logo.png" />
-    <Resource Include="Assets\log.png" />
     <Resource Include="Assets\LoginIM.png" />
     <Resource Include="Assets\Recurso 5.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
