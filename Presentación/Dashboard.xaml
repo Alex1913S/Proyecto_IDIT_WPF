@@ -413,7 +413,7 @@
                                         <Button Style="{StaticResource MenuWorkspaceButtonStyle}" 
                                                 Height="48" 
    
-                                              Click="WorkspaceItem_Click">
+                                              Click="WorkspaceItem3_Click">
                                             <StackPanel VerticalAlignment="Center">
 
                                                 <TextBlock Text="Soporte Técnico" FontSize="13" FontWeight="SemiBold" Foreground="White"/>

@@ -13,4 +13,7 @@
   <Project Path="Presentación/Presentación.csproj">
     <BuildType Solution="DefaultBuild|*" Project="Release" />
   </Project>
+  <Project Path="Setup IDIT/Setup IDIT.vdproj" Type="Installer">
+    <BuildType Solution="DefaultBuild|*" Project="Release" />
+  </Project>
 </Solution>
