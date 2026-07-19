@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dominio;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -41,118 +42,136 @@ namespace Presentación
     // ═══════════════════════════════════════════════════════════════════
     public static class PermisosService
     {
-        // Diccionario: [Rol -> [PermisoId -> bool]]
-        private static Dictionary<string, Dictionary<string, bool>> _permisos = new();
+        private static readonly PermisosDominio _dominio = new();
 
-        static PermisosService()
-        {
-            // Inicializar con defaults para cada rol
-            foreach (var rol in new[] { "Operador", "Empleado" })
-                _permisos[rol] = new Dictionary<string, bool>();
-
-            AplicarDefaultsOperador();
-            AplicarDefaultsEmpleado();
-        }
+        // Caché en memoria por sesión de aplicación (evita ir a BD en cada .Tiene())
+        private static readonly Dictionary<string, Dictionary<string, bool>> _cache = new();
 
         public static bool Tiene(string rol, string permisoId)
         {
-            if (_permisos.TryGetValue(rol, out var mapa))
-                return mapa.TryGetValue(permisoId, out bool v) && v;
-            return false;
+            AsegurarCargado(rol);
+            return _cache[rol].TryGetValue(permisoId, out bool v) && v;
         }
 
         public static void Establecer(string rol, string permisoId, bool valor)
         {
-            if (!_permisos.ContainsKey(rol)) _permisos[rol] = new();
-            _permisos[rol][permisoId] = valor;
+            AsegurarCargado(rol);
+            _cache[rol][permisoId] = valor;
+            // Nota: esto solo cambia la copia en memoria; persistir se hace con CargarDesdeDict (Guardar)
         }
 
         public static Dictionary<string, bool> ObtenerTodos(string rol)
         {
-            if (!_permisos.ContainsKey(rol)) return new();
-            return new Dictionary<string, bool>(_permisos[rol]);
+            AsegurarCargado(rol);
+            return new Dictionary<string, bool>(_cache[rol]);
         }
 
+        /// <summary>
+        /// Persiste la copia de trabajo en BD y actualiza la caché.
+        /// </summary>
         public static void CargarDesdeDict(string rol, Dictionary<string, bool> mapa)
         {
-            _permisos[rol] = new Dictionary<string, bool>(mapa);
+            try
+            {
+                _dominio.Guardar(rol, mapa);
+                _cache[rol] = new Dictionary<string, bool>(mapa);
+            }
+            catch
+            {
+                // Re-lanzar para que la UI (BtnGuardar_Click) muestre el error al usuario
+                throw;
+            }
         }
 
-        // ─── Defaults para Operador: acceso casi total ───────────────
-        private static void AplicarDefaultsOperador()
+        private static void AsegurarCargado(string rol)
+        {
+            if (_cache.ContainsKey(rol)) return;
+
+            try
+            {
+                if (_dominio.ExistenPermisos(rol))
+                {
+                    _cache[rol] = _dominio.Obtener(rol);
+                }
+                else
+                {
+                    // Primera vez que se usa este rol: sembrar defaults y guardarlos
+                    var defaults = rol == "Operador" ? DefaultsOperador() : DefaultsEmpleado();
+                    _dominio.Guardar(rol, defaults);
+                    _cache[rol] = defaults;
+                }
+            }
+            catch
+            {
+                // Si falla la BD (ej. sin conexión), usar defaults solo en memoria para no romper la app
+                _cache[rol] = rol == "Operador" ? DefaultsOperador() : DefaultsEmpleado();
+            }
+        }
+
+        // ─── Los mismos defaults que ya tenías, ahora como generadores de diccionario ───
+        private static Dictionary<string, bool> DefaultsOperador()
         {
             var ids = new[]
             {
-                // Activos
-                "act_menu_ver", "act_menu_submenu",
-                "act_ver_lista", "act_filtrar_tabs", "act_buscar", "act_paginar",
-                "act_descargar_factura", "act_exportar_excel",
-                "act_crear_acceso", "act_crear_paso1", "act_crear_paso2",
-                "act_subir_pdf", "act_guardar", "act_cancelar",
-                "act_editar_acceso", "act_editar_guardar",
-                "act_baja_logica",
-                // Categorías
-                "cat_menu_ver", "cat_ver_lista", "cat_crear", "cat_editar",
-                // Colaboradores
-                "col_menu_ver",
-                "col_ver_lista", "col_filtrar_tabs", "col_buscar", "col_paginar",
-                "col_ver_detalle_panel",
-                "col_crear", "col_editar", "col_subir_foto", "col_cambiar_password",
-                "col_cambiar_perfil", "col_exportar_excel",
-                // Asignaciones
-                "asi_menu_ver",
-                "asi_ver_lista", "asi_buscar", "asi_paginar", "asi_ver_detalle",
-                "asi_crear", "asi_editar", "asi_selec_activo", "asi_selec_colaborador",
-                "asi_guardar",
-                // Contraseñas
-                "cred_menu_ver",
-                "cred_ver_lista", "cred_filtrar_tabs", "cred_buscar", "cred_paginar",
-                "cred_ver_detalle", "cred_revelar_password",
-                "cred_crear", "cred_editar", "cred_eliminar",
-                "cred_generar_pass", "cred_ver_notas", "cred_editar_vencimiento",
-                // Auditoría
-                "aud_menu_ver", "aud_acceso_modulo",
-                "aud_consultar", "aud_ver_diff", "aud_exportar_excel",
-                "aud_limpiar_filtros", "aud_paginar",
-                // Dashboard
-                "dash_acceso", "dash_sidebar_colapsar", "dash_selector_workspace",
-                "dash_ver_kpis", "dash_ver_grafico", "dash_filtrar_tiempo",
-                "dash_ver_categorias", "dash_ver_mapa",
-                // Login
-                "login_tema",
-            };
-            foreach (var id in ids) _permisos["Operador"][id] = true;
+            "act_menu_ver", "act_menu_submenu",
+            "act_ver_lista", "act_filtrar_tabs", "act_buscar", "act_paginar",
+            "act_descargar_factura", "act_exportar_excel",
+            "act_crear_acceso", "act_crear_paso1", "act_crear_paso2",
+            "act_subir_pdf", "act_guardar", "act_cancelar",
+            "act_editar_acceso", "act_editar_guardar",
+            "act_baja_logica",
+            "cat_menu_ver", "cat_ver_lista", "cat_crear", "cat_editar",
+            "col_menu_ver",
+            "col_ver_lista", "col_filtrar_tabs", "col_buscar", "col_paginar",
+            "col_ver_detalle_panel",
+            "col_crear", "col_editar", "col_subir_foto", "col_cambiar_password",
+            "col_cambiar_perfil", "col_exportar_excel",
+            "asi_menu_ver",
+            "asi_ver_lista", "asi_buscar", "asi_paginar", "asi_ver_detalle",
+            "asi_crear", "asi_editar", "asi_selec_activo", "asi_selec_colaborador",
+            "asi_guardar",
+            "cred_menu_ver",
+            "cred_ver_lista", "cred_filtrar_tabs", "cred_buscar", "cred_paginar",
+            "cred_ver_detalle", "cred_revelar_password",
+            "cred_crear", "cred_editar", "cred_eliminar",
+            "cred_generar_pass", "cred_ver_notas", "cred_editar_vencimiento",
+            "aud_menu_ver", "aud_acceso_modulo",
+            "aud_consultar", "aud_ver_diff", "aud_exportar_excel",
+            "aud_limpiar_filtros", "aud_paginar",
+            "dash_acceso", "dash_sidebar_colapsar", "dash_selector_workspace",
+            "dash_ver_kpis", "dash_ver_grafico", "dash_filtrar_tiempo",
+            "dash_ver_categorias", "dash_ver_mapa",
+            "login_tema",
+        };
+            var dict = new Dictionary<string, bool>();
+            foreach (var id in ids) dict[id] = true;
+            return dict;
         }
 
-        // ─── Defaults para Empleado: acceso limitado ─────────────────
-        private static void AplicarDefaultsEmpleado()
+        private static Dictionary<string, bool> DefaultsEmpleado()
         {
             var ids = new[]
             {
-                // Activos: solo lectura
-                "act_menu_ver",
-                "act_ver_lista", "act_filtrar_tabs", "act_buscar", "act_paginar",
-                "act_descargar_factura",
-                // Categorías: solo lectura
-                "cat_menu_ver", "cat_ver_lista",
-                // Colaboradores: solo lectura
-                "col_menu_ver",
-                "col_ver_lista", "col_filtrar_tabs", "col_buscar", "col_paginar",
-                "col_ver_detalle_panel",
-                // Contraseñas propias: CRUD completo
-                "cred_menu_ver",
-                "cred_ver_lista", "cred_filtrar_tabs", "cred_buscar", "cred_paginar",
-                "cred_ver_detalle", "cred_revelar_password",
-                "cred_crear", "cred_editar", "cred_eliminar",
-                "cred_generar_pass", "cred_ver_notas", "cred_editar_vencimiento",
-                // Dashboard básico
-                "dash_acceso", "dash_sidebar_colapsar",
-                "dash_ver_kpis", "dash_ver_grafico", "dash_filtrar_tiempo",
-                "dash_ver_categorias", "dash_ver_mapa",
-                // Login
-                "login_tema",
-            };
-            foreach (var id in ids) _permisos["Empleado"][id] = true;
+            "act_menu_ver",
+            "act_ver_lista", "act_filtrar_tabs", "act_buscar", "act_paginar",
+            "act_descargar_factura",
+            "cat_menu_ver", "cat_ver_lista",
+            "col_menu_ver",
+            "col_ver_lista", "col_filtrar_tabs", "col_buscar", "col_paginar",
+            "col_ver_detalle_panel",
+            "cred_menu_ver",
+            "cred_ver_lista", "cred_filtrar_tabs", "cred_buscar", "cred_paginar",
+            "cred_ver_detalle", "cred_revelar_password",
+            "cred_crear", "cred_editar", "cred_eliminar",
+            "cred_generar_pass", "cred_ver_notas", "cred_editar_vencimiento",
+            "dash_acceso", "dash_sidebar_colapsar",
+            "dash_ver_kpis", "dash_ver_grafico", "dash_filtrar_tiempo",
+            "dash_ver_categorias", "dash_ver_mapa",
+            "login_tema",
+        };
+            var dict = new Dictionary<string, bool>();
+            foreach (var id in ids) dict[id] = true;
+            return dict;
         }
     }
 

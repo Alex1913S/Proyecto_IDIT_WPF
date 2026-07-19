@@ -11,6 +11,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Linq;
 using System.Globalization;
+using Presentación.Controls;
+
 
 namespace Presentación
 {
@@ -527,17 +529,41 @@ namespace Presentación
                         foreach (var child in panel.Children) if (child is TextBlock tb) content += tb.Text + " ";
                     }
 
-                    if (content.Contains("Finanzas")) { txtCurrent.Text = "Finanzas & Control"; txtSub.Text = "Área Contable"; }
-                    else if (content.Contains("Seguridad")) { txtCurrent.Text = "Seguridad SGSI"; txtSub.Text = "Auditoría de Riesgos"; }
-                    else if (content.Contains("Soporte")) { txtCurrent.Text = "Soporte Técnico"; txtSub.Text = "Mantenimiento TI"; }
-                    else if (content.Contains("Gobernanza"))
-                    {
-                        string rolFormateado = (!string.IsNullOrEmpty(_rol)) ? _rol.Trim().ToUpper() : "EMPLEADO";
+                    string rolFormateado = (!string.IsNullOrEmpty(_rol)) ? _rol.Trim().ToUpper() : "EMPLEADO";
 
+                    if (content.Contains("Finanzas"))
+                    {
+                        txtCurrent.Text = "Finanzas & Control";
+                        txtSub.Text = "Área Contable";
+                    }
+                    else if (content.Contains("Seguridad"))
+                    {
+                        txtCurrent.Text = "Seguridad SGSI";
+                        txtSub.Text = "Auditoría de Riesgos";
+                    }
+                    else if (content.Contains("Soporte"))
+                    {
                         if (rolFormateado != "ADMINISTRADOR")
                         {
-                            MessageBox.Show("El entorno de Gobernanza TI y Control de Permisos está restringido para Administradores.",
-                                "Acceso Denegado", MessageBoxButton.OK, MessageBoxImage.Stop);
+                            NotificacionService.Error(
+                                "El entorno de Soporte Técnico y Mantenimiento TI está reservado para Administradores.",
+                                "Acceso Denegado");
+                            PopupWorkspace.IsOpen = false;
+                            return;
+                        }
+
+                        txtCurrent.Text = "Soporte Técnico";
+                        txtSub.Text = "Mantenimiento TI";
+
+                        NavegaA(new Presentación.UserControls.MantenimientoTI(_colaboradorId), "Mantenimiento TI");
+                    }
+                    else if (content.Contains("Gobernanza"))
+                    {
+                        if (rolFormateado != "ADMINISTRADOR")
+                        {
+                            NotificacionService.Error(
+                                "El entorno de Gobernanza TI y Control de Permisos está reservado para Administradores.",
+                                "Acceso Denegado");
                             PopupWorkspace.IsOpen = false;
                             return;
                         }
