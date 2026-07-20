@@ -27,6 +27,9 @@ namespace Dominio
                     responsableId, proveedorId, fechaEstimada, colaboradorAccionId);
                 r.Exitoso = true;
                 r.Mensaje = "Ingreso a mantenimiento registrado. El activo cambió a estado 'En Mantenimiento'.";
+
+                if (r.Exitoso) NotificacionesService.Notificar(NotificacionesService.Modulos.Mantenimiento,
+    NotificacionesService.Acciones.Creacion, $"Ingreso a mantenimiento: {tipo} — {prioridad}.", activoId.ToString());
             }
             catch (Exception ex) { r.Mensaje = $"Error: {ex.Message}"; }
             return r;
@@ -44,6 +47,8 @@ namespace Dominio
                     comentario, costo, garantiaAplicada, diagnostico, colaboradorAccionId);
                 r.Exitoso = true;
                 r.Mensaje = "Estado del mantenimiento actualizado correctamente.";
+
+
             }
             catch (Exception ex) { r.Mensaje = $"Error: {ex.Message}"; }
             return (r, historialId);

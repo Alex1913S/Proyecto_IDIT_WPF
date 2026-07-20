@@ -1,17 +1,18 @@
 ﻿using Dominio;
 using Microsoft.Data.SqlClient;
+using Presentación.Controls;
 using Presentación.UserControls;
 using System;
 using System.Data;
+using System.Globalization;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using System.Linq;
-using System.Globalization;
-using Presentación.Controls;
+using System.Windows.Threading;
 
 
 namespace Presentación
@@ -77,6 +78,10 @@ namespace Presentación
             await CargarKPIsAsync();
 
             ConfigurarInterfazPorPerfil();
+
+            NotificacionesService.ColaboradorActualId = _colaboradorId;
+            NotificacionesService.EsAdministrador = _rol.Trim().ToUpper() == "ADMINISTRADOR";
+            IniciarPollingNotificaciones();
         }
 
         private async Task CargarKPIsAsync()
@@ -888,5 +893,63 @@ namespace Presentación
                 pbs[i].Value = (double)cantidad / maxCantidad * 100;
             }
         }
+
+        private DispatcherTimer _timerNotificaciones;
+
+        // Llamar dentro de Dashboard_Loaded, después de configurar NotificacionService
+        private void IniciarPollingNotificaciones()
+        {
+            ActualizarBadgeNotificaciones();
+            _timerNotificaciones = new DispatcherTimer { Interval = TimeSpan.FromSeconds(30) };
+            _timerNotificaciones.Tick += (s, e) => ActualizarBadgeNotificaciones();
+            _timerNotificaciones.Start();
+        }
+
+        private void ActualizarBadgeNotificaciones()
+        {
+            int noLeidas = NotificacionesService.ContarNoLeidas();
+            BadgeNoLeidas.Visibility = noLeidas > 0 ? Visibility.Visible : Visibility.Collapsed;
+            TxtBadgeNoLeidas.Text = noLeidas > 99 ? "99+" : noLeidas.ToString();
+        }
+
+        private void BtnCampana_Click(object sender, RoutedEventArgs e)
+        {
+            CargarListaNotificaciones();
+            PopupNotificaciones.IsOpen = true;
+        }
+
+        private void CargarListaNotificaciones()
+        {
+            var dt = NotificacionesService.Obtener();
+            var lista = new List<NotificacionVM>();
+            foreach (DataRow r in dt.Rows)
+            {
+                lista.Add(new NotificacionVM
+                {
+                    ModuloAccion = $"{r["Modulo"]} · {r["Accion"]}",
+                    Descripcion = r["Descripcion"].ToString(),
+                    FechaTexto = Convert.ToDateTime(r["FechaCreacion"]).ToString("dd/MM/yyyy HH:mm"),
+                    VisibilidadNoLeida = Convert.ToBoolean(r["Leida"]) ? Visibility.Collapsed : Visibility.Visible
+                });
+            }
+            IcNotificaciones.ItemsSource = lista;
+        }
+
+        private void MarcarTodasLeidas_Click(object sender, MouseButtonEventArgs e)
+        {
+            NotificacionesService.MarcarTodasLeidas();
+            ActualizarBadgeNotificaciones();
+            CargarListaNotificaciones();
+        }
+
+        public class NotificacionVM
+        {
+            public string ModuloAccion { get; set; }
+            public string Descripcion { get; set; }
+            public string FechaTexto { get; set; }
+            public Visibility VisibilidadNoLeida { get; set; }
+        }
     }
+
+
 }

@@ -147,6 +147,9 @@ namespace Dominio
                     resultado.Mensaje = ok
                         ? "Activo registrado correctamente."
                         : "No se pudo registrar el activo.";
+
+                    if (resultado.Exitoso) NotificacionesService.Notificar(NotificacionesService.Modulos.Inventario,
+    NotificacionesService.Acciones.Creacion, $"Se registró el activo {marca} {modelo}.", null);
                 }
                 catch (Exception ex)
                 {
@@ -314,6 +317,7 @@ namespace Dominio
                     resultado.Exitoso = false;
                     resultado.Mensaje = "Cédula, Nombres y Apellidos son campos estrictamente obligatorios.";
                     return resultado;
+
                 }
 
                 if (string.IsNullOrWhiteSpace(usuarioApp) || string.IsNullOrWhiteSpace(password))
@@ -340,6 +344,9 @@ namespace Dominio
 
                 resultado.Exitoso = ok;
                 resultado.Mensaje = ok ? "Colaborador registrado exitosamente en el sistema." : "No se pudo completar el registro del colaborador.";
+
+                if (ok) NotificacionesService.Notificar(NotificacionesService.Modulos.Colaboradores,
+                 NotificacionesService.Acciones.Creacion, $"Se registró al colaborador {nombres} {apellidos}.", documentoIdentidad);
             }
             catch (Exception ex)
             {
@@ -503,6 +510,8 @@ namespace Dominio
             r.Mensaje = ok
                 ? "Credencial eliminada correctamente."
                 : "No se encontró la credencial o no tiene permisos para eliminarla.";
+
+
             return r;
         }
 
@@ -562,6 +571,12 @@ namespace Dominio
                         responsableId, proveedorId, fechaEstimada, colaboradorAccionId);
                     r.Exitoso = true;
                     r.Mensaje = "Ingreso a mantenimiento registrado. El activo cambió a estado 'En Mantenimiento'.";
+
+                    // 🔔 Notificación
+                    NotificacionesService.Notificar(NotificacionesService.Modulos.Mantenimiento,
+                        NotificacionesService.Acciones.Creacion,
+                        $"Ingreso a mantenimiento ({tipo}, prioridad {prioridad}).",
+                        activoId.ToString());
                 }
                 catch (Exception ex) { r.Mensaje = $"Error: {ex.Message}"; }
                 return r;
@@ -579,6 +594,12 @@ namespace Dominio
                         comentario, costo, garantiaAplicada, diagnostico, colaboradorAccionId);
                     r.Exitoso = true;
                     r.Mensaje = "Estado del mantenimiento actualizado correctamente.";
+
+                    // 🔔 Notificación
+                    NotificacionesService.Notificar(NotificacionesService.Modulos.Mantenimiento,
+                        NotificacionesService.Acciones.Edicion,
+                        $"Mantenimiento actualizado: {estadoActual} → {estadoNuevo}.",
+                        activoId.ToString());
                 }
                 catch (Exception ex) { r.Mensaje = $"Error: {ex.Message}"; }
                 return (r, historialId);
