@@ -148,8 +148,14 @@ namespace Dominio
                         ? "Activo registrado correctamente."
                         : "No se pudo registrar el activo.";
 
-                    if (resultado.Exitoso) NotificacionesService.Notificar(NotificacionesService.Modulos.Inventario,
-    NotificacionesService.Acciones.Creacion, $"Se registró el activo {marca} {modelo}.", null);
+                    // 🔔 Notificación — usando el número de serie
+                    if (ok)
+                    {
+                        string identificador = string.IsNullOrWhiteSpace(numeroSerie) ? "(sin número de serie)" : numeroSerie;
+                        NotificacionesService.Notificar(NotificacionesService.Modulos.Inventario,
+                            NotificacionesService.Acciones.Creacion,
+                            $"Se registró el activo con serie {identificador}.", null);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -199,6 +205,14 @@ namespace Dominio
                     resultado.Mensaje = operacionExitosa
                         ? "El activo y su ficha técnica se modificaron con éxito."
                         : "No se pudo actualizar en la base de datos.";
+
+                    // 🔔 Notificación — usando la etiqueta del activo
+                    if (operacionExitosa)
+                    {
+                        NotificacionesService.Notificar(NotificacionesService.Modulos.Inventario,
+                            NotificacionesService.Acciones.Edicion,
+                            $"Se editó el activo {etiqueta}.", activoId.ToString());
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -208,11 +222,10 @@ namespace Dominio
                 return resultado;
             }
 
-            public ResultadoActivo EliminarActivoLogico(Guid activoId, string estadoActual)
+            public ResultadoActivo EliminarActivoLogico(Guid activoId, string estadoActual, string etiqueta, string motivo = null)
             {
                 var resultado = new ResultadoActivo();
 
-                // REGLA CRÍTICA SGSI: Un activo asignado a un empleado no puede ser borrado sin una devolución formal
                 if (estadoActual.Equals("Asignado", StringComparison.OrdinalIgnoreCase))
                 {
                     resultado.Exitoso = false;
@@ -220,9 +233,37 @@ namespace Dominio
                     return resultado;
                 }
 
-                bool operacionExitosa = _datos.DarDeBajaActivo(activoId);
+                bool operacionExitosa = _datos.DarDeBajaActivo(activoId, NotificacionesService.ColaboradorActualId, motivo);
                 resultado.Exitoso = operacionExitosa;
-                resultado.Mensaje = operacionExitosa ? "El activo ha sido retirado y marcado 'De Baja' correctamente." : "Error al procesar la baja.";
+                resultado.Mensaje = operacionExitosa
+                    ? "El activo fue movido al registro de 'Olvidados'."
+                    : "Error al procesar la baja.";
+
+                if (operacionExitosa)
+                {
+                    string identificador = string.IsNullOrWhiteSpace(etiqueta) ? "(sin etiqueta)" : etiqueta;
+                    NotificacionesService.Notificar(NotificacionesService.Modulos.Inventario,
+                        NotificacionesService.Acciones.Eliminacion,
+                        $"Se dio de baja el activo {identificador}.", activoId.ToString());
+                }
+
+                return resultado;
+            }
+
+            public DataTable ObtenerActivosOlvidados() => _datos.ObtenerActivosOlvidados();
+
+            public ResultadoActivo RestaurarActivo(Guid activoId, string etiqueta)
+            {
+                var resultado = new ResultadoActivo();
+                bool ok = _datos.RestaurarActivo(activoId);
+                resultado.Exitoso = ok;
+                resultado.Mensaje = ok ? "El activo fue restaurado a 'En Bodega'." : "No se pudo restaurar el activo.";
+
+                if (ok)
+                    NotificacionesService.Notificar(NotificacionesService.Modulos.Inventario,
+                        NotificacionesService.Acciones.Edicion,
+                        $"Se restauró el activo {etiqueta} desde 'Olvidados'.", activoId.ToString());
+
                 return resultado;
             }
         }
@@ -269,14 +310,22 @@ namespace Dominio
             int id = _acceso.RegistrarAsignacion(
                 activoId.Value, colaboradorId.Value, fechaAsignacion, observaciones);
 
-            return id > 0
-                ? new ResultadoAsignacion { Exitoso = true, AsignacionID = id, Mensaje = "Asignación registrada con éxito." }
-                : Error("Ocurrió un error al guardar la asignación en la base de datos. Intente nuevamente.");
+            if (id > 0)
+            {
+                // 🔔 Notificación
+                NotificacionesService.Notificar(NotificacionesService.Modulos.Asignaciones,
+                    NotificacionesService.Acciones.Creacion,
+                    "Se registró una nueva asignación de activo a colaborador.", id.ToString());
+
+                return new ResultadoAsignacion { Exitoso = true, AsignacionID = id, Mensaje = "Asignación registrada con éxito." };
+            }
+
+            return Error("Ocurrió un error al guardar la asignación en la base de datos. Intente nuevamente.");
         }
 
         private static ResultadoAsignacion Error(string msg) => new() { Exitoso = false, Mensaje = msg };
     }
-        public class ResultadoAsignacion
+    public class ResultadoAsignacion
     {
         public bool Exitoso { get; set; }
         public int AsignacionID { get; set; }
@@ -317,7 +366,6 @@ namespace Dominio
                     resultado.Exitoso = false;
                     resultado.Mensaje = "Cédula, Nombres y Apellidos son campos estrictamente obligatorios.";
                     return resultado;
-
                 }
 
                 if (string.IsNullOrWhiteSpace(usuarioApp) || string.IsNullOrWhiteSpace(password))
@@ -345,8 +393,13 @@ namespace Dominio
                 resultado.Exitoso = ok;
                 resultado.Mensaje = ok ? "Colaborador registrado exitosamente en el sistema." : "No se pudo completar el registro del colaborador.";
 
-                if (ok) NotificacionesService.Notificar(NotificacionesService.Modulos.Colaboradores,
-                 NotificacionesService.Acciones.Creacion, $"Se registró al colaborador {nombres} {apellidos}.", documentoIdentidad);
+                // 🔔 Notificación
+                if (ok)
+                {
+                    NotificacionesService.Notificar(NotificacionesService.Modulos.Colaboradores,
+                        NotificacionesService.Acciones.Creacion,
+                        $"Se registró al colaborador {nombres} {apellidos}.", documentoIdentidad);
+                }
             }
             catch (Exception ex)
             {
@@ -386,12 +439,35 @@ namespace Dominio
             DateTime fechaIngreso, string estado, int perfilId,
             string usuarioApp, string passwordPlano, byte[] foto, string cargo)
         {
-            return objetoCD.ModificarColaborador(documentoIdentidad, nombres, apellidos, correoCorporativo,
+            bool ok = objetoCD.ModificarColaborador(documentoIdentidad, nombres, apellidos, correoCorporativo,
                                                  departamentoId, ubicacionId, fechaIngreso, estado,
                                                  perfilId, usuarioApp, passwordPlano, foto, cargo);
+
+            // 🔔 Notificación
+            if (ok)
+            {
+                NotificacionesService.Notificar(NotificacionesService.Modulos.Colaboradores,
+                    NotificacionesService.Acciones.Edicion,
+                    $"Se editó al colaborador {nombres} {apellidos}.", documentoIdentidad);
+            }
+
+            return ok;
         }
 
-        public bool EliminarColaborador(string documentoIdentidad) => objetoCD.EliminarColaborador(documentoIdentidad);
+        public bool EliminarColaborador(string documentoIdentidad)
+        {
+            bool ok = objetoCD.EliminarColaborador(documentoIdentidad);
+
+            // 🔔 Notificación
+            if (ok)
+            {
+                NotificacionesService.Notificar(NotificacionesService.Modulos.Colaboradores,
+                    NotificacionesService.Acciones.Eliminacion,
+                    $"Se eliminó al colaborador con documento {documentoIdentidad}.", documentoIdentidad);
+            }
+
+            return ok;
+        }
 
         public DataTable MostrarColaboradores(string busqueda = "") => objetoCD.ListarColaboradores(busqueda);
     }
@@ -461,6 +537,15 @@ namespace Dominio
 
             r.Exitoso = ok;
             r.Mensaje = ok ? "Credencial guardada correctamente." : "No se pudo guardar la credencial.";
+
+            // 🔔 Notificación (nunca se incluye la contraseña, solo el nombre del servicio)
+            if (ok)
+            {
+                NotificacionesService.Notificar(NotificacionesService.Modulos.Contrasenas,
+                    NotificacionesService.Acciones.Creacion,
+                    $"Se guardó una nueva credencial: {nombreServicio}.", null);
+            }
+
             return r;
         }
 
@@ -494,6 +579,15 @@ namespace Dominio
 
             r.Exitoso = ok;
             r.Mensaje = ok ? "Credencial actualizada correctamente." : "No se pudo actualizar la credencial.";
+
+            // 🔔 Notificación
+            if (ok)
+            {
+                NotificacionesService.Notificar(NotificacionesService.Modulos.Contrasenas,
+                    NotificacionesService.Acciones.Edicion,
+                    $"Se editó la credencial: {nombreServicio}.", credencialId.ToString());
+            }
+
             return r;
         }
 
@@ -511,6 +605,13 @@ namespace Dominio
                 ? "Credencial eliminada correctamente."
                 : "No se encontró la credencial o no tiene permisos para eliminarla.";
 
+            // 🔔 Notificación
+            if (ok)
+            {
+                NotificacionesService.Notificar(NotificacionesService.Modulos.Contrasenas,
+                    NotificacionesService.Acciones.Eliminacion,
+                    "Se eliminó una credencial.", credencialId.ToString());
+            }
 
             return r;
         }
@@ -546,75 +647,5 @@ namespace Dominio
             byte[] cifrado = encryptor.TransformFinalBlock(plain, 0, plain.Length);
             return Convert.ToBase64String(cifrado);
         }
-
-        public class MantenimientoDominio
-        {
-            private readonly AccesoDatos.MantenimientoAccesoDatos _datos = new();
-
-            public DataTable Listar(string filtroEstado = null, string busqueda = null)
-                => _datos.ObtenerMantenimientos(filtroEstado, busqueda);
-
-            public DataTable ObtenerKPIs() => _datos.ObtenerKPIs();
-
-            public DataTable ObtenerActivosDisponibles() => _datos.ObtenerActivosParaMantenimiento();
-
-            public ResultadoActivo Crear(Guid activoId, string tipo, string prioridad,
-                string descripcion, int? responsableId, int? proveedorId, DateTime? fechaEstimada,
-                int colaboradorAccionId)
-            {
-                var r = new ResultadoActivo();
-                if (activoId == Guid.Empty) { r.Mensaje = "Selecciona un activo."; return r; }
-                if (string.IsNullOrWhiteSpace(tipo)) { r.Mensaje = "El tipo de mantenimiento es obligatorio."; return r; }
-                try
-                {
-                    _datos.CrearMantenimiento(activoId, tipo, prioridad, descripcion,
-                        responsableId, proveedorId, fechaEstimada, colaboradorAccionId);
-                    r.Exitoso = true;
-                    r.Mensaje = "Ingreso a mantenimiento registrado. El activo cambió a estado 'En Mantenimiento'.";
-
-                    // 🔔 Notificación
-                    NotificacionesService.Notificar(NotificacionesService.Modulos.Mantenimiento,
-                        NotificacionesService.Acciones.Creacion,
-                        $"Ingreso a mantenimiento ({tipo}, prioridad {prioridad}).",
-                        activoId.ToString());
-                }
-                catch (Exception ex) { r.Mensaje = $"Error: {ex.Message}"; }
-                return r;
-            }
-
-            public (ResultadoActivo resultado, int historialId) CambiarEstado(
-                int id, Guid activoId, string estadoActual, string estadoNuevo, string comentario,
-                decimal? costo, bool garantiaAplicada, string diagnostico, int colaboradorAccionId)
-            {
-                var r = new ResultadoActivo();
-                int historialId = 0;
-                try
-                {
-                    historialId = _datos.CambiarEstado(id, activoId, estadoActual, estadoNuevo,
-                        comentario, costo, garantiaAplicada, diagnostico, colaboradorAccionId);
-                    r.Exitoso = true;
-                    r.Mensaje = "Estado del mantenimiento actualizado correctamente.";
-
-                    // 🔔 Notificación
-                    NotificacionesService.Notificar(NotificacionesService.Modulos.Mantenimiento,
-                        NotificacionesService.Acciones.Edicion,
-                        $"Mantenimiento actualizado: {estadoActual} → {estadoNuevo}.",
-                        activoId.ToString());
-                }
-                catch (Exception ex) { r.Mensaje = $"Error: {ex.Message}"; }
-                return (r, historialId);
-            }
-
-            public DataTable ObtenerHistorial(int id) => _datos.ObtenerHistorial(id);
-
-            public void AgregarFoto(int id, int? historialId, byte[] img, string desc)
-                => _datos.AgregarFoto(id, historialId, img, desc);
-
-            public DataTable ObtenerFotos(int id) => _datos.ObtenerFotos(id);
-        }
     }
-
-
-
-
 }

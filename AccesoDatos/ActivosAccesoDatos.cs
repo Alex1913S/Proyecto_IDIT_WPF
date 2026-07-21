@@ -132,7 +132,7 @@ namespace AccesoDatos
                             cmd.Parameters.AddWithValue("@FechaAdquisicion", fechaAdquis ?? (object)DBNull.Value);
                             cmd.Parameters.AddWithValue("@Costo", costo ?? (object)DBNull.Value);
                             cmd.Parameters.AddWithValue("@EstadoOperativo", estadoOperativo);
-                            cmd.Parameters.AddWithValue("@FacturaCompra", facturaCompra != null ? (object)facturaCompra : DBNull.Value);
+                            cmd.Parameters.Add("@FacturaCompra", SqlDbType.VarBinary, -1).Value = facturaCompra != null ? (object)facturaCompra : DBNull.Value;
                             cmd.ExecuteNonQuery();
                         }
 
@@ -173,16 +173,164 @@ namespace AccesoDatos
         }
 
         // ELIMINACIÓN LÓGICA
-        public bool DarDeBajaActivo(Guid activoId)
+        // 🔄 Reemplaza el DarDeBajaActivo actual (el que solo hacía UPDATE) por este:
+        public bool DarDeBajaActivo(Guid activoId, int colaboradorAccionId, string motivo = null)
         {
-            const string sql = "UPDATE ITAM.ActivosBase SET EstadoOperativo = 'De Baja' WHERE ActivoID = @ActivoID";
+            using (var conn = GetConnection())
+            {
+                conn.Open();
+                using (var tx = conn.BeginTransaction())
+                {
+                    try
+                    {
+                        const string sqlCopiarBase = @"
+                    INSERT INTO ITAM.ActivosOlvidados
+                        (ActivoID, CategoriaID, UbicacionID, Marca, Modelo, NumeroSerie, ProveedorID,
+                         FechaAdquisicion, Costo, EstadoOperativoAnterior, FacturaCompra, EtiquetaActivo,
+                         FechaRegistroOriginal, MotivoBaja, ColaboradorBajaID)
+                    SELECT ActivoID, CategoriaID, UbicacionID, Marca, Modelo, NumeroSerie, ProveedorID,
+                           FechaAdquisicion, Costo, EstadoOperativo, FacturaCompra, EtiquetaActivo,
+                           FechaRegistro, @Motivo, @ColabID
+                    FROM ITAM.ActivosBase
+                    WHERE ActivoID = @ActivoID";
+
+                        using (var cmd = new SqlCommand(sqlCopiarBase, conn, tx))
+                        {
+                            cmd.Parameters.AddWithValue("@ActivoID", activoId);
+                            cmd.Parameters.AddWithValue("@Motivo", (object)motivo ?? DBNull.Value);
+                            cmd.Parameters.AddWithValue("@ColabID", colaboradorAccionId <= 0 ? (object)DBNull.Value : colaboradorAccionId);
+                            if (cmd.ExecuteNonQuery() == 0) { tx.Rollback(); return false; }
+                        }
+
+                        const string sqlCopiarHw = @"
+                    INSERT INTO ITAM.EspecificacionesHardwareOlvidados
+                        (ActivoID, Procesador, MemoriaRAM, Almacenamiento1, Almacenamiento2,
+                         TarjetaGrafica, SistemaOperativo, DireccionMAC, DireccionIP_Estatica, ResolucionPantalla)
+                    SELECT ActivoID, Procesador, MemoriaRAM, Almacenamiento1, Almacenamiento2,
+                           TarjetaGrafica, SistemaOperativo, DireccionMAC, DireccionIP_Estatica, ResolucionPantalla
+                    FROM ITAM.EspecificacionesHardware
+                    WHERE ActivoID = @ActivoID";
+
+                        using (var cmd = new SqlCommand(sqlCopiarHw, conn, tx))
+                        {
+                            cmd.Parameters.AddWithValue("@ActivoID", activoId);
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        using (var cmd = new SqlCommand("DELETE FROM ITAM.EspecificacionesHardware WHERE ActivoID = @ActivoID", conn, tx))
+                        {
+                            cmd.Parameters.AddWithValue("@ActivoID", activoId);
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        using (var cmd = new SqlCommand("DELETE FROM ITAM.ActivosBase WHERE ActivoID = @ActivoID", conn, tx))
+                        {
+                            cmd.Parameters.AddWithValue("@ActivoID", activoId);
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        tx.Commit();
+                        return true;
+                    }
+                    catch { tx.Rollback(); throw; }
+                }
+            }
+        }
+
+        // 🆕 Listado de olvidados — se alían los nombres de columna para reutilizar
+        // exactamente los mismos bindings del DataGrid que ya usas en See_Assets.
+        public DataTable ObtenerActivosOlvidados()
+        {
+            const string sql = @"
+        SELECT 
+            AO.ActivoID,
+            AO.EtiquetaActivo,
+            AO.NumeroSerie,
+            AO.Marca,
+            AO.Modelo,
+            'De Baja'                          AS EstadoOperativo,
+            AO.EstadoOperativoAnterior,
+            EH.Procesador,
+            EH.MemoriaRAM,
+            EH.DireccionIP_Estatica,
+            AO.Costo,
+            AO.FechaAdquisicion,
+            AO.FechaBaja,
+            AO.MotivoBaja,
+            AO.FacturaCompra
+        FROM ITAM.ActivosOlvidados AO
+        LEFT JOIN ITAM.EspecificacionesHardwareOlvidados EH ON AO.ActivoID = EH.ActivoID
+        ORDER BY AO.FechaBaja DESC";
+
             using (var conn = GetConnection())
             {
                 conn.Open();
                 using (var cmd = new SqlCommand(sql, conn))
                 {
-                    cmd.Parameters.AddWithValue("@ActivoID", activoId);
-                    return cmd.ExecuteNonQuery() > 0;
+                    var dt = new DataTable();
+                    using (var adapter = new SqlDataAdapter(cmd)) adapter.Fill(dt);
+                    return dt;
+                }
+            }
+        }
+
+        // 🆕 Restaurar un olvidado de vuelta al inventario activo
+        public bool RestaurarActivo(Guid activoId, string nuevoEstado = "En Bodega")
+        {
+            using (var conn = GetConnection())
+            {
+                conn.Open();
+                using (var tx = conn.BeginTransaction())
+                {
+                    try
+                    {
+                        const string sqlRestBase = @"
+                    INSERT INTO ITAM.ActivosBase
+                        (ActivoID, CategoriaID, UbicacionID, Marca, Modelo, NumeroSerie, ProveedorID,
+                         FechaAdquisicion, Costo, EstadoOperativo, FacturaCompra, EtiquetaActivo)
+                    SELECT ActivoID, CategoriaID, UbicacionID, Marca, Modelo, NumeroSerie, ProveedorID,
+                           FechaAdquisicion, Costo, @NuevoEstado, FacturaCompra, EtiquetaActivo
+                    FROM ITAM.ActivosOlvidados
+                    WHERE ActivoID = @ActivoID";
+
+                        using (var cmd = new SqlCommand(sqlRestBase, conn, tx))
+                        {
+                            cmd.Parameters.AddWithValue("@ActivoID", activoId);
+                            cmd.Parameters.AddWithValue("@NuevoEstado", nuevoEstado);
+                            if (cmd.ExecuteNonQuery() == 0) { tx.Rollback(); return false; }
+                        }
+
+                        const string sqlRestHw = @"
+                    INSERT INTO ITAM.EspecificacionesHardware
+                        (ActivoID, Procesador, MemoriaRAM, Almacenamiento1, Almacenamiento2,
+                         TarjetaGrafica, SistemaOperativo, DireccionMAC, DireccionIP_Estatica, ResolucionPantalla)
+                    SELECT ActivoID, Procesador, MemoriaRAM, Almacenamiento1, Almacenamiento2,
+                           TarjetaGrafica, SistemaOperativo, DireccionMAC, DireccionIP_Estatica, ResolucionPantalla
+                    FROM ITAM.EspecificacionesHardwareOlvidados
+                    WHERE ActivoID = @ActivoID";
+
+                        using (var cmd = new SqlCommand(sqlRestHw, conn, tx))
+                        {
+                            cmd.Parameters.AddWithValue("@ActivoID", activoId);
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        using (var cmd = new SqlCommand("DELETE FROM ITAM.EspecificacionesHardwareOlvidados WHERE ActivoID = @ActivoID", conn, tx))
+                        {
+                            cmd.Parameters.AddWithValue("@ActivoID", activoId);
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        using (var cmd = new SqlCommand("DELETE FROM ITAM.ActivosOlvidados WHERE ActivoID = @ActivoID", conn, tx))
+                        {
+                            cmd.Parameters.AddWithValue("@ActivoID", activoId);
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        tx.Commit();
+                        return true;
+                    }
+                    catch { tx.Rollback(); throw; }
                 }
             }
         }

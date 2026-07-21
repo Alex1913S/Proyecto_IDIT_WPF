@@ -39,6 +39,8 @@ namespace Presentación
         private byte[] _facturaCompraNueva = null;       // solo si el usuario reemplaza el PDF
         private bool _facturaFueReemplazada = false;
 
+        private bool _modoOlvidados = false;
+
         // ═════════════════════════════════════════════════════════════════
         // CONSTRUCTORES
         // ═════════════════════════════════════════════════════════════════
@@ -73,6 +75,7 @@ namespace Presentación
             // 🔒 Solo el Administrador ve los botones de Editar / Eliminar
             BtnEditarActivo.Visibility = EsAdministrador ? Visibility.Visible : Visibility.Collapsed;
             BtnEliminarActivo.Visibility = EsAdministrador ? Visibility.Visible : Visibility.Collapsed;
+            BtnRestaurarActivo.Visibility = EsAdministrador ? Visibility.Visible : Visibility.Collapsed;
 
             RefrescarGrid();
             _cargando = false;
@@ -257,13 +260,28 @@ namespace Presentación
                 BtnTabAsignados.IsEnabled = true;
                 BtnTabBodega.IsEnabled = true;
                 BtnTabMantenimiento.IsEnabled = true;
+                BtnTabOlvidados.IsEnabled = true;
 
                 botonPresionado.IsEnabled = false;
+                _modoOlvidados = (botonPresionado == BtnTabOlvidados);
+
+                if (_modoOlvidados)
+                {
+                    _dtTodosLosActivos = _activosDominio.ObtenerActivosOlvidados();
+                    _filtroEstadoActual = "Todos"; // sin sub-filtro, ya viene solo con olvidados
+                    _paginaActual = 1;
+                    AplicarFiltrosCombinados();
+                    return;
+                }
 
                 if (botonPresionado == BtnTabTodos) _filtroEstadoActual = "Todos";
                 else if (botonPresionado == BtnTabAsignados) _filtroEstadoActual = "Asignado";
                 else if (botonPresionado == BtnTabBodega) _filtroEstadoActual = "En Bodega";
                 else if (botonPresionado == BtnTabMantenimiento) _filtroEstadoActual = "En Mantenimiento";
+
+                // Si veníamos de "Olvidados", recargar el inventario activo normal
+                if (_dtTodosLosActivos == null || _dtTodosLosActivos.Columns.Contains("MotivoBaja"))
+                    RefrescarGrid();
 
                 _paginaActual = 1;
                 AplicarFiltrosCombinados();
@@ -294,6 +312,7 @@ namespace Presentación
                 BtnDescargarFactura.IsEnabled = false;
                 BtnEditarActivo.IsEnabled = false;
                 BtnEliminarActivo.IsEnabled = false;
+
                 return;
             }
 
@@ -311,7 +330,12 @@ namespace Presentación
                 // 🔒 Solo Administrador puede editar/eliminar, y solo con selección válida
                 BtnEditarActivo.IsEnabled = EsAdministrador;
                 BtnEliminarActivo.IsEnabled = EsAdministrador;
+                BtnDescargarFactura.IsEnabled = tieneFactura;
+                BtnEditarActivo.IsEnabled = EsAdministrador && !_modoOlvidados;
+                BtnEliminarActivo.IsEnabled = EsAdministrador && !_modoOlvidados;
+                BtnRestaurarActivo.IsEnabled = EsAdministrador && _modoOlvidados;
             }
+            else { BtnRestaurarActivo.IsEnabled = false; }
         }
 
         private void BtnExportarExcel_Click(object sender, RoutedEventArgs e)
@@ -755,7 +779,11 @@ namespace Presentación
             {
                 Guid activoId = _activoSeleccionadoId is Guid g ? g : Guid.Parse(_activoSeleccionadoId.ToString());
 
-                var resultado = _activosDominio.EliminarActivoLogico(activoId, _estadoActivoSeleccionado);
+                string etiquetaSeleccionada = "";
+                if (DgActivos.SelectedItem is DataRowView filaSel)
+                    etiquetaSeleccionada = filaSel["EtiquetaActivo"]?.ToString() ?? "";
+
+                var resultado = _activosDominio.EliminarActivoLogico(activoId, _estadoActivoSeleccionado, etiquetaSeleccionada);
 
                 MessageBox.Show(resultado.Mensaje,
                     resultado.Exitoso ? "Éxito" : "No permitido",
@@ -771,5 +799,44 @@ namespace Presentación
                     "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+        private void BtnRestaurarActivo_Click(object sender, RoutedEventArgs e)
+        {
+            if (!EsAdministrador || _activoSeleccionadoId == null) return;
+
+            if (DgActivos.SelectedItem is not DataRowView fila) return;
+
+            var confirmar = MessageBox.Show(
+                "¿Restaurar este activo desde 'Olvidados' a 'En Bodega'?",
+                "Confirmar restauración", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (confirmar != MessageBoxResult.Yes) return;
+
+            try
+            {
+                Guid activoId = _activoSeleccionadoId is Guid g ? g : Guid.Parse(_activoSeleccionadoId.ToString());
+                string etiqueta = fila["EtiquetaActivo"]?.ToString() ?? "";
+
+                var resultado = _activosDominio.RestaurarActivo(activoId, etiqueta);
+
+                MessageBox.Show(resultado.Mensaje, resultado.Exitoso ? "Éxito" : "Error",
+                    MessageBoxButton.OK, resultado.Exitoso ? MessageBoxImage.Information : MessageBoxImage.Warning);
+
+                if (resultado.Exitoso)
+                {
+                    _modoOlvidados = false;
+                    BtnTabTodos.IsEnabled = false;
+                    BtnTabAsignados.IsEnabled = true;
+                    BtnTabBodega.IsEnabled = true;
+                    BtnTabMantenimiento.IsEnabled = true;
+                    BtnTabOlvidados.IsEnabled = true;
+                    RefrescarGrid();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al restaurar el activo:\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
     }
 }

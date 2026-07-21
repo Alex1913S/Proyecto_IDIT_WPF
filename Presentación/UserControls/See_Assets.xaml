@@ -499,9 +499,9 @@
 
             <!-- ══════════════════ HEADER ══════════════════ -->
             <Grid Grid.Row="0" Margin="0,0,0,15">
-                <TextBlock Text="Inventario de Activos Tecnológicos" FontSize="18" FontWeight="Bold" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+               
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                    <Border Width="280" Height="36" Background="#09274c" BorderBrush="#0d3a5c" BorderThickness="1" CornerRadius="6" Margin="0,0,12,0">
+                    <Border Width="230" Height="36" Background="#09274c" BorderBrush="#0d3a5c" BorderThickness="1" CornerRadius="6" Margin="0,0,12,0">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="35"/>
@@ -533,6 +533,16 @@
                             Margin="0,0,8,0"
                             Visibility="Collapsed"
                             Click="BtnEliminarActivo_Click"/>
+                    
+                    <Button x:Name="BtnRestaurarActivo"
+                            Content="↺ Restaurar"
+                            Width="110" Height="36"
+                            Background="#0F5132" Foreground="#4CD964"
+                            Style="{StaticResource HeaderActionButtonStyle}"
+                            IsEnabled="False"
+                            Margin="0,0,8,0"
+                            Visibility="Collapsed"
+                            Click="BtnRestaurarActivo_Click"/>
 
                     <!-- Descargar Factura -->
                     <Button x:Name="BtnDescargarFactura"
@@ -562,6 +572,7 @@
                 <Button x:Name="BtnTabAsignados" Content="Asignados" Style="{StaticResource TabFilterButtonStyle}" Tag="0" Click="FilterTab_Click"/>
                 <Button x:Name="BtnTabBodega" Content="En Bodega" Style="{StaticResource TabFilterButtonStyle}" Tag="0" Click="FilterTab_Click"/>
                 <Button x:Name="BtnTabMantenimiento" Content="Mantenimiento" Style="{StaticResource TabFilterButtonStyle}" Tag="0" Click="FilterTab_Click"/>
+                <Button x:Name="BtnTabOlvidados" Content="🗄 Olvidados" Style="{StaticResource TabFilterButtonStyle}" Tag="0" Click="FilterTab_Click"/>
             </StackPanel>
 
             <!-- ══════════════════ DATAGRID ══════════════════ -->
@@ -612,6 +623,7 @@
                                         <Trigger Property="Text" Value="De Baja">
                                             <Setter Property="Foreground" Value="#e7133f"/>
                                         </Trigger>
+                                        
                                     </Style.Triggers>
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
