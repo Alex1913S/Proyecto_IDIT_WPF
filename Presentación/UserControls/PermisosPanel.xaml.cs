@@ -1,4 +1,5 @@
 ﻿using Dominio;
+using Presentación.Controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,6 @@ using System.Windows.Shapes;
 
 namespace Presentación
 {
-
-
-
     // ═══════════════════════════════════════════════════════════════════
     // MODELO DE DATOS — Permiso atómico
     // ═══════════════════════════════════════════════════════════════════
@@ -108,41 +106,40 @@ namespace Presentación
             }
         }
 
-        // ─── Los mismos defaults que ya tenías, ahora como generadores de diccionario ───
         private static Dictionary<string, bool> DefaultsOperador()
         {
             var ids = new[]
             {
-            "act_menu_ver", "act_menu_submenu",
-            "act_ver_lista", "act_filtrar_tabs", "act_buscar", "act_paginar",
-            "act_descargar_factura", "act_exportar_excel",
-            "act_crear_acceso", "act_crear_paso1", "act_crear_paso2",
-            "act_subir_pdf", "act_guardar", "act_cancelar",
-            "act_editar_acceso", "act_editar_guardar",
-            "act_baja_logica",
-            "cat_menu_ver", "cat_ver_lista", "cat_crear", "cat_editar",
-            "col_menu_ver",
-            "col_ver_lista", "col_filtrar_tabs", "col_buscar", "col_paginar",
-            "col_ver_detalle_panel",
-            "col_crear", "col_editar", "col_subir_foto", "col_cambiar_password",
-            "col_cambiar_perfil", "col_exportar_excel",
-            "asi_menu_ver",
-            "asi_ver_lista", "asi_buscar", "asi_paginar", "asi_ver_detalle",
-            "asi_crear", "asi_editar", "asi_selec_activo", "asi_selec_colaborador",
-            "asi_guardar",
-            "cred_menu_ver",
-            "cred_ver_lista", "cred_filtrar_tabs", "cred_buscar", "cred_paginar",
-            "cred_ver_detalle", "cred_revelar_password",
-            "cred_crear", "cred_editar", "cred_eliminar",
-            "cred_generar_pass", "cred_ver_notas", "cred_editar_vencimiento",
-            "aud_menu_ver", "aud_acceso_modulo",
-            "aud_consultar", "aud_ver_diff", "aud_exportar_excel",
-            "aud_limpiar_filtros", "aud_paginar",
-            "dash_acceso", "dash_sidebar_colapsar", "dash_selector_workspace",
-            "dash_ver_kpis", "dash_ver_grafico", "dash_filtrar_tiempo",
-            "dash_ver_categorias", "dash_ver_mapa",
-            "login_tema",
-        };
+                "act_menu_ver", "act_menu_submenu",
+                "act_ver_lista", "act_filtrar_tabs", "act_buscar", "act_paginar",
+                "act_descargar_factura", "act_exportar_excel",
+                "act_crear_acceso", "act_crear_paso1", "act_crear_paso2",
+                "act_subir_pdf", "act_guardar", "act_cancelar",
+                "act_editar_acceso", "act_editar_guardar",
+                "act_baja_logica",
+                "cat_menu_ver", "cat_ver_lista", "cat_crear", "cat_editar",
+                "col_menu_ver",
+                "col_ver_lista", "col_filtrar_tabs", "col_buscar", "col_paginar",
+                "col_ver_detalle_panel",
+                "col_crear", "col_editar", "col_subir_foto", "col_cambiar_password",
+                "col_cambiar_perfil", "col_exportar_excel",
+                "asi_menu_ver",
+                "asi_ver_lista", "asi_buscar", "asi_paginar", "asi_ver_detalle",
+                "asi_crear", "asi_editar", "asi_selec_activo", "asi_selec_colaborador",
+                "asi_guardar",
+                "cred_menu_ver",
+                "cred_ver_lista", "cred_filtrar_tabs", "cred_buscar", "cred_paginar",
+                "cred_ver_detalle", "cred_revelar_password",
+                "cred_crear", "cred_editar", "cred_eliminar",
+                "cred_generar_pass", "cred_ver_notas", "cred_editar_vencimiento",
+                "aud_menu_ver", "aud_acceso_modulo",
+                "aud_consultar", "aud_ver_diff", "aud_exportar_excel",
+                "aud_limpiar_filtros", "aud_paginar",
+                "dash_acceso", "dash_sidebar_colapsar", "dash_selector_workspace",
+                "dash_ver_kpis", "dash_ver_grafico", "dash_filtrar_tiempo",
+                "dash_ver_categorias", "dash_ver_mapa",
+                "login_tema",
+            };
             var dict = new Dictionary<string, bool>();
             foreach (var id in ids) dict[id] = true;
             return dict;
@@ -152,23 +149,23 @@ namespace Presentación
         {
             var ids = new[]
             {
-            "act_menu_ver",
-            "act_ver_lista", "act_filtrar_tabs", "act_buscar", "act_paginar",
-            "act_descargar_factura",
-            "cat_menu_ver", "cat_ver_lista",
-            "col_menu_ver",
-            "col_ver_lista", "col_filtrar_tabs", "col_buscar", "col_paginar",
-            "col_ver_detalle_panel",
-            "cred_menu_ver",
-            "cred_ver_lista", "cred_filtrar_tabs", "cred_buscar", "cred_paginar",
-            "cred_ver_detalle", "cred_revelar_password",
-            "cred_crear", "cred_editar", "cred_eliminar",
-            "cred_generar_pass", "cred_ver_notas", "cred_editar_vencimiento",
-            "dash_acceso", "dash_sidebar_colapsar",
-            "dash_ver_kpis", "dash_ver_grafico", "dash_filtrar_tiempo",
-            "dash_ver_categorias", "dash_ver_mapa",
-            "login_tema",
-        };
+                "act_menu_ver",
+                "act_ver_lista", "act_filtrar_tabs", "act_buscar", "act_paginar",
+                "act_descargar_factura",
+                "cat_menu_ver", "cat_ver_lista",
+                "col_menu_ver",
+                "col_ver_lista", "col_filtrar_tabs", "col_buscar", "col_paginar",
+                "col_ver_detalle_panel",
+                "cred_menu_ver",
+                "cred_ver_lista", "cred_filtrar_tabs", "cred_buscar", "cred_paginar",
+                "cred_ver_detalle", "cred_revelar_password",
+                "cred_crear", "cred_editar", "cred_eliminar",
+                "cred_generar_pass", "cred_ver_notas", "cred_editar_vencimiento",
+                "dash_acceso", "dash_sidebar_colapsar",
+                "dash_ver_kpis", "dash_ver_grafico", "dash_filtrar_tiempo",
+                "dash_ver_categorias", "dash_ver_mapa",
+                "login_tema",
+            };
             var dict = new Dictionary<string, bool>();
             foreach (var id in ids) dict[id] = true;
             return dict;
@@ -190,7 +187,7 @@ namespace Presentación
         private Dictionary<string, bool> _copiaTrabajo = new();
         private Dictionary<string, bool> _copiaTrabajoCopiaOriginal = new();
 
-        // ── Catálogo de módulos (mapeado del código real del proyecto) ─
+        // ── Catálogo de módulos ───────────────────────────────────────
         private readonly List<ModuloPermisos> _modulos = ConstruirModulos();
 
         // ─────────────────────────────────────────────────────────────
@@ -205,21 +202,16 @@ namespace Presentación
 
         private void PermisosPanel_Loaded(object sender, RoutedEventArgs e)
         {
-            _inicializado = true; // <── Aquí das luz verde a la interfaz
+            _inicializado = true;
             Abrir();
         }
-
 
         // ─────────────────────────────────────────────────────────────
         // APERTURA DEL PANEL
         // ─────────────────────────────────────────────────────────────
         public void Abrir()
         {
-            if (!_inicializado)
-            {
-                // Aún no está cargado; espera al evento Loaded
-                return;
-            }
+            if (!_inicializado) return;
 
             CargarCopiaTrabajo();
             _moduloIndex = 0;
@@ -248,10 +240,7 @@ namespace Presentación
         // ─────────────────────────────────────────────────────────────
         private void RolChanged(object sender, RoutedEventArgs e)
         {
-            // Si el XAML no se ha terminado de cargar, salimos inmediatamente
-            if (!_inicializado) return;
-
-            if (RbOperador == null) return; // Salvaguarda extra por si acaso
+            if (!_inicializado || RbOperador == null) return;
 
             _rolActual = RbOperador.IsChecked == true ? "Operador" : "Empleado";
             CargarCopiaTrabajo();
@@ -261,7 +250,6 @@ namespace Presentación
 
         private void TabModulo_Checked(object sender, RoutedEventArgs e)
         {
-            // Si el XAML no se ha terminado de cargar, salimos inmediatamente
             if (!_inicializado) return;
 
             if (sender is RadioButton rb)
@@ -272,8 +260,8 @@ namespace Presentación
                     "TabColaboradores" => 1,
                     "TabAsignaciones" => 2,
                     "TabContrasenas" => 3,
-                    "TabAuditoria" => 4,
-                    "TabCategorias" => 5,
+                    "TabAuditoria" => 5, // Asegúrate de que el índice coincida con ConstruirModulos
+                    "TabCategorias" => 4,
                     "TabDashboard" => 6,
                     _ => 0
                 };
@@ -287,7 +275,6 @@ namespace Presentación
         // ─────────────────────────────────────────────────────────────
         private void RenderizarGrupos()
         {
-            // Si por alguna razón mística se invoca antes de tiempo o PnlGrupos no existe, frena el código
             if (!_inicializado || PnlGrupos == null) return;
 
             PnlGrupos.Children.Clear();
@@ -365,7 +352,6 @@ namespace Presentación
                     RenderizarPermisos();
                 };
 
-                // Aplicar template sin borde visible
                 var template = new ControlTemplate(typeof(Button));
                 var factory = new FrameworkElementFactory(typeof(Border));
                 factory.SetValue(Border.BackgroundProperty, new TemplateBindingExtension(Button.BackgroundProperty));
@@ -381,7 +367,6 @@ namespace Presentación
                 PnlGrupos.Children.Add(btn);
             }
 
-            // Auto-seleccionar primer grupo
             if (_grupoActual == null && _moduloActual.Grupos.Count > 0)
             {
                 _grupoActual = _moduloActual.Grupos[0];
@@ -455,7 +440,6 @@ namespace Presentación
                 }
                 Grid.SetColumn(check, 0);
 
-                // Texto del permiso
                 var txt = new TextBlock
                 {
                     Text = p.Descripcion,
@@ -469,7 +453,6 @@ namespace Presentación
                 };
                 Grid.SetColumn(txt, 1);
 
-                // Indicador LED
                 var led = new System.Windows.Shapes.Ellipse
                 {
                     Width = 7,
@@ -486,7 +469,6 @@ namespace Presentación
                 grid.Children.Add(led);
                 fila.Child = grid;
 
-                // Evento toggle al hacer clic
                 fila.MouseLeftButtonDown += (s, e) =>
                 {
                     EstablecerPermiso(p.Id, !ObtenerPermiso(p.Id));
@@ -549,7 +531,6 @@ namespace Presentación
         }
 
         // GUARDAR / CERRAR
-
         private void BtnGuardar_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -557,36 +538,32 @@ namespace Presentación
                 PermisosService.CargarDesdeDict(_rolActual, _copiaTrabajo);
                 _copiaTrabajoCopiaOriginal = new Dictionary<string, bool>(_copiaTrabajo);
 
-                MessageBox.Show(
+                NotificacionService.Exito(
                     $"Configuración de permisos guardada para el rol '{_rolActual}'.\n\n" +
                     "Los cambios se aplicarán en el próximo inicio de sesión de los usuarios afectados.",
-                    "Permisos actualizados", MessageBoxButton.OK, MessageBoxImage.Information);
+                    "Permisos actualizados");
 
                 this.Visibility = Visibility.Collapsed;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"No se pudieron guardar los permisos en la base de datos:\n{ex.Message}",
-                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                NotificacionService.Error($"No se pudieron guardar los permisos en la base de datos:\n{ex.Message}");
             }
         }
 
         private void BtnCerrar_Click(object sender, RoutedEventArgs e)
         {
-            // Restaurar copia de trabajo sin guardar
             _copiaTrabajo = new Dictionary<string, bool>(_copiaTrabajoCopiaOriginal);
             this.Visibility = Visibility.Collapsed;
         }
 
         private void Overlay_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            // Clic en el fondo oscuro cierra el panel
             if (e.Source is System.Windows.Shapes.Rectangle)
                 BtnCerrar_Click(sender, e);
         }
 
         // CONTADORES
-
         private void ActualizarContadores()
         {
             var todosLosIds = _modulos
@@ -602,7 +579,6 @@ namespace Presentación
             TxtContadorActivos.Text = activos.ToString();
             TxtContadorTotal.Text = total.ToString();
 
-            // Calcular diferencias respecto al estado original
             int diffs = todosLosIds.Count(id =>
             {
                 bool orig = _copiaTrabajoCopiaOriginal.TryGetValue(id, out bool o) && o;
@@ -620,8 +596,7 @@ namespace Presentación
         }
 
         // ═══════════════════════════════════════════════════════════════
-        // CATÁLOGO DE MÓDULOS Y PERMISOS
-        // Mapeado exactamente del código del proyecto SGSI
+        // CATÁLOGO DE MÓDULOS Y PERMISOS (COMPLETO)
         // ═══════════════════════════════════════════════════════════════
         private static List<ModuloPermisos> ConstruirModulos()
         {
@@ -633,33 +608,32 @@ namespace Presentación
                     Grupos = new() {
                         new() { Nombre = "Menú lateral", Permisos = new() {
                             new() { Id="act_menu_ver",     Descripcion="Ver ítem 'Activos Tecnológicos' en el sidebar" },
-                            new() { Id="act_menu_submenu", Descripcion="Expandir submenú de activos (Ver Todos / Nuevo Activo / Categoría / Licencias)" },
+                            new() { Id="act_menu_submenu", Descripcion="Expandir submenú de activos" },
                         }},
-                        new() { Nombre = "See_Assets — Ver Inventario", Permisos = new() {
+                        new() { Nombre = "Ver Inventario", Permisos = new() {
                             new() { Id="act_ver_lista",         Descripcion="Ver listado de activos en el DataGrid" },
-                            new() { Id="act_filtrar_tabs",      Descripcion="Filtrar por estado: Todos / Asignados / En Bodega / En Mantenimiento" },
-                            new() { Id="act_buscar",            Descripcion="Buscar activos en tiempo real (TxtBuscarActivo)" },
+                            new() { Id="act_filtrar_tabs",      Descripcion="Filtrar por estado: Todos / Asignados / En Bodega / Mantenimiento" },
+                            new() { Id="act_buscar",            Descripcion="Buscar activos en tiempo real" },
                             new() { Id="act_paginar",           Descripcion="Navegar entre páginas del inventario" },
-                            new() { Id="act_descargar_factura", Descripcion="Descargar factura de compra en PDF (BtnDescargarFactura)" },
+                            new() { Id="act_descargar_factura", Descripcion="Descargar factura de compra en PDF" },
                             new() { Id="act_exportar_excel",    Descripcion="Exportar inventario filtrado a Excel" },
                         }},
-                        new() { Nombre = "View_Create_Assets — Crear Activo", Permisos = new() {
-                            new() { Id="act_crear_acceso",  Descripcion="Acceder al formulario 'Nuevo Activo' desde el submenú" },
-                            new() { Id="act_crear_paso1",   Descripcion="Completar Paso 1: Categoría, Estado, Ubicación, Proveedor, Costo, Fecha" },
-                            new() { Id="act_crear_paso2",   Descripcion="Completar Paso 2: Marca, Modelo, Serie, RAM, Disco, IP, SO, Procesador, Resolución" },
-                            new() { Id="act_subir_pdf",     Descripcion="Adjuntar factura de compra en formato PDF (BtnSeleccionarPdf)" },
-                            new() { Id="act_ver_pdf",       Descripcion="Previsualizar PDF adjunto antes de guardar (BtnVerPdf)" },
-                            new() { Id="act_guardar",       Descripcion="Guardar nuevo activo en base de datos (INSERT transaccional ActivosBase + EspecificacionesHardware)" },
-                            new() { Id="act_cancelar",      Descripcion="Cancelar registro en curso y volver al panel inicial" },
+                        new() { Nombre = "Crear Activo", Permisos = new() {
+                            new() { Id="act_crear_acceso",  Descripcion="Acceder al formulario 'Nuevo Activo'" },
+                            new() { Id="act_crear_paso1",   Descripcion="Completar Paso 1 (Datos Generales)" },
+                            new() { Id="act_crear_paso2",   Descripcion="Completar Paso 2 (Especificaciones)" },
+                            new() { Id="act_subir_pdf",     Descripcion="Adjuntar factura en PDF" },
+                            new() { Id="act_guardar",       Descripcion="Guardar nuevo activo" },
+                            new() { Id="act_cancelar",      Descripcion="Cancelar registro en curso" },
                         }},
-                        new() { Nombre = "Activo Existente — Editar / Dar de Baja", Permisos = new() {
-                            new() { Id="act_editar_acceso",  Descripcion="Acceder al formulario de edición de un activo existente" },
-                            new() { Id="act_editar_guardar", Descripcion="Guardar cambios al activo (UPDATE ActivosBase + EspecificacionesHardware)" },
-                            new() { Id="act_baja_logica",    Descripcion="Ejecutar baja lógica del activo (EstadoOperativo = 'De Baja') — solo si no está 'Asignado'" },
+                        new() { Nombre = "Edición y Baja", Permisos = new() {
+                            new() { Id="act_editar_acceso",  Descripcion="Acceder al formulario de edición" },
+                            new() { Id="act_editar_guardar", Descripcion="Guardar cambios al activo" },
+                            new() { Id="act_baja_logica",    Descripcion="Ejecutar baja lógica del activo" },
                         }},
                     }
                 },
- 
+
                 // ── COLABORADORES ────────────────────────────────────────
                 new() {
                     Id = "colaboradores", Nombre = "Gestión de Colaboradores",
@@ -667,141 +641,123 @@ namespace Presentación
                         new() { Nombre = "Menú lateral", Permisos = new() {
                             new() { Id="col_menu_ver", Descripcion="Ver ítem 'Empleados' en el sidebar" },
                         }},
-                        new() { Nombre = "Employee_Viewer — Visualización", Permisos = new() {
-                            new() { Id="col_ver_lista",         Descripcion="Ver listado de colaboradores en el DataGrid" },
-                            new() { Id="col_filtrar_tabs",      Descripcion="Filtrar por perfil: Todos / Administradores / Operadores / Empleados" },
-                            new() { Id="col_buscar",            Descripcion="Buscar por cédula, nombre, cargo o correo en tiempo real" },
-                            new() { Id="col_paginar",           Descripcion="Navegar entre páginas del listado" },
-                            new() { Id="col_exportar_excel",    Descripcion="Exportar colaboradores filtrados a Excel" },
-                            new() { Id="col_ver_detalle_panel", Descripcion="Ver panel lateral: foto, nombre, cargo, departamento, estado, fecha de ingreso" },
+                        new() { Nombre = "Visualización", Permisos = new() {
+                            new() { Id="col_ver_lista",         Descripcion="Ver listado de colaboradores" },
+                            new() { Id="col_filtrar_tabs",      Descripcion="Filtrar por perfil" },
+                            new() { Id="col_buscar",            Descripcion="Buscar colaboradores en tiempo real" },
+                            new() { Id="col_paginar",           Descripcion="Navegar entre páginas" },
+                            new() { Id="col_exportar_excel",    Descripcion="Exportar colaboradores a Excel" },
+                            new() { Id="col_ver_detalle_panel", Descripcion="Ver panel lateral de detalles" },
                         }},
-                        new() { Nombre = "Employee_Viewer — CRUD", Permisos = new() {
-                            new() { Id="col_crear",           Descripcion="Crear nuevo colaborador (botón '+ Nuevo Colaborador')" },
-                            new() { Id="col_editar",          Descripcion="Editar colaborador seleccionado (botón 'Editar Colaborador')" },
-                            new() { Id="col_eliminar",        Descripcion="Eliminar colaborador permanentemente (DELETE Core.Colaboradores)" },
-                            new() { Id="col_subir_foto",      Descripcion="Seleccionar y cargar foto de perfil desde disco (BtnSeleccionarFoto)" },
-                            new() { Id="col_cambiar_password", Descripcion="Establecer o cambiar contraseña de acceso al sistema" },
-                            new() { Id="col_cambiar_perfil",  Descripcion="Asignar o cambiar perfil / rol del colaborador (CbFPerfil)" },
-                            new() { Id="col_cambiar_depto",   Descripcion="Asignar o cambiar departamento y ubicación (CbFDepartamento, CbFUbicacion)" },
+                        new() { Nombre = "Gestión (CRUD)", Permisos = new() {
+                            new() { Id="col_crear",           Descripcion="Crear nuevo colaborador" },
+                            new() { Id="col_editar",          Descripcion="Editar colaborador seleccionado" },
+                            new() { Id="col_subir_foto",      Descripcion="Seleccionar y cargar foto de perfil" },
+                            new() { Id="col_cambiar_password", Descripcion="Cambiar contraseña de acceso" },
+                            new() { Id="col_cambiar_perfil",  Descripcion="Cambiar perfil / rol del colaborador" },
                         }},
                     }
                 },
- 
+
                 // ── ASIGNACIONES ─────────────────────────────────────────
                 new() {
-                    Id = "asignaciones", Nombre = "Asignación de Inventario",
+                    Id = "asignaciones", Nombre = "Asignación de Equipos",
                     Grupos = new() {
                         new() { Nombre = "Menú lateral", Permisos = new() {
                             new() { Id="asi_menu_ver", Descripcion="Ver ítem 'Asignaciones' en el sidebar" },
                         }},
-                        new() { Nombre = "Assign_Inventory — Visualización", Permisos = new() {
-                            new() { Id="asi_ver_lista",    Descripcion="Ver listado de asignaciones activas en el DataGrid" },
-                            new() { Id="asi_buscar",       Descripcion="Buscar asignaciones por colaborador, activo o estado" },
-                            new() { Id="asi_paginar",      Descripcion="Navegar entre páginas" },
-                            new() { Id="asi_ver_detalle",  Descripcion="Ver panel lateral: colaborador, activo asignado, fecha y observaciones" },
+                        new() { Nombre = "Visualización", Permisos = new() {
+                            new() { Id="asi_ver_lista",   Descripcion="Ver listado general de asignaciones" },
+                            new() { Id="asi_buscar",      Descripcion="Buscar asignaciones" },
+                            new() { Id="asi_paginar",     Descripcion="Navegar entre páginas de asignaciones" },
+                            new() { Id="asi_ver_detalle", Descripcion="Ver panel de detalles de asignación y acta" },
                         }},
-                        new() { Nombre = "Assign_Inventory — CRUD", Permisos = new() {
-                            new() { Id="asi_crear",             Descripcion="Registrar nueva asignación (botón '+ Nueva Asignación')" },
-                            new() { Id="asi_editar",            Descripcion="Editar asignación existente (BtnEditarAsignacion)" },
-                            new() { Id="asi_selec_activo",      Descripcion="Seleccionar activo disponible en el combo (CmbActivo — solo 'En Bodega')" },
-                            new() { Id="asi_selec_colaborador", Descripcion="Seleccionar colaborador destino en el combo (CmbColaborador)" },
-                            new() { Id="asi_guardar",           Descripcion="Confirmar asignación y actualizar EstadoOperativo a 'Asignado'" },
-                            new() { Id="asi_cancelar",          Descripcion="Cancelar formulario de asignación" },
+                        new() { Nombre = "Gestión de Asignación", Permisos = new() {
+                            new() { Id="asi_crear",             Descripcion="Acceder a nueva asignación" },
+                            new() { Id="asi_editar",            Descripcion="Editar asignación existente" },
+                            new() { Id="asi_selec_activo",      Descripcion="Seleccionar activo a asignar" },
+                            new() { Id="asi_selec_colaborador", Descripcion="Seleccionar colaborador destino" },
+                            new() { Id="asi_guardar",           Descripcion="Ejecutar y guardar asignación" },
                         }},
                     }
                 },
- 
-                // ── CONTRASEÑAS ──────────────────────────────────────────
+
+                // ── CREDENCIALES Y CONTRASEÑAS ───────────────────────────
                 new() {
-                    Id = "contrasenas", Nombre = "Gestor de Contraseñas",
+                    Id = "credenciales", Nombre = "Bóveda de Credenciales",
                     Grupos = new() {
                         new() { Nombre = "Menú lateral", Permisos = new() {
-                            new() { Id="cred_menu_ver", Descripcion="Ver ítem 'Gestor de Contraseñas' en el sidebar" },
+                            new() { Id="cred_menu_ver", Descripcion="Ver ítem 'Credenciales' en el sidebar" },
                         }},
-                        new() { Nombre = "GestorContrasenas — Visualización", Permisos = new() {
-                            new() { Id="cred_ver_lista",        Descripcion="Ver listado de credenciales propias en el DataGrid" },
-                            new() { Id="cred_filtrar_tabs",     Descripcion="Filtrar por categoría: Todas / Correo / Sistema Interno / Próximas a vencer" },
-                            new() { Id="cred_buscar",           Descripcion="Buscar por nombre de servicio, usuario, categoría o URL" },
-                            new() { Id="cred_paginar",          Descripcion="Navegar entre páginas" },
-                            new() { Id="cred_ver_detalle",      Descripcion="Ver panel lateral: servicio, categoría, URL, usuario, vencimiento, notas" },
-                            new() { Id="cred_revelar_password", Descripcion="Revelar contraseña descifrada AES-256 (BtnMostrarPassword — ícono ojo)" },
-                            new() { Id="cred_ver_notas",        Descripcion="Ver notas seguras almacenadas junto a la credencial" },
+                        new() { Nombre = "Visualización", Permisos = new() {
+                            new() { Id="cred_ver_lista",          Descripcion="Ver bóveda de credenciales" },
+                            new() { Id="cred_filtrar_tabs",       Descripcion="Filtrar por tipo (Servidor, Correo, etc.)" },
+                            new() { Id="cred_buscar",             Descripcion="Buscar credenciales" },
+                            new() { Id="cred_paginar",            Descripcion="Paginar listado de credenciales" },
+                            new() { Id="cred_ver_detalle",        Descripcion="Ver detalles de la cuenta" },
+                            new() { Id="cred_revelar_password",   Descripcion="Revelar contraseña oculta" },
+                            new() { Id="cred_ver_notas",          Descripcion="Ver notas seguras adjuntas" },
                         }},
-                        new() { Nombre = "GestorContrasenas — CRUD", Permisos = new() {
-                            new() { Id="cred_crear",             Descripcion="Crear nueva credencial (botón '+ Nueva Credencial')" },
-                            new() { Id="cred_editar",            Descripcion="Editar credencial existente (BtnEditar)" },
-                            new() { Id="cred_eliminar",          Descripcion="Eliminar credencial permanentemente (BtnEliminar con confirmación)" },
-                            new() { Id="cred_generar_pass",      Descripcion="Generar contraseña segura automática de 16 caracteres (BtnGenerar ⟳)" },
-                            new() { Id="cred_editar_vencimiento",Descripcion="Establecer o modificar la fecha de vencimiento de la clave (DpFVencimiento)" },
-                            new() { Id="cred_cambiar_categoria", Descripcion="Asignar categoría a la credencial (CbFCategoria)" },
+                        new() { Nombre = "Gestión", Permisos = new() {
+                            new() { Id="cred_crear",              Descripcion="Añadir nueva credencial" },
+                            new() { Id="cred_editar",             Descripcion="Editar credencial existente" },
+                            new() { Id="cred_eliminar",           Descripcion="Eliminar credencial de la bóveda" },
+                            new() { Id="cred_generar_pass",       Descripcion="Usar generador de contraseñas seguras" },
+                            new() { Id="cred_editar_vencimiento", Descripcion="Configurar fecha de expiración" },
                         }},
                     }
                 },
- 
-                // ── AUDITORÍA ────────────────────────────────────────────
+
+                // ── CATEGORÍAS ───────────────────────────────────────────
                 new() {
-                    Id = "auditoria", Nombre = "Log de Auditoría",
+                    Id = "categorias", Nombre = "Gestión de Categorías",
                     Grupos = new() {
-                        new() { Nombre = "Acceso al módulo", Permisos = new() {
+                        new() { Nombre = "Acceso y Gestión", Permisos = new() {
+                            new() { Id="cat_menu_ver",  Descripcion="Ver ítem 'Categorías' en el sidebar" },
+                            new() { Id="cat_ver_lista", Descripcion="Ver listado de categorías" },
+                            new() { Id="cat_crear",     Descripcion="Crear nuevas categorías" },
+                            new() { Id="cat_editar",    Descripcion="Editar categorías existentes" },
+                        }},
+                    }
+                },
+
+                // ── AUDITORÍA Y LOGS ─────────────────────────────────────
+                new() {
+                    Id = "auditoria", Nombre = "Auditoría del Sistema",
+                    Grupos = new() {
+                        new() { Nombre = "Menú y Acceso", Permisos = new() {
                             new() { Id="aud_menu_ver",      Descripcion="Ver ítem 'Auditoría' en el sidebar" },
-                            new() { Id="aud_acceso_modulo", Descripcion="Acceder al UserControl Audit_Log" },
+                            new() { Id="aud_acceso_modulo", Descripcion="Ingresar al visor de logs del sistema" },
                         }},
-                        new() { Nombre = "Audit_Log — Funciones", Permisos = new() {
-                            new() { Id="aud_consultar",       Descripcion="Consultar logs por rango de fechas (BtnConsultar)" },
-                            new() { Id="aud_ver_diff",        Descripcion="Ver panel de diferencias: valor anterior vs. valor nuevo" },
-                            new() { Id="aud_limpiar_filtros", Descripcion="Limpiar filtros y resetear rango de fechas (BtnLimpiar)" },
-                            new() { Id="aud_paginar",         Descripcion="Navegar entre páginas de resultados" },
-                            new() { Id="aud_exportar_excel",  Descripcion="Exportar log de auditoría a Excel (BtnExportarExcel)" },
+                        new() { Nombre = "Consultas", Permisos = new() {
+                            new() { Id="aud_consultar",       Descripcion="Realizar consultas y búsquedas en logs" },
+                            new() { Id="aud_ver_diff",        Descripcion="Ver diferencias (Diff) de cambios en JSON" },
+                            new() { Id="aud_exportar_excel",  Descripcion="Exportar registro de auditoría a Excel" },
+                            new() { Id="aud_limpiar_filtros", Descripcion="Restablecer filtros de búsqueda" },
+                            new() { Id="aud_paginar",         Descripcion="Navegar entre páginas del log" },
                         }},
                     }
                 },
- 
-                // ── CATEGORÍAS DE ACTIVOS ────────────────────────────────
+
+                // ── DASHBOARD Y GENERAL ──────────────────────────────────
                 new() {
-                    Id = "categorias", Nombre = "Categorías de Activos",
+                    Id = "dashboard", Nombre = "Dashboard y Configuración",
                     Grupos = new() {
-                        new() { Nombre = "Acceso al módulo", Permisos = new() {
-                            new() { Id="cat_menu_ver",      Descripcion="Ver ítem 'Categoría Activos' en el submenú de Activos" },
-                            new() { Id="cat_acceso_modulo", Descripcion="Acceder al UserControl de gestión de categorías" },
+                        new() { Nombre = "Dashboard", Permisos = new() {
+                            new() { Id="dash_acceso",             Descripcion="Ver pantalla principal de Dashboard" },
+                            new() { Id="dash_ver_kpis",           Descripcion="Ver tarjetas de KPIs e indicadores" },
+                            new() { Id="dash_ver_grafico",        Descripcion="Ver gráficos estadísticos" },
+                            new() { Id="dash_filtrar_tiempo",     Descripcion="Cambiar filtros de tiempo (Mes/Año)" },
+                            new() { Id="dash_ver_categorias",     Descripcion="Ver desglose por categorías" },
+                            new() { Id="dash_ver_mapa",           Descripcion="Ver mapa o distribución de activos" },
                         }},
-                        new() { Nombre = "Gestión de Categorías — CRUD", Permisos = new() {
-                            new() { Id="cat_ver_lista",   Descripcion="Ver listado de categorías (ITAM.CategoriasActivo)" },
-                            new() { Id="cat_crear",       Descripcion="Crear nueva categoría de activo" },
-                            new() { Id="cat_editar",      Descripcion="Editar nombre de categoría existente" },
-                            new() { Id="cat_eliminar",    Descripcion="Eliminar categoría (solo si no tiene activos asociados)" },
-                            new() { Id="cat_ver_conteo",  Descripcion="Ver conteo de activos por categoría en el panel lateral" },
+                        new() { Nombre = "Interfaz y Sistema", Permisos = new() {
+                            new() { Id="dash_sidebar_colapsar",   Descripcion="Colapsar o expandir el menú lateral" },
+                            new() { Id="dash_selector_workspace", Descripcion="Cambiar espacio de trabajo / sucursal" },
+                            new() { Id="login_tema",              Descripcion="Cambiar tema visual (Claro/Oscuro)" },
                         }},
                     }
-                },
- 
-                // ── DASHBOARD ────────────────────────────────────────────
-                new() {
-                    Id = "dashboard", Nombre = "Dashboard Principal",
-                    Grupos = new() {
-                        new() { Nombre = "Acceso y navegación", Permisos = new() {
-                            new() { Id="dash_acceso",              Descripcion="Acceder al Dashboard tras login exitoso" },
-                            new() { Id="dash_sidebar_colapsar",    Descripcion="Colapsar / expandir el sidebar lateral (BtnToggleSidebar)" },
-                            new() { Id="dash_selector_workspace",  Descripcion="Usar el selector de workspace (Finanzas / Seguridad / Soporte)" },
-                        }},
-                        new() { Nombre = "Widgets KPI y Gráficos", Permisos = new() {
-                            new() { Id="dash_ver_kpis",       Descripcion="Ver tarjetas KPI: valor total inventario, activos, colaboradores, garantías" },
-                            new() { Id="dash_ver_grafico",    Descripcion="Ver gráfico de barras de historial de ingreso de activos" },
-                            new() { Id="dash_filtrar_tiempo", Descripcion="Cambiar filtro temporal del gráfico: Día / Mes / Año" },
-                            new() { Id="dash_ver_categorias", Descripcion="Ver panel de distribución por categorías con progress bars" },
-                            new() { Id="dash_ver_mapa",       Descripcion="Ver mapa de calor de sedes Colombia SVG (WebBrowser MapaBrowser)" },
-                        }},
-                        new() { Nombre = "Panel de Permisos — Acceso Admin", Permisos = new() {
-                            new() { Id="perm_abrir_panel",   Descripcion="Abrir este panel de control de permisos" },
-                            new() { Id="perm_modificar_ops", Descripcion="Modificar permisos del rol Operador" },
-                            new() { Id="perm_modificar_emp", Descripcion="Modificar permisos del rol Empleado" },
-                            new() { Id="perm_guardar",       Descripcion="Guardar cambios de permisos en base de datos" },
-                        }},
-                        new() { Nombre = "Login — Opciones", Permisos = new() {
-                            new() { Id="login_tema",       Descripcion="Alternar tema claro / oscuro en la pantalla de login" },
-                            new() { Id="login_registrar",  Descripcion="Acceder a la pestaña 'Sign In' para auto-registro de usuarios" },
-                        }},
-                    }
-                },
+                }
             };
         }
     }

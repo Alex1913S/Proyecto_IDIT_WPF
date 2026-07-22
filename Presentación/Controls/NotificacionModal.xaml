@@ -125,12 +125,24 @@
                                TextAlignment="Center"
                                Margin="0,0,0,22"/>
 
-                    <Button x:Name="BtnAccion"
-                            Content="Entendido"
-                            Style="{StaticResource ModalButtonStyle}"
-                            HorizontalAlignment="Center"
-                            MinWidth="140"
-                            Click="BtnCerrar_Click"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button x:Name="BtnAccion"
+                                Content="Entendido"
+                                Style="{StaticResource ModalButtonStyle}"
+                                HorizontalAlignment="Center"
+                                MinWidth="120"
+                                Margin="0,0,8,0"
+                                Click="BtnAccion_Click"/>
+
+                        <Button x:Name="BtnCancelar"
+                                Content="Cancelar"
+                                Style="{StaticResource ModalButtonStyle}"
+                                HorizontalAlignment="Center"
+                                MinWidth="120"
+                                Margin="8,0,0,0"
+                                Visibility="Collapsed"
+                                Click="BtnCancelar_Click"/>
+                    </StackPanel>
                 </StackPanel>
             </Grid>
         </Border>

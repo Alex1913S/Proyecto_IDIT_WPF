@@ -1,4 +1,5 @@
 ﻿using Dominio;
+using Presentación.Controls;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -7,86 +8,51 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
-using static AccesoDatos.ConexionSql;
 
 namespace Presentación
 {
     public partial class GestorContrasenas : UserControl
     {
-        // ── Capa de negocio ───────────────────────────────────────────────
         private readonly GestorCredencialesDominio _dominio = new();
 
-        // ── Estado general ────────────────────────────────────────────────
-        private int _colaboradorId;          // Se inyecta desde el Dashboard
-        private DataTable _tablaTodos;       // Tabla completa traída de BD
+        private int _colaboradorId;
+        private DataTable _tablaTodos;
 
-        // ── Paginación ────────────────────────────────────────────────────
         private List<CredencialVM> _registrosFiltrados = new();
         private int _paginaActual = 1;
         private const int _porPagina = 10;
         private int _totalPaginas = 1;
 
-        // ── Filtros activos ───────────────────────────────────────────────
         private string _filtroBusqueda = "";
-        private string _filtroCategoria = "";   // "" = Todas
+        private string _filtroCategoria = "";
 
-        // ── Estado del panel lateral ──────────────────────────────────────
         private CredencialVM? _seleccionada;
         private bool _modoEdicion = false;
         private bool _passwordVisible = false;
 
-        // ── Constantes de tabs ────────────────────────────────────────────
         private const string TAB_CORREO = "Correo Electrónico";
         private const string TAB_SISTEMA = "Sistema Interno";
         private const string TAB_VENCIDAS = "PROXIMAS";
-        private bool _isDarkMode = true;
-        private bool _esModoClaro = false;
-
-        // ═════════════════════════════════════════════════════════════════
-        // CONSTRUCTOR
-        // ═════════════════════════════════════════════════════════════════
 
         public GestorContrasenas()
         {
             InitializeComponent();
         }
 
-        /// <summary>
-        /// Constructor con ColaboradorID inyectado desde el Dashboard.
-        /// Usar este en producción: NavegaA(new GestorContrasenas(colaboradorId))
-        /// </summary>
         public GestorContrasenas(int colaboradorId) : this()
         {
             _colaboradorId = colaboradorId;
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        // CARGA INICIAL
-        // ═════════════════════════════════════════════════════════════════
-
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            // Si _colaboradorId no fue inyectado (diseñador / demo), usar variable global
             if (_colaboradorId <= 0)
                 _colaboradorId = ObtenerColaboradorIdDeSesion();
 
             CargarDatos();
         }
 
-        /// <summary>
-        /// Obtiene el ColaboradorID de la sesión activa.
-        /// Ajustar según cómo manejes la sesión en tu proyecto.
-        /// </summary>
-        private int ObtenerColaboradorIdDeSesion()
-        {
-            // Ejemplo: si guardas el ID en VariablesGlobales, usar ese valor.
-            // Por ahora retorna 0 para que el diseñador no explote.
-            return 0;
-        }
-
-        // ═════════════════════════════════════════════════════════════════
-        // CARGA Y TRANSFORMACIÓN DE DATOS
-        // ═════════════════════════════════════════════════════════════════
+        private int ObtenerColaboradorIdDeSesion() => 0;
 
         private void CargarDatos()
         {
@@ -97,8 +63,7 @@ namespace Presentación
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al cargar credenciales: {ex.Message}",
-                                "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                NotificacionService.Error($"Error al cargar credenciales: {ex.Message}");
             }
         }
 
@@ -108,7 +73,6 @@ namespace Presentación
 
             IEnumerable<DataRow> filas = _tablaTodos.AsEnumerable();
 
-            // Filtro de búsqueda
             if (!string.IsNullOrWhiteSpace(_filtroBusqueda))
             {
                 string t = _filtroBusqueda.ToLower();
@@ -119,10 +83,8 @@ namespace Presentación
                     (r["URL_Acceso"]?.ToString() ?? "").ToLower().Contains(t));
             }
 
-            // Filtro de tab de categoría
             if (_filtroCategoria == TAB_VENCIDAS)
             {
-                // Próximas a vencer: fecha ≤ 30 días desde hoy o ya vencidas
                 DateTime limite = DateTime.Today.AddDays(30);
                 filas = filas.Where(r =>
                 {
@@ -138,18 +100,14 @@ namespace Presentación
                         .Equals(_filtroCategoria, StringComparison.OrdinalIgnoreCase));
             }
 
-            // Proyectar a ViewModel
             _registrosFiltrados = filas.Select(r => new CredencialVM
             {
                 CredencialID = Convert.ToInt32(r["CredencialID"]),
                 NombreServicio = r["NombreServicio"]?.ToString() ?? "",
                 Usuario = r["Usuario"]?.ToString() ?? "",
-
-                // CORRECCIÓN: Conversión segura de VARBINARY (byte[]) a string legible
                 ContrasenaCifrada = r["ContrasenaCifrada"] != DBNull.Value
                     ? System.Text.Encoding.UTF8.GetString((byte[])r["ContrasenaCifrada"])
                     : "",
-
                 Categoria = r["Categoria"]?.ToString() ?? "—",
                 UrlAcceso = r["URL_Acceso"]?.ToString() ?? "",
                 NotasSeguras = r["NotasSeguras"]?.ToString() ?? "",
@@ -161,7 +119,6 @@ namespace Presentación
                                         : DateTime.MinValue,
             }).ToList();
 
-            // Actualizar badges de los tabs
             ActualizarBadgesTabs();
 
             _paginaActual = 1;
@@ -184,10 +141,6 @@ namespace Presentación
                 return Convert.ToDateTime(r["FechaVencimientoClave"]) <= limite;
             }).ToString();
         }
-
-        // ═════════════════════════════════════════════════════════════════
-        // PAGINACIÓN
-        // ═════════════════════════════════════════════════════════════════
 
         private void RenderizarPagina()
         {
@@ -249,10 +202,6 @@ namespace Presentación
             if (_paginaActual < _totalPaginas) { _paginaActual++; RenderizarPagina(); }
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        // SELECCIÓN EN EL DATAGRID
-        // ═════════════════════════════════════════════════════════════════
-
         private void DgCredenciales_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (DgCredenciales.SelectedItem is CredencialVM vm)
@@ -269,7 +218,6 @@ namespace Presentación
 
         private void MostrarDetalle(CredencialVM vm)
         {
-            // Asegurar que mostramos el panel detalle, no el formulario
             PanelDetalle.Visibility = Visibility.Visible;
             PanelFormulario.Visibility = Visibility.Collapsed;
 
@@ -284,7 +232,6 @@ namespace Presentación
                 ? vm.UltimaActualizacion.ToString("dd/MM/yyyy HH:mm")
                 : "—";
 
-            // Badge de vencimiento
             if (vm.FechaVencimiento.HasValue)
             {
                 int diasRestantes = (vm.FechaVencimiento.Value - DateTime.Today).Days;
@@ -306,10 +253,6 @@ namespace Presentación
             BtnEliminar.IsEnabled = true;
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        // MOSTRAR / OCULTAR CONTRASEÑA EN EL PANEL LATERAL
-        // ═════════════════════════════════════════════════════════════════
-
         private void BtnMostrarPassword_Click(object sender, RoutedEventArgs e)
         {
             if (_seleccionada == null) return;
@@ -327,10 +270,6 @@ namespace Presentación
                 EyeIconPanel.Fill = new SolidColorBrush(Color.FromRgb(0xA0, 0xA0, 0xB8));
             }
         }
-
-        // ═════════════════════════════════════════════════════════════════
-        // FILTROS POR TAB
-        // ═════════════════════════════════════════════════════════════════
 
         private void FilterTab_Click(object sender, RoutedEventArgs e)
         {
@@ -354,20 +293,12 @@ namespace Presentación
             AplicarFiltros();
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        // BÚSQUEDA
-        // ═════════════════════════════════════════════════════════════════
-
         private void TxtBuscar_TextChanged(object sender, TextChangedEventArgs e)
         {
             _filtroBusqueda = TxtBuscar.Text.Trim();
             _paginaActual = 1;
             AplicarFiltros();
         }
-
-        // ═════════════════════════════════════════════════════════════════
-        // NUEVA CREDENCIAL
-        // ═════════════════════════════════════════════════════════════════
 
         private void BtnNueva_Click(object sender, RoutedEventArgs e)
         {
@@ -379,10 +310,6 @@ namespace Presentación
             MostrarFormulario();
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        // EDITAR
-        // ═════════════════════════════════════════════════════════════════
-
         private void BtnEditar_Click(object sender, RoutedEventArgs e)
         {
             if (_seleccionada == null) return;
@@ -391,15 +318,13 @@ namespace Presentación
             TxtFormTitulo.Text = "Editar Credencial";
             BtnGuardar.Content = "Actualizar Credencial";
 
-            // Pre-poblar campos del formulario
             TxtFServicio.Text = _seleccionada.NombreServicio;
             TxtFUrl.Text = _seleccionada.UrlAcceso;
             TxtFUsuario.Text = _seleccionada.Usuario;
-            PbFPassword.Password = "";   // No revelamos la contraseña actual al editar
+            PbFPassword.Password = "";
             TxtFNotas.Text = _seleccionada.NotasSeguras;
             DpFVencimiento.SelectedDate = _seleccionada.FechaVencimiento;
 
-            // Seleccionar categoría en el combo
             foreach (ComboBoxItem item in CbFCategoria.Items)
             {
                 if (item.Content.ToString() == _seleccionada.Categoria)
@@ -411,10 +336,6 @@ namespace Presentación
 
             MostrarFormulario();
         }
-
-        // ═════════════════════════════════════════════════════════════════
-        // GUARDAR (crear o actualizar)
-        // ═════════════════════════════════════════════════════════════════
 
         private void BtnGuardar_Click(object sender, RoutedEventArgs e)
         {
@@ -432,30 +353,19 @@ namespace Presentación
 
                 if (_modoEdicion && _seleccionada != null)
                 {
-                    if (string.IsNullOrWhiteSpace(password))
-                    {
-                        resultado = ActualizarSinCambiarPassword(_seleccionada.CredencialID,
-                            servicio, url, usuario, categoria, venc, notas);
-                    }
-                    else
-                    {
-                        resultado = _dominio.Editar(
-                            _seleccionada.CredencialID, servicio, url, usuario,
-                            password, categoria, null, venc, notas);
-                    }
+                    resultado = string.IsNullOrWhiteSpace(password)
+                        ? ActualizarSinCambiarPassword(_seleccionada.CredencialID, servicio, url, usuario, categoria, venc, notas)
+                        : _dominio.Editar(_seleccionada.CredencialID, servicio, url, usuario, password, categoria, null, venc, notas);
                 }
                 else
                 {
-                    // OJO AQUÍ: Asegúrate de que _colaboradorId tenga un valor válido
-                    resultado = _dominio.Crear(
-                        servicio, url, usuario, password, categoria,
-                        _colaboradorId, null, venc, notas);
+                    resultado = _dominio.Crear(servicio, url, usuario, password, categoria, _colaboradorId, null, venc, notas);
                 }
 
-                MessageBox.Show(resultado.Mensaje,
-                    resultado.Exitoso ? "Éxito" : "Error de Validación",
-                    MessageBoxButton.OK,
-                    resultado.Exitoso ? MessageBoxImage.Information : MessageBoxImage.Warning);
+                if (resultado.Exitoso)
+                    NotificacionService.Exito(resultado.Mensaje);
+                else
+                    NotificacionService.Advertencia(resultado.Mensaje);
 
                 if (resultado.Exitoso)
                 {
@@ -465,24 +375,18 @@ namespace Presentación
             }
             catch (Exception ex)
             {
-                // Esto te mostrará el error real en una ventana emergente para saber qué falla
-                MessageBox.Show($"Ocurrió un error técnico:\n\n{ex.Message}\n\nDetalles:\n{ex.InnerException?.Message}",
-                    "Error del Sistema", MessageBoxButton.OK, MessageBoxImage.Error);
+                NotificacionService.Error($"Ocurrió un error técnico:\n\n{ex.Message}\n\n{ex.InnerException?.Message}");
             }
         }
 
-        /// <summary>
-        /// Actualiza todos los campos excepto la contraseña (la conserva cifrada).
-        /// </summary>
         private ResultadoCredencial ActualizarSinCambiarPassword(
             int credencialId, string servicio, string url, string usuario,
             string categoria, DateTime? venc, string notas)
         {
-            // Llamamos al AccesoDatos directamente para pasar el valor cifrado ya existente
             var ad = new AccesoDatos.GestorCredencialesAccesoDatos();
             bool ok = ad.ActualizarCredencial(
                 credencialId, servicio, url, usuario,
-                _seleccionada!.ContrasenaCifrada,   // conservar cifrada original
+                _seleccionada!.ContrasenaCifrada,
                 categoria, null, venc, notas);
 
             return new ResultadoCredencial
@@ -492,45 +396,31 @@ namespace Presentación
             };
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        // ELIMINAR
-        // ═════════════════════════════════════════════════════════════════
-
-        private void BtnEliminar_Click(object sender, RoutedEventArgs e)
+        private async void BtnEliminar_Click(object sender, RoutedEventArgs e)
         {
             if (_seleccionada == null) return;
 
-            var confirmar = MessageBox.Show(
+            bool confirmado = await NotificacionService.Confirmar(
                 $"¿Eliminar permanentemente la credencial de «{_seleccionada.NombreServicio}»?\n\nEsta acción es irreversible.",
-                "Confirmar eliminación",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Warning);
+                "Confirmar eliminación");
 
-            if (confirmar != MessageBoxResult.Yes) return;
+            if (!confirmado) return;
 
             var resultado = _dominio.Eliminar(_seleccionada.CredencialID, _colaboradorId);
 
-            MessageBox.Show(resultado.Mensaje,
-                resultado.Exitoso ? "Éxito" : "Error",
-                MessageBoxButton.OK,
-                resultado.Exitoso ? MessageBoxImage.Information : MessageBoxImage.Error);
+            if (resultado.Exitoso)
+                NotificacionService.Exito(resultado.Mensaje);
+            else
+                NotificacionService.Error(resultado.Mensaje);
 
             if (resultado.Exitoso)
                 CargarDatos();
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        // CANCELAR FORMULARIO
-        // ═════════════════════════════════════════════════════════════════
-
         private void BtnCancelarForm_Click(object sender, RoutedEventArgs e)
         {
             OcultarFormulario();
         }
-
-        // ═════════════════════════════════════════════════════════════════
-        // GENERAR CONTRASEÑA SEGURA
-        // ═════════════════════════════════════════════════════════════════
 
         private void BtnGenerar_Click(object sender, RoutedEventArgs e)
         {
@@ -541,13 +431,8 @@ namespace Presentación
 
             PbFPassword.Password = nuevaPass;
 
-            MessageBox.Show($"Contraseña generada:\n\n{nuevaPass}\n\nCópiala antes de guardar.",
-                "Contraseña Segura", MessageBoxButton.OK, MessageBoxImage.Information);
+            NotificacionService.Info($"Contraseña generada:\n\n{nuevaPass}\n\nCópiala antes de guardar.", "Contraseña Segura");
         }
-
-        // ═════════════════════════════════════════════════════════════════
-        // HELPERS DE UI
-        // ═════════════════════════════════════════════════════════════════
 
         private void MostrarFormulario()
         {
@@ -608,7 +493,6 @@ namespace Presentación
 
         public void AplicarTema(bool modoClaro)
         {
-            _isDarkMode = !modoClaro;
             var bc = new BrushConverter();
 
             if (modoClaro)
@@ -710,9 +594,6 @@ namespace Presentación
         }
     }
 
-    // ═════════════════════════════════════════════════════════════════════
-    // VIEW MODEL — representa una fila en el DataGrid
-    // ═════════════════════════════════════════════════════════════════════
     public class CredencialVM
     {
         public int CredencialID { get; set; }
@@ -725,7 +606,6 @@ namespace Presentación
         public DateTime? FechaVencimiento { get; set; }
         public DateTime UltimaActualizacion { get; set; }
 
-        // Columnas calculadas para el DataGrid
         public string ContrasenaMask => "••••••••";
 
         public string VencimientoFormateado
@@ -741,5 +621,4 @@ namespace Presentación
             }
         }
     }
-
 }

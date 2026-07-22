@@ -1,5 +1,6 @@
 ﻿using Dominio;
 using Microsoft.Win32;
+using Presentación.Controls;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -57,8 +58,7 @@ namespace Presentación.UserControls
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al cargar mantenimientos:\n{ex.Message}",
-                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                NotificacionService.Error($"Error al cargar mantenimientos:\n{ex.Message}");
             }
         }
 
@@ -129,8 +129,7 @@ namespace Presentación.UserControls
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al cargar catálogos:\n{ex.Message}",
-                    "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                NotificacionService.Advertencia($"Error al cargar catálogos:\n{ex.Message}");
             }
         }
 
@@ -254,20 +253,17 @@ namespace Presentación.UserControls
         {
             if (CbActivo.SelectedItem is not ComboItemGenerico activo)
             {
-                MessageBox.Show("Selecciona el activo a ingresar a mantenimiento.", "Validación",
-                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                NotificacionService.Advertencia("Selecciona el activo a ingresar a mantenimiento.");
                 return;
             }
             if (CbTipo.SelectedItem == null)
             {
-                MessageBox.Show("Selecciona el tipo de mantenimiento.", "Validación",
-                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                NotificacionService.Advertencia("Selecciona el tipo de mantenimiento.");
                 return;
             }
             if (string.IsNullOrWhiteSpace(TxtDescripcion.Text))
             {
-                MessageBox.Show("Describe el problema o la razón del ingreso.", "Validación",
-                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                NotificacionService.Advertencia("Describe el problema o la razón del ingreso.");
                 return;
             }
 
@@ -279,8 +275,10 @@ namespace Presentación.UserControls
             var resultado = _dominio.Crear(activoId, tipo, prioridad, TxtDescripcion.Text.Trim(),
                 responsableId, null, DpFechaEstimada.SelectedDate, _colaboradorSesionId);
 
-            MessageBox.Show(resultado.Mensaje, resultado.Exitoso ? "Éxito" : "Error",
-                MessageBoxButton.OK, resultado.Exitoso ? MessageBoxImage.Information : MessageBoxImage.Warning);
+            if (resultado.Exitoso)
+                NotificacionService.Exito(resultado.Mensaje, "Éxito");
+            else
+                NotificacionService.Error(resultado.Mensaje);
 
             if (resultado.Exitoso)
             {
@@ -298,14 +296,12 @@ namespace Presentación.UserControls
         {
             if (CbNuevoEstado.SelectedItem == null)
             {
-                MessageBox.Show("Selecciona el nuevo estado.", "Validación",
-                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                NotificacionService.Advertencia("Selecciona el nuevo estado.");
                 return;
             }
             if (string.IsNullOrWhiteSpace(TxtComentarioCambio.Text))
             {
-                MessageBox.Show("Agrega un comentario describiendo el cambio (esto queda en el historial de auditoría).",
-                    "Validación", MessageBoxButton.OK, MessageBoxImage.Warning);
+                NotificacionService.Advertencia("Agrega un comentario describiendo el cambio (esto queda en el historial de auditoría).");
                 return;
             }
 
@@ -326,8 +322,10 @@ namespace Presentación.UserControls
                 TxtComentarioCambio.Text.Trim(), costo, ChkGarantia.IsChecked == true,
                 null, _colaboradorSesionId);
 
-            MessageBox.Show(resultado.Mensaje, resultado.Exitoso ? "Éxito" : "Error",
-                MessageBoxButton.OK, resultado.Exitoso ? MessageBoxImage.Information : MessageBoxImage.Warning);
+            if (resultado.Exitoso)
+                NotificacionService.Exito(resultado.Mensaje, "Éxito");
+            else
+                NotificacionService.Error(resultado.Mensaje);
 
             if (resultado.Exitoso)
             {
@@ -365,8 +363,7 @@ namespace Presentación.UserControls
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"No se pudo adjuntar la foto:\n{ex.Message}",
-                    "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                NotificacionService.Advertencia($"No se pudo adjuntar la foto:\n{ex.Message}");
             }
         }
 

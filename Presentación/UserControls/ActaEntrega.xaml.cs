@@ -1,5 +1,6 @@
 ﻿using Dominio;
 using Microsoft.Win32;
+using Presentación.Controls;
 using System;
 using System.Data;
 using System.IO;
@@ -35,8 +36,7 @@ namespace Presentación.UserControls
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al cargar colaboradores:\n{ex.Message}",
-                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                NotificacionService.Error($"Error al cargar colaboradores:\n{ex.Message}");
             }
         }
 
@@ -56,13 +56,11 @@ namespace Presentación.UserControls
                 TxtCargoPreview.Text = _modeloActual.Cargo;
 
                 if (_modeloActual.Activos.Count == 0)
-                    MessageBox.Show("Este colaborador no tiene equipos asignados actualmente.",
-                        "Sin equipos", MessageBoxButton.OK, MessageBoxImage.Information);
+                    NotificacionService.Info("Este colaborador no tiene equipos asignados actualmente.", "Sin equipos");
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al cargar los datos:\n{ex.Message}",
-                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                NotificacionService.Error($"Error al cargar los datos:\n{ex.Message}");
             }
         }
 
@@ -82,22 +80,19 @@ namespace Presentación.UserControls
         {
             if (_modeloActual == null)
             {
-                MessageBox.Show("Selecciona primero un colaborador.",
-                    "Validación", MessageBoxButton.OK, MessageBoxImage.Warning);
+                NotificacionService.Advertencia("Selecciona primero un colaborador.");
                 return;
             }
 
             if (!_modeloActual.Activos.Any(a => a.Incluido))
             {
-                MessageBox.Show("Marca al menos un equipo en la columna \"✓ Incluir\".",
-                    "Validación", MessageBoxButton.OK, MessageBoxImage.Warning);
+                NotificacionService.Advertencia("Marca al menos un equipo en la columna \"✓ Incluir\".");
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(TxtLugar.Text))
             {
-                MessageBox.Show("El campo Lugar es obligatorio.",
-                    "Validación", MessageBoxButton.OK, MessageBoxImage.Warning);
+                NotificacionService.Advertencia("El campo Lugar es obligatorio.");
                 TxtLugar.Focus();
                 return;
             }
@@ -117,26 +112,19 @@ namespace Presentación.UserControls
             try
             {
                 _dominio.GenerarPdf(_modeloActual, dlg.FileName);
-                MessageBox.Show($"Acta generada correctamente:\n{dlg.FileName}",
-                    "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
+                NotificacionService.Exito($"Acta generada correctamente:\n{dlg.FileName}", "Éxito");
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al generar el PDF:\n{ex.Message}",
-                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                NotificacionService.Error($"Error al generar el PDF:\n{ex.Message}");
             }
         }
 
         // ═════════════════════════════════════════════════════════════════
         // EXPORTAR TODOS — selección de carpeta con truco SaveFileDialog
-        // (100 % WPF nativo, sin System.Windows.Forms ni paquetes extra)
         // ═════════════════════════════════════════════════════════════════
         private async void BtnExportarTodos_Click(object sender, RoutedEventArgs e)
         {
-            // ── Truco WPF para seleccionar carpeta ────────────────────────
-            // Usamos SaveFileDialog configurado para que el usuario navegue
-            // a la carpeta deseada; el "archivo" ficticio se descarta y solo
-            // nos quedamos con la ruta del directorio.
             var dlg = new SaveFileDialog
             {
                 Title = "Navega hasta la carpeta donde guardar las actas y pulsa Guardar",
@@ -150,7 +138,7 @@ namespace Presentación.UserControls
 
             if (dlg.ShowDialog() != true) return;
 
-            // Extraemos solo el directorio (ignoramos el nombre ficticio)
+            // Extraemos solo el directorio
             string raiz = Path.GetDirectoryName(dlg.FileName)!;
 
             // ── Confirmación ──────────────────────────────────────────────
@@ -159,8 +147,7 @@ namespace Presentación.UserControls
 
             if (total == 0)
             {
-                MessageBox.Show("No hay colaboradores activos para exportar.",
-                    "Sin datos", MessageBoxButton.OK, MessageBoxImage.Information);
+                NotificacionService.Info("No hay colaboradores activos para exportar.", "Sin datos");
                 return;
             }
 
@@ -258,9 +245,10 @@ namespace Presentación.UserControls
                 (fallidos > 0 ? $"❌  Con errores:              {fallidos}\n{errores}\n\n" : "") +
                 $"\nCarpeta raíz:\n{raiz}";
 
-            MessageBox.Show(resumen, "Exportación finalizada",
-                MessageBoxButton.OK,
-                fallidos > 0 ? MessageBoxImage.Warning : MessageBoxImage.Information);
+            if (fallidos > 0)
+                NotificacionService.Advertencia(resumen);
+            else
+                NotificacionService.Info(resumen, "Exportación finalizada");
 
             // Abrir el explorador en la carpeta raíz
             if (exitosos > 0)

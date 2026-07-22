@@ -1,4 +1,5 @@
 ﻿using Dominio;
+using Presentación.Controls;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -13,28 +14,19 @@ namespace Presentación.UserControls
 {
     public partial class Assign_Inventory : UserControl
     {
-        // ── Capa de negocio ───────────────────────────────────────────────
-        private readonly AsignarActivoDominio _dominio = new AsignarActivoDominio();
+        private readonly AsignarActivoDominio _dominio = new();
 
-        // ── Tabla completa desde BD ───────────────────────────────────────
         private DataTable _tablaCompleta;
 
-        // ── Paginación ────────────────────────────────────────────────────
         private List<DataRow> _registrosFiltrados = new List<DataRow>();
         private int _paginaActual = 1;
         private const int _registrosPorPagina = 12;
         private int _totalPaginas = 1;
 
-        // ── Filtro de búsqueda ────────────────────────────────────────────
         private string _filtroBusqueda = "";
 
-        // ── Estado CRUD ───────────────────────────────────────────────────
-        private bool _modoEdicion = false;
-
-        // ── IDs seleccionados para la asignación ──────────────────────────
         private Guid? _activoIdSeleccionado = null;
         private int? _colaboradorIdSeleccionado = null;
-
 
         public Assign_Inventory()
         {
@@ -52,7 +44,6 @@ namespace Presentación.UserControls
         {
             try
             {
-                // Traemos los datos de la base de datos de fondo
                 var dtActivos = await Task.Run(() => _dominio.ObtenerActivosDisponibles());
 
                 CmbActivo.ItemsSource = null;
@@ -68,7 +59,6 @@ namespace Presentación.UserControls
                 CmbActivo.DisplayMemberPath = "Display";
                 CmbActivo.SelectedValuePath = "Value";
 
-                // Segunda consulta en segundo plano
                 var dtColaboradores = await Task.Run(() => _dominio.ObtenerColaboradores());
 
                 CmbColaborador.ItemsSource = null;
@@ -86,8 +76,7 @@ namespace Presentación.UserControls
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al cargar los catálogos:\n{ex.Message}",
-                                "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                NotificacionService.Advertencia($"Error al cargar los catálogos:\n{ex.Message}");
             }
         }
 
@@ -95,7 +84,6 @@ namespace Presentación.UserControls
         {
             try
             {
-                // La consulta pesada se va a un hilo de fondo
                 _tablaCompleta = await Task.Run(() => ObtenerAsignacionesActivas());
 
                 _filtroBusqueda = "";
@@ -105,8 +93,7 @@ namespace Presentación.UserControls
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al cargar las asignaciones:\n{ex.Message}",
-                                "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                NotificacionService.Error($"Error al cargar las asignaciones:\n{ex.Message}");
             }
         }
 
@@ -247,14 +234,12 @@ namespace Presentación.UserControls
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al cargar el detalle:\n{ex.Message}",
-                                "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                NotificacionService.Advertencia($"Error al cargar el detalle:\n{ex.Message}");
             }
         }
 
         private void BtnNuevaAsignacion_Click(object sender, RoutedEventArgs e)
         {
-            _modoEdicion = false;
             TxtTituloPanel.Text = "Nueva Asignación";
             BtnGuardar.Content = "Guardar Asignación";
             LimpiarFormulario();
@@ -265,7 +250,6 @@ namespace Presentación.UserControls
         {
             if (DgAsignaciones.SelectedItem == null) return;
 
-            _modoEdicion = true;
             TxtTituloPanel.Text = "Editar Asignación";
             BtnGuardar.Content = "Actualizar Asignación";
 
@@ -286,20 +270,18 @@ namespace Presentación.UserControls
         {
             try
             {
-                // Recolección de valores
                 Guid? activoId = (CmbActivo.SelectedItem as ComboItem)?.Value is Guid g ? g : null;
                 int? colaboradorId = (CmbColaborador.SelectedItem as ComboItem)?.Value is int id ? id : (int?)null;
 
                 DateTime fechaAsignacion = DpFechaAsignacion.SelectedDate ?? DateTime.Today;
                 string observaciones = TxtObservaciones.Text.Trim();
 
-                // 🔥 CAMBIO: El comando INSERT / UPDATE de SQL se ejecuta de fondo sin colgar la UI
                 var resultado = await Task.Run(() => _dominio.Registrar(activoId, colaboradorId, fechaAsignacion, observaciones));
 
-                MessageBox.Show(resultado.Mensaje,
-                    resultado.Exitoso ? "Asignación Registrada" : "Error de Validación",
-                    MessageBoxButton.OK,
-                    resultado.Exitoso ? MessageBoxImage.Information : MessageBoxImage.Warning);
+                if (resultado.Exitoso)
+                    NotificacionService.Exito(resultado.Mensaje, "Asignación Registrada");
+                else
+                    NotificacionService.Advertencia(resultado.Mensaje);
 
                 if (resultado.Exitoso)
                 {
@@ -310,8 +292,7 @@ namespace Presentación.UserControls
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error crítico al procesar la asignación:\n{ex.Message}",
-                                "Error del Sistema", MessageBoxButton.OK, MessageBoxImage.Error);
+                NotificacionService.Error($"Error crítico al procesar la asignación:\n{ex.Message}");
             }
         }
 
@@ -415,8 +396,7 @@ namespace Presentación.UserControls
                 DgAsignaciones.Background = (SolidColorBrush)bc.ConvertFromString("#EDF2FF");
                 DgAsignaciones.Foreground = (SolidColorBrush)bc.ConvertFromString("#1E3A5F");
                 DgAsignaciones.HorizontalGridLinesBrush = (SolidColorBrush)bc.ConvertFromString("#C3D3F0");
-                var rs = BuildRowStyle(bc, "#EDF2FF", "#1E3A5F", "#C3D3F0", "#D6E4FF", "#BFCFE8", "#1E3A5F");
-                DgAsignaciones.RowStyle = rs;
+                DgAsignaciones.RowStyle = BuildRowStyle(bc, "#EDF2FF", "#1E3A5F", "#C3D3F0", "#D6E4FF", "#BFCFE8", "#1E3A5F");
                 DgAsignaciones.ColumnHeaderStyle = BuildHeaderStyle(bc, "#EDF2FF", "#4A6080", "#C3D3F0");
             }
             else
@@ -443,8 +423,7 @@ namespace Presentación.UserControls
                 DgAsignaciones.Background = Brushes.Transparent;
                 DgAsignaciones.Foreground = Brushes.White;
                 DgAsignaciones.HorizontalGridLinesBrush = (SolidColorBrush)bc.ConvertFromString("#0d3a5c");
-                var rs = BuildRowStyle(bc, "Transparent", "White", "#0d3a5c", "#0e3560", "#1a4a7a", "#E89A24");
-                DgAsignaciones.RowStyle = rs;
+                DgAsignaciones.RowStyle = BuildRowStyle(bc, "Transparent", "White", "#0d3a5c", "#0e3560", "#1a4a7a", "#E89A24");
                 DgAsignaciones.ColumnHeaderStyle = BuildHeaderStyle(bc, "Transparent", "#A0C4E0", "#0e3560");
             }
         }

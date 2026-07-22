@@ -1,71 +1,51 @@
 ﻿using Dominio;
 using Microsoft.Win32;
+using Presentación.Controls;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks; // 🔥 REQUISITO: Para el soporte de operaciones con Task
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using static Presentación.UserControls.Assign_Inventory;
 
 namespace Presentación
 {
     public partial class Employee_Viewer : UserControl
     {
-        // ── Capa de negocio ───────────────────────────────────────────────
         private readonly CN_Colaboradores _cnColaboradores = new CN_Colaboradores();
         private readonly ColaboradorDominio _colaboradorDominio = new ColaboradorDominio();
 
-        // ── Tabla completa desde BD ───────────────────────────────────────
         private DataTable _tablaCompleta;
 
-        // ── Registros filtrados y paginación ─────────────────────────────
         private List<DataRow> _registrosFiltrados = new List<DataRow>();
         private int _paginaActual = 1;
         private const int _registrosPorPagina = 12;
         private int _totalPaginas = 1;
 
-        // ── Filtros activos ───────────────────────────────────────────────
         private string _filtroRol = "";
         private string _filtroBusqueda = "";
 
-        // ── Estado CRUD ───────────────────────────────────────────────────
         private bool _modoEdicion = false;
-        private string _cedulaEnEdicion = "";   // clave para UPDATE
-        private byte[] _fotoSeleccionada = null; // bytes de la foto elegida
+        private string _cedulaEnEdicion = "";
+        private byte[] _fotoSeleccionada = null;
         private bool _fotoFueModificada = false;
-        private bool _isDarkMode = true;
 
-        // ── Modo tema ─────────────────────────────────────────────────────
-        private bool _esModoClaro = false;
-
-        // ═════════════════════════════════════════════════════════════════
-        // CONSTRUCTOR
-        // ═════════════════════════════════════════════════════════════════
         public Employee_Viewer()
         {
             InitializeComponent();
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        // CARGA INICIAL
-        // ═════════════════════════════════════════════════════════════════
-        // 🔥 CAMBIO: Convertido a 'async void' para cargar los combos y la grilla sin congelar la interfaz
         private async void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             await CargarCombosFormularioAsync();
             await CargarDatosAsync();
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        // CARGA DE COMBOS (Departamentos, Ubicaciones, Perfiles)
-        // ═════════════════════════════════════════════════════════════════
-        // 🔥 CAMBIO: Consulta los catálogos en hilos secundarios mediante Task.Run
         private async Task CargarCombosFormularioAsync()
         {
             try
@@ -105,15 +85,10 @@ namespace Presentación
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al cargar catálogos del formulario:\n{ex.Message}",
-                                "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                NotificacionService.Advertencia($"Error al cargar catálogos del formulario:\n{ex.Message}");
             }
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        // CARGA Y FILTRADO DE DATOS
-        // ═════════════════════════════════════════════════════════════════
-        // 🔥 CAMBIO: La lectura de colaboradores ahora es asíncrona para que el buscador en vivo no cause tirones visuales
         private async Task CargarDatosAsync()
         {
             try
@@ -131,8 +106,7 @@ namespace Presentación
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al cargar colaboradores:\n{ex.Message}",
-                                "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                NotificacionService.Error($"Error al cargar colaboradores:\n{ex.Message}");
             }
         }
 
@@ -174,9 +148,6 @@ namespace Presentación
             BtnTabEmpleados.Tag = todas.Count(r => (r["NombrePerfil"]?.ToString() ?? "") == "Empleado").ToString();
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        // PAGINACIÓN
-        // ═════════════════════════════════════════════════════════════════
         private void RenderizarPagina()
         {
             int total = _registrosFiltrados.Count;
@@ -202,7 +173,6 @@ namespace Presentación
                                         ? Convert.ToDateTime(r["FechaIngreso"])
                                         : (DateTime?)null,
 
-                // Datos extra para panel lateral y formulario
                 _Nombres = r["Nombres"]?.ToString() ?? "",
                 _Apellidos = r["Apellidos"]?.ToString() ?? "",
                 _FotoBytes = r["Foto"] != DBNull.Value ? (byte[])r["Foto"] : null,
@@ -262,9 +232,6 @@ namespace Presentación
             if (_paginaActual < _totalPaginas) { _paginaActual++; RenderizarPagina(); }
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        // SELECCIÓN EN DATAGRID → Panel lateral detalle
-        // ═════════════════════════════════════════════════════════════════
         private void DgColaboradores_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (DgColaboradores.SelectedItem == null)
@@ -300,7 +267,6 @@ namespace Presentación
                     ? new SolidColorBrush(Color.FromRgb(0x4C, 0xD9, 0x64))
                     : new SolidColorBrush(Color.FromRgb(0xE5, 0x3E, 0x3E));
 
-                // Avatar / foto
                 string iniciales = ObtenerIniciales(fila.NombreCompleto ?? "?");
                 TxtAvatarInicial.Text = iniciales;
 
@@ -317,23 +283,17 @@ namespace Presentación
                     TxtAvatarInicial.Visibility = Visibility.Visible;
                 }
 
-                // Habilitar botones acción
                 BtnEditar.IsEnabled = true;
                 BtnEliminar.IsEnabled = true;
 
-                // Aseguramos que se vea el panel detalle (no el formulario)
                 MostrarDetalle();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al cargar el panel lateral:\n{ex.Message}",
-                                "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                NotificacionService.Advertencia($"Error al cargar el panel lateral:\n{ex.Message}");
             }
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        // FILTROS POR TAB
-        // ═════════════════════════════════════════════════════════════════
         private void FilterTab_Click(object sender, RoutedEventArgs e)
         {
             BtnTabTodos.IsEnabled = true;
@@ -356,19 +316,12 @@ namespace Presentación
             AplicarFiltros();
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        // BÚSQUEDA EN VIVO
-        // ═════════════════════════════════════════════════════════════════
-        // 🔥 CAMBIO: Marcado como asíncrono para que la grilla filtre dinámicamente con fluidez
         private async void TxtBuscarColaborador_TextChanged(object sender, TextChangedEventArgs e)
         {
             _filtroBusqueda = TxtBuscarColaborador.Text.Trim();
             await CargarDatosAsync();
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        // CRUD — NUEVO COLABORADOR
-        // ═════════════════════════════════════════════════════════════════
         private void BtnNuevo_Click(object sender, RoutedEventArgs e)
         {
             _modoEdicion = false;
@@ -387,9 +340,6 @@ namespace Presentación
             MostrarFormulario();
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        // CRUD — EDITAR COLABORADOR
-        // ═════════════════════════════════════════════════════════════════
         private void BtnEditar_Click(object sender, RoutedEventArgs e)
         {
             if (DgColaboradores.SelectedItem == null) return;
@@ -406,11 +356,9 @@ namespace Presentación
             LblPassword.Text = "Contraseña";
             TxtPasswordHint.Visibility = Visibility.Visible;
 
-            // Cédula no editable en modo edición (es la clave primaria)
             TxtFCedula.IsReadOnly = true;
             TxtFCedula.Opacity = 0.6;
 
-            // Pre-poblar campos
             TxtFCedula.Text = fila.DocumentoIdentidad ?? "";
             TxtFNombres.Text = fila._Nombres ?? "";
             TxtFApellidos.Text = fila._Apellidos ?? "";
@@ -419,27 +367,20 @@ namespace Presentación
             TxtFUsuario.Text = fila._UsuarioApp ?? "";
             PbFPassword.Clear();
 
-            // Fecha de ingreso
             DpFIngreso.SelectedDate = fila._FechaIngresoCruda as DateTime?;
 
-            // Estado
             string estadoRaw = ConvertirEstado(fila._EstadoRaw);
             CbFEstado.SelectedIndex = estadoRaw == "Activo" ? 0 : 1;
 
-            // Seleccionar combos por ID
-            SeleccionarComboItem(CbFDepartamento, "DepartamentoID", fila._DepartamentoID);
-            SeleccionarComboItem(CbFUbicacion, "UbicacionID", fila._UbicacionID);
-            SeleccionarComboItem(CbFPerfil, "PerfilID", fila._PerfilID);
+            SeleccionarComboItem(CbFDepartamento, fila._DepartamentoID);
+            SeleccionarComboItem(CbFUbicacion, fila._UbicacionID);
+            SeleccionarComboItem(CbFPerfil, fila._PerfilID);
 
-            // Foto preview
             CargarFotoEnPreview(_fotoSeleccionada);
 
             MostrarFormulario();
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        // CRUD — SELECCIONAR FOTO (explorador de archivos)
-        // ═════════════════════════════════════════════════════════════════
         private void BtnSeleccionarFoto_Click(object sender, RoutedEventArgs e)
         {
             var dialog = new OpenFileDialog
@@ -458,8 +399,7 @@ namespace Presentación
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"No se pudo cargar la imagen:\n{ex.Message}",
-                                    "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    NotificacionService.Advertencia($"No se pudo cargar la imagen:\n{ex.Message}");
                 }
             }
         }
@@ -479,15 +419,10 @@ namespace Presentación
             }
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        // CRUD — GUARDAR (crear o actualizar)
-        // ═════════════════════════════════════════════════════════════════
-        // 🔥 CAMBIO: Convertido a 'async void' para transaccionar con la BD sin colgar las animaciones WPF
         private async void BtnGuardar_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                // ── Recolección de campos ─────────────────────────────────
                 string cedula = TxtFCedula.Text.Trim();
                 string nombres = TxtFNombres.Text.Trim();
                 string apellidos = TxtFApellidos.Text.Trim();
@@ -499,64 +434,28 @@ namespace Presentación
 
                 DateTime? fechaIngreso = DpFIngreso.SelectedDate;
 
-                int departamentoId = ObtenerIdCombo(CbFDepartamento, "DepartamentoID");
-                int ubicacionId = ObtenerIdCombo(CbFUbicacion, "UbicacionID");
-                int perfilId = ObtenerIdCombo(CbFPerfil, "PerfilID");
+                int departamentoId = ObtenerIdCombo(CbFDepartamento);
+                int ubicacionId = ObtenerIdCombo(CbFUbicacion);
+                int perfilId = ObtenerIdCombo(CbFPerfil);
 
-                // ── Validaciones básicas ──────────────────────────────────
-                if (string.IsNullOrWhiteSpace(cedula))
-                {
-                    Alerta("La cédula es obligatoria."); TxtFCedula.Focus(); return;
-                }
-                if (string.IsNullOrWhiteSpace(nombres))
-                {
-                    Alerta("Los nombres son obligatorios."); TxtFNombres.Focus(); return;
-                }
-                if (string.IsNullOrWhiteSpace(apellidos))
-                {
-                    Alerta("Los apellidos son obligatorios."); TxtFApellidos.Focus(); return;
-                }
-                if (string.IsNullOrWhiteSpace(cargo))
-                {
-                    Alerta("El cargo es obligatorio."); TxtFCargo.Focus(); return;
-                }
-                if (departamentoId <= 0)
-                {
-                    Alerta("Selecciona un departamento."); CbFDepartamento.Focus(); return;
-                }
-                if (ubicacionId <= 0)
-                {
-                    Alerta("Selecciona una ubicación."); CbFUbicacion.Focus(); return;
-                }
-                if (perfilId <= 0)
-                {
-                    Alerta("Selecciona un perfil."); CbFPerfil.Focus(); return;
-                }
-                if (fechaIngreso == null)
-                {
-                    Alerta("Selecciona la fecha de ingreso."); DpFIngreso.Focus(); return;
-                }
-                if (string.IsNullOrWhiteSpace(usuario))
-                {
-                    Alerta("El usuario de la app es obligatorio."); TxtFUsuario.Focus(); return;
-                }
-                if (!_modoEdicion && string.IsNullOrWhiteSpace(password))
-                {
-                    Alerta("La contraseña es obligatoria para un nuevo colaborador."); PbFPassword.Focus(); return;
-                }
+                if (string.IsNullOrWhiteSpace(cedula)) { Alerta("La cédula es obligatoria."); TxtFCedula.Focus(); return; }
+                if (string.IsNullOrWhiteSpace(nombres)) { Alerta("Los nombres son obligatorios."); TxtFNombres.Focus(); return; }
+                if (string.IsNullOrWhiteSpace(apellidos)) { Alerta("Los apellidos son obligatorios."); TxtFApellidos.Focus(); return; }
+                if (string.IsNullOrWhiteSpace(cargo)) { Alerta("El cargo es obligatorio."); TxtFCargo.Focus(); return; }
+                if (departamentoId <= 0) { Alerta("Selecciona un departamento."); CbFDepartamento.Focus(); return; }
+                if (ubicacionId <= 0) { Alerta("Selecciona una ubicación."); CbFUbicacion.Focus(); return; }
+                if (perfilId <= 0) { Alerta("Selecciona un perfil."); CbFPerfil.Focus(); return; }
+                if (fechaIngreso == null) { Alerta("Selecciona la fecha de ingreso."); DpFIngreso.Focus(); return; }
+                if (string.IsNullOrWhiteSpace(usuario)) { Alerta("El usuario de la app es obligatorio."); TxtFUsuario.Focus(); return; }
+                if (!_modoEdicion && string.IsNullOrWhiteSpace(password)) { Alerta("La contraseña es obligatoria para un nuevo colaborador."); PbFPassword.Focus(); return; }
 
-                // ── Foto: usar la seleccionada o null ─────────────────────
                 byte[] fotoFinal = _fotoSeleccionada;
-
                 bool ok;
 
                 if (_modoEdicion)
                 {
-                    string passParaActualizar = string.IsNullOrWhiteSpace(password)
-                        ? "##SIN_CAMBIO##"
-                        : password;
+                    string passParaActualizar = string.IsNullOrWhiteSpace(password) ? "##SIN_CAMBIO##" : password;
 
-                    // 🔥 CAMBIO: Ejecución asíncrona de la edición en SQL Server
                     ok = await Task.Run(() => _cnColaboradores.EditarColaborador(
                         cedula, nombres, apellidos, correo,
                         departamentoId, ubicacionId,
@@ -565,13 +464,10 @@ namespace Presentación
                         _fotoFueModificada ? fotoFinal : null,
                         cargo));
 
-                    MostrarResultado(ok,
-                        "Colaborador actualizado correctamente.",
-                        "No se pudo actualizar el colaborador.");
+                    MostrarResultado(ok, "Colaborador actualizado correctamente.", "No se pudo actualizar el colaborador.");
                 }
                 else
                 {
-                    // 🔥 CAMBIO: Ejecución asíncrona de la inserción con cifrado
                     var resultado = await Task.Run(() => _colaboradorDominio.RegistrarColaborador(
                         cedula, nombres, apellidos, correo,
                         departamentoId, ubicacionId,
@@ -585,20 +481,15 @@ namespace Presentación
                 if (ok)
                 {
                     OcultarFormulario();
-                    await CargarDatosAsync(); // Recarga fluida de la grilla
+                    await CargarDatosAsync();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error crítico al guardar:\n{ex.Message}\n\n{ex.InnerException?.Message}",
-                                "Error del Sistema", MessageBoxButton.OK, MessageBoxImage.Error);
+                NotificacionService.Error($"Error crítico al guardar:\n{ex.Message}\n\n{ex.InnerException?.Message}");
             }
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        // CRUD — ELIMINAR COLABORADOR
-        // ═════════════════════════════════════════════════════════════════
-        // 🔥 CAMBIO: Convertido a 'async void' para remover registros de manera asíncrona sin frenar el render
         private async void BtnEliminar_Click(object sender, RoutedEventArgs e)
         {
             if (DgColaboradores.SelectedItem == null) return;
@@ -617,56 +508,36 @@ namespace Presentación
 
             try
             {
-                // 🔥 CAMBIO: Borrado asíncrono
                 bool ok = await Task.Run(() => _cnColaboradores.EliminarColaborador(cedula));
-                MostrarResultado(ok,
-                    "Colaborador eliminado correctamente.",
-                    "No se pudo completar la eliminación.");
+                MostrarResultado(ok, "Colaborador eliminado correctamente.", "No se pudo completar la eliminación.");
 
                 if (ok) await CargarDatosAsync();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al eliminar:\n{ex.Message}",
-                                "Error de Restricción", MessageBoxButton.OK, MessageBoxImage.Error);
+                NotificacionService.Error($"Error al eliminar:\n{ex.Message}");
             }
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        // CANCELAR FORMULARIO
-        // ═════════════════════════════════════════════════════════════════
         private void BtnCancelarForm_Click(object sender, RoutedEventArgs e)
             => OcultarFormulario();
 
-        // ═════════════════════════════════════════════════════════════════
-        // EXPORTAR EXCEL (stub)
-        // ═════════════════════════════════════════════════════════════════
         private void BtnExportarExcel_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Función de exportación a Excel pendiente de implementar.",
-                            "Exportar", MessageBoxButton.OK, MessageBoxImage.Information);
+            NotificacionService.Info("Función de exportación a Excel pendiente de implementar.", "Exportar");
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        // MODO CLARO / OSCURO
-        // Llamar desde Dashboard.xaml.cs al cambiar el tema:
-        //   miViewer.AplicarTema(esModoClaro: true/false);
-        // ═════════════════════════════════════════════════════════════════
         public void AplicarTema(bool modoClaro)
         {
-            _isDarkMode = !modoClaro;
             var bc = new BrushConverter();
 
             if (modoClaro)
             {
-                // ── Fondo raíz del UserControl ────────────────────────────────
                 RootGrid.Background = (SolidColorBrush)bc.ConvertFromString("#F4F6F9");
 
-                // ── Panel lateral ─────────────────────────────────────────────
                 PanelLateralBorder.Background = (SolidColorBrush)bc.ConvertFromString("#EDF2FF");
                 PanelLateralBorder.BorderBrush = (SolidColorBrush)bc.ConvertFromString("#C3D3F0");
 
-                // ── Textos del panel lateral ──────────────────────────────────
                 TxtPanelNombre.Foreground = (SolidColorBrush)bc.ConvertFromString("#1E3A5F");
                 TxtPanelCargo.Foreground = (SolidColorBrush)bc.ConvertFromString("#4A6080");
                 TxtPanelCedula.Foreground = (SolidColorBrush)bc.ConvertFromString("#1E3A5F");
@@ -675,15 +546,12 @@ namespace Presentación
                 TxtPanelFechaIngreso.Foreground = (SolidColorBrush)bc.ConvertFromString("#1E3A5F");
                 TxtAvatarInicial.Foreground = (SolidColorBrush)bc.ConvertFromString("#4B93FF");
 
-                // ── Títulos y buscador ────────────────────────────────────────
                 TxtTituloSeccion.Foreground = (SolidColorBrush)bc.ConvertFromString("#1E3A5F");
                 TxtBuscarColaborador.Foreground = (SolidColorBrush)bc.ConvertFromString("#1E3A5F");
 
-                // ── Contenedor del DataGrid ───────────────────────────────────
                 GridContainerBorder.Background = (SolidColorBrush)bc.ConvertFromString("#EDF2FF");
                 GridContainerBorder.BorderBrush = (SolidColorBrush)bc.ConvertFromString("#C3D3F0");
 
-                // ── DataGrid fondo y filas (sobreescribir recursos locales) ───
                 DgColaboradores.Background = (SolidColorBrush)bc.ConvertFromString("#EDF2FF");
                 DgColaboradores.RowBackground = (SolidColorBrush)bc.ConvertFromString("#EDF2FF");
                 DgColaboradores.AlternatingRowBackground = (SolidColorBrush)bc.ConvertFromString("#E2EAFF");
@@ -691,68 +559,39 @@ namespace Presentación
                 DgColaboradores.HorizontalGridLinesBrush = (SolidColorBrush)bc.ConvertFromString("#C3D3F0");
                 DgColaboradores.VerticalGridLinesBrush = Brushes.Transparent;
 
-                // Sobreescribir el estilo de filas en tiempo de ejecución
                 var rowStyle = new Style(typeof(DataGridRow));
-                rowStyle.Setters.Add(new Setter(DataGridRow.BackgroundProperty,
-                    (SolidColorBrush)bc.ConvertFromString("#EDF2FF")));
-                rowStyle.Setters.Add(new Setter(DataGridRow.ForegroundProperty,
-                    (SolidColorBrush)bc.ConvertFromString("#1E3A5F")));
-                rowStyle.Setters.Add(new Setter(DataGridRow.BorderBrushProperty,
-                    (SolidColorBrush)bc.ConvertFromString("#C3D3F0")));
-                rowStyle.Setters.Add(new Setter(DataGridRow.BorderThicknessProperty,
-                    new Thickness(0, 0, 0, 1)));
+                rowStyle.Setters.Add(new Setter(DataGridRow.BackgroundProperty, (SolidColorBrush)bc.ConvertFromString("#EDF2FF")));
+                rowStyle.Setters.Add(new Setter(DataGridRow.ForegroundProperty, (SolidColorBrush)bc.ConvertFromString("#1E3A5F")));
+                rowStyle.Setters.Add(new Setter(DataGridRow.BorderBrushProperty, (SolidColorBrush)bc.ConvertFromString("#C3D3F0")));
+                rowStyle.Setters.Add(new Setter(DataGridRow.BorderThicknessProperty, new Thickness(0, 0, 0, 1)));
 
-                // Trigger hover
-                var triggerHover = new Trigger
-                {
-                    Property = DataGridRow.IsMouseOverProperty,
-                    Value = true
-                };
-                triggerHover.Setters.Add(new Setter(DataGridRow.BackgroundProperty,
-                    (SolidColorBrush)bc.ConvertFromString("#D6E4FF")));
+                var triggerHover = new Trigger { Property = DataGridRow.IsMouseOverProperty, Value = true };
+                triggerHover.Setters.Add(new Setter(DataGridRow.BackgroundProperty, (SolidColorBrush)bc.ConvertFromString("#D6E4FF")));
                 rowStyle.Triggers.Add(triggerHover);
 
-                // Trigger seleccionado
-                var triggerSelected = new Trigger
-                {
-                    Property = DataGridRow.IsSelectedProperty,
-                    Value = true
-                };
-                triggerSelected.Setters.Add(new Setter(DataGridRow.BackgroundProperty,
-                    (SolidColorBrush)bc.ConvertFromString("#BFCFE8")));
-                triggerSelected.Setters.Add(new Setter(DataGridRow.ForegroundProperty,
-                    (SolidColorBrush)bc.ConvertFromString("#1E3A5F")));
+                var triggerSelected = new Trigger { Property = DataGridRow.IsSelectedProperty, Value = true };
+                triggerSelected.Setters.Add(new Setter(DataGridRow.BackgroundProperty, (SolidColorBrush)bc.ConvertFromString("#BFCFE8")));
+                triggerSelected.Setters.Add(new Setter(DataGridRow.ForegroundProperty, (SolidColorBrush)bc.ConvertFromString("#1E3A5F")));
                 rowStyle.Triggers.Add(triggerSelected);
 
                 DgColaboradores.RowStyle = rowStyle;
 
-                // Sobreescribir estilo de encabezados de columna
                 var headerStyle = new Style(typeof(DataGridColumnHeader));
-                headerStyle.Setters.Add(new Setter(DataGridColumnHeader.BackgroundProperty,
-                    (SolidColorBrush)bc.ConvertFromString("#EDF2FF")));
-                headerStyle.Setters.Add(new Setter(DataGridColumnHeader.ForegroundProperty,
-                    (SolidColorBrush)bc.ConvertFromString("#4A6080")));
-                headerStyle.Setters.Add(new Setter(DataGridColumnHeader.FontWeightProperty,
-                    FontWeights.SemiBold));
+                headerStyle.Setters.Add(new Setter(DataGridColumnHeader.BackgroundProperty, (SolidColorBrush)bc.ConvertFromString("#EDF2FF")));
+                headerStyle.Setters.Add(new Setter(DataGridColumnHeader.ForegroundProperty, (SolidColorBrush)bc.ConvertFromString("#4A6080")));
+                headerStyle.Setters.Add(new Setter(DataGridColumnHeader.FontWeightProperty, FontWeights.SemiBold));
                 headerStyle.Setters.Add(new Setter(DataGridColumnHeader.FontSizeProperty, 12.0));
-                headerStyle.Setters.Add(new Setter(DataGridColumnHeader.PaddingProperty,
-                    new Thickness(12, 12, 12, 12)));
-                headerStyle.Setters.Add(new Setter(DataGridColumnHeader.BorderThicknessProperty,
-                    new Thickness(0, 0, 0, 1)));
-                headerStyle.Setters.Add(new Setter(DataGridColumnHeader.BorderBrushProperty,
-                    (SolidColorBrush)bc.ConvertFromString("#C3D3F0")));
-                headerStyle.Setters.Add(new Setter(DataGridColumnHeader.HorizontalContentAlignmentProperty,
-                    HorizontalAlignment.Center));
+                headerStyle.Setters.Add(new Setter(DataGridColumnHeader.PaddingProperty, new Thickness(12, 12, 12, 12)));
+                headerStyle.Setters.Add(new Setter(DataGridColumnHeader.BorderThicknessProperty, new Thickness(0, 0, 0, 1)));
+                headerStyle.Setters.Add(new Setter(DataGridColumnHeader.BorderBrushProperty, (SolidColorBrush)bc.ConvertFromString("#C3D3F0")));
+                headerStyle.Setters.Add(new Setter(DataGridColumnHeader.HorizontalContentAlignmentProperty, HorizontalAlignment.Center));
                 DgColaboradores.ColumnHeaderStyle = headerStyle;
 
-                // ── Paginador ─────────────────────────────────────────────────
                 TxtInfoPagina.Foreground = (SolidColorBrush)bc.ConvertFromString("#4A6080");
                 TxtContadorRegistros.Foreground = (SolidColorBrush)bc.ConvertFromString("#4A6080");
             }
             else
             {
-                // ════════════ MODO OSCURO (restaurar) ════════════
-
                 RootGrid.Background = Brushes.Transparent;
 
                 PanelLateralBorder.Background = (SolidColorBrush)bc.ConvertFromString("#090924");
@@ -772,7 +611,6 @@ namespace Presentación
                 GridContainerBorder.Background = (SolidColorBrush)bc.ConvertFromString("#090924");
                 GridContainerBorder.BorderBrush = (SolidColorBrush)bc.ConvertFromString("#151538");
 
-                // ── Restaurar DataGrid oscuro ─────────────────────────────────
                 DgColaboradores.Background = Brushes.Transparent;
                 DgColaboradores.RowBackground = Brushes.Transparent;
                 DgColaboradores.AlternatingRowBackground = Brushes.Transparent;
@@ -780,53 +618,32 @@ namespace Presentación
                 DgColaboradores.HorizontalGridLinesBrush = Brushes.Transparent;
                 DgColaboradores.VerticalGridLinesBrush = Brushes.Transparent;
 
-                // Restaurar estilo de filas original
                 var rowStyleDark = new Style(typeof(DataGridRow));
                 rowStyleDark.Setters.Add(new Setter(DataGridRow.BackgroundProperty, Brushes.Transparent));
                 rowStyleDark.Setters.Add(new Setter(DataGridRow.ForegroundProperty, Brushes.White));
-                rowStyleDark.Setters.Add(new Setter(DataGridRow.BorderBrushProperty,
-                    (SolidColorBrush)bc.ConvertFromString("#151538")));
-                rowStyleDark.Setters.Add(new Setter(DataGridRow.BorderThicknessProperty,
-                    new Thickness(0, 0, 0, 1)));
+                rowStyleDark.Setters.Add(new Setter(DataGridRow.BorderBrushProperty, (SolidColorBrush)bc.ConvertFromString("#151538")));
+                rowStyleDark.Setters.Add(new Setter(DataGridRow.BorderThicknessProperty, new Thickness(0, 0, 0, 1)));
 
-                var triggerHoverDark = new Trigger
-                {
-                    Property = DataGridRow.IsMouseOverProperty,
-                    Value = true
-                };
-                triggerHoverDark.Setters.Add(new Setter(DataGridRow.BackgroundProperty,
-                    (SolidColorBrush)bc.ConvertFromString("#0D0D2D")));
+                var triggerHoverDark = new Trigger { Property = DataGridRow.IsMouseOverProperty, Value = true };
+                triggerHoverDark.Setters.Add(new Setter(DataGridRow.BackgroundProperty, (SolidColorBrush)bc.ConvertFromString("#0D0D2D")));
                 rowStyleDark.Triggers.Add(triggerHoverDark);
 
-                var triggerSelectedDark = new Trigger
-                {
-                    Property = DataGridRow.IsSelectedProperty,
-                    Value = true
-                };
-                triggerSelectedDark.Setters.Add(new Setter(DataGridRow.BackgroundProperty,
-                    (SolidColorBrush)bc.ConvertFromString("#1F1F45")));
-                triggerSelectedDark.Setters.Add(new Setter(DataGridRow.ForegroundProperty,
-                    (SolidColorBrush)bc.ConvertFromString("#E89A24")));
+                var triggerSelectedDark = new Trigger { Property = DataGridRow.IsSelectedProperty, Value = true };
+                triggerSelectedDark.Setters.Add(new Setter(DataGridRow.BackgroundProperty, (SolidColorBrush)bc.ConvertFromString("#1F1F45")));
+                triggerSelectedDark.Setters.Add(new Setter(DataGridRow.ForegroundProperty, (SolidColorBrush)bc.ConvertFromString("#E89A24")));
                 rowStyleDark.Triggers.Add(triggerSelectedDark);
 
                 DgColaboradores.RowStyle = rowStyleDark;
 
-                // Restaurar encabezados oscuros
                 var headerStyleDark = new Style(typeof(DataGridColumnHeader));
                 headerStyleDark.Setters.Add(new Setter(DataGridColumnHeader.BackgroundProperty, Brushes.Transparent));
-                headerStyleDark.Setters.Add(new Setter(DataGridColumnHeader.ForegroundProperty,
-                    (SolidColorBrush)bc.ConvertFromString("#A0A0B8")));
-                headerStyleDark.Setters.Add(new Setter(DataGridColumnHeader.FontWeightProperty,
-                    FontWeights.SemiBold));
+                headerStyleDark.Setters.Add(new Setter(DataGridColumnHeader.ForegroundProperty, (SolidColorBrush)bc.ConvertFromString("#A0A0B8")));
+                headerStyleDark.Setters.Add(new Setter(DataGridColumnHeader.FontWeightProperty, FontWeights.SemiBold));
                 headerStyleDark.Setters.Add(new Setter(DataGridColumnHeader.FontSizeProperty, 12.0));
-                headerStyleDark.Setters.Add(new Setter(DataGridColumnHeader.PaddingProperty,
-                    new Thickness(12, 12, 12, 12)));
-                headerStyleDark.Setters.Add(new Setter(DataGridColumnHeader.BorderThicknessProperty,
-                    new Thickness(0, 0, 0, 1)));
-                headerStyleDark.Setters.Add(new Setter(DataGridColumnHeader.BorderBrushProperty,
-                    (SolidColorBrush)bc.ConvertFromString("#1F1F45")));
-                headerStyleDark.Setters.Add(new Setter(DataGridColumnHeader.HorizontalContentAlignmentProperty,
-                    HorizontalAlignment.Center));
+                headerStyleDark.Setters.Add(new Setter(DataGridColumnHeader.PaddingProperty, new Thickness(12, 12, 12, 12)));
+                headerStyleDark.Setters.Add(new Setter(DataGridColumnHeader.BorderThicknessProperty, new Thickness(0, 0, 0, 1)));
+                headerStyleDark.Setters.Add(new Setter(DataGridColumnHeader.BorderBrushProperty, (SolidColorBrush)bc.ConvertFromString("#1F1F45")));
+                headerStyleDark.Setters.Add(new Setter(DataGridColumnHeader.HorizontalContentAlignmentProperty, HorizontalAlignment.Center));
                 DgColaboradores.ColumnHeaderStyle = headerStyleDark;
 
                 TxtInfoPagina.Foreground = (SolidColorBrush)bc.ConvertFromString("#A0A0B8");
@@ -834,9 +651,6 @@ namespace Presentación
             }
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        // HELPERS DE UI
-        // ═════════════════════════════════════════════════════════════════
         private void MostrarFormulario()
         {
             PanelDetalle.Visibility = Visibility.Collapsed;
@@ -898,8 +712,7 @@ namespace Presentación
             BtnEliminar.IsEnabled = false;
         }
 
-        // ── Seleccionar un item de ComboBox por valor de columna ─────────
-        private void SeleccionarComboItem(ComboBox combo, string columna, int valor)
+        private void SeleccionarComboItem(ComboBox combo, int valor)
         {
             for (int i = 0; i < combo.Items.Count; i++)
             {
@@ -912,15 +725,13 @@ namespace Presentación
             combo.SelectedIndex = -1;
         }
 
-        // ── Obtener el ID seleccionado de un ComboBox ────────────────────
-        private int ObtenerIdCombo(ComboBox combo, string columna)
+        private int ObtenerIdCombo(ComboBox combo)
         {
             if (combo.SelectedItem is ComboItem item)
                 return Convert.ToInt32(item.Value);
             return -1;
         }
 
-        // ── Convertir el campo Estado (bit/bool/string) a texto ─────────
         private string ConvertirEstado(object valor)
         {
             if (valor == null || valor == DBNull.Value) return "—";
@@ -929,7 +740,6 @@ namespace Presentación
             return (s == "true" || s == "1" || s == "activo") ? "Activo" : "Inactivo";
         }
 
-        // ── Iniciales del nombre ─────────────────────────────────────────
         private string ObtenerIniciales(string nombreCompleto)
         {
             if (string.IsNullOrWhiteSpace(nombreCompleto)) return "?";
@@ -939,7 +749,6 @@ namespace Presentación
                 : partes[0][0].ToString().ToUpper();
         }
 
-        // ── Convertir byte[] a BitmapImage ───────────────────────────────
         private BitmapImage BytesToImagen(byte[] bytes)
         {
             using var ms = new MemoryStream(bytes);
@@ -952,15 +761,13 @@ namespace Presentación
             return img;
         }
 
-        // ── Mensajes rápidos ─────────────────────────────────────────────
-        private void Alerta(string msg)
-            => MessageBox.Show(msg, "Validación", MessageBoxButton.OK, MessageBoxImage.Warning);
+        private void Alerta(string msg) => NotificacionService.Advertencia(msg);
 
         private void MostrarResultado(bool ok, string msgOk, string msgError)
-            => MessageBox.Show(ok ? msgOk : msgError,
-                               ok ? "Éxito" : "Error",
-                               MessageBoxButton.OK,
-                               ok ? MessageBoxImage.Information : MessageBoxImage.Error);
+        {
+            if (ok) NotificacionService.Exito(msgOk);
+            else NotificacionService.Error(msgError);
+        }
 
         public class ComboItem
         {

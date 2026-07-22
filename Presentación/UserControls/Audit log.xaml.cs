@@ -1,9 +1,10 @@
 ﻿using Dominio;
+using Presentación.Controls;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Threading.Tasks; // 🔥 REQUISITO: Para dar soporte a Task
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -12,86 +13,57 @@ namespace Presentación
 {
     public partial class Audit_Log : UserControl
     {
-        // ── Capa de negocio ───────────────────────────────────────────────
         private readonly AuditoriaDominio _dominio = new AuditoriaDominio();
 
-        // ── Datos ─────────────────────────────────────────────────────────
         private DataTable _tablaCompleta;
 
-        // ── Paginación ────────────────────────────────────────────────────
         private List<DataRow> _registrosFiltrados = new List<DataRow>();
         private int _paginaActual = 1;
         private const int _registrosPorPagina = 15;
         private int _totalPaginas = 1;
 
-        // ─────────────────────────────────────────────────────────────────
-        // CONSTRUCTOR
-        // ─────────────────────────────────────────────────────────────────
         public Audit_Log()
         {
             InitializeComponent();
         }
 
-        // ─────────────────────────────────────────────────────────────────
-        // CARGA INICIAL
-        // ─────────────────────────────────────────────────────────────────
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            // Rango predeterminado: último mes
             DpDesde.SelectedDate = DateTime.Today.AddDays(-30);
             DpHasta.SelectedDate = DateTime.Today;
         }
 
-        // ─────────────────────────────────────────────────────────────────
-        // CONSULTAR LOGS
-        // ─────────────────────────────────────────────────────────────────
-        // 🔥 CAMBIO: Convertido a 'async void' para liberar el hilo de UI durante la consulta pesada
         private async void BtnConsultar_Click(object sender, RoutedEventArgs e)
         {
             if (DpDesde.SelectedDate == null || DpHasta.SelectedDate == null)
             {
-                MessageBox.Show("Debe seleccionar ambas fechas (Desde y Hasta) para filtrar.",
-                    "Validación", MessageBoxButton.OK, MessageBoxImage.Warning);
+                NotificacionService.Advertencia("Debe seleccionar ambas fechas (Desde y Hasta) para filtrar.");
                 return;
             }
 
             if (DpDesde.SelectedDate > DpHasta.SelectedDate)
             {
-                MessageBox.Show("La fecha 'Desde' no puede ser posterior a la fecha 'Hasta'.",
-                    "Validación", MessageBoxButton.OK, MessageBoxImage.Warning);
+                NotificacionService.Advertencia("La fecha 'Desde' no puede ser posterior a la fecha 'Hasta'.");
                 return;
             }
 
-            // 🔥 SOLUCIÓN: Extraemos los valores de los controles WPF en el hilo principal
             DateTime fechaDesde = DpDesde.SelectedDate.Value;
             DateTime fechaHasta = DpHasta.SelectedDate.Value;
 
             try
             {
-                // Opcional: Mostrar aquí un spinner o ProgressBar si lo tienes en el XAML
-
-                // 🔥 CAMBIO: Pasamos las variables locales seguras al hilo secundario sin tocar la UI
                 _tablaCompleta = await Task.Run(() => _dominio.ListarLogsAuditoria(fechaDesde, fechaHasta));
 
-                // Al usar 'await', el código de abajo regresa automáticamente al hilo principal (UI) de forma segura
                 _paginaActual = 1;
                 CargarPagina();
                 LimpiarPanelDetalle();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al consultar los logs de auditoría:\n\n{ex.Message}",
-                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            finally
-            {
-                // Opcional: Ocultar aquí el spinner o ProgressBar
+                NotificacionService.Error($"Error al consultar los logs de auditoría:\n\n{ex.Message}");
             }
         }
 
-        // ─────────────────────────────────────────────────────────────────
-        // LIMPIAR FILTROS
-        // ─────────────────────────────────────────────────────────────────
         private void BtnLimpiar_Click(object sender, RoutedEventArgs e)
         {
             DpDesde.SelectedDate = DateTime.Today.AddDays(-30);
@@ -115,9 +87,6 @@ namespace Presentación
             LimpiarPanelDetalle();
         }
 
-        // ─────────────────────────────────────────────────────────────────
-        // PAGINACIÓN
-        // ─────────────────────────────────────────────────────────────────
         private void CargarPagina()
         {
             if (_tablaCompleta == null) return;
@@ -204,9 +173,6 @@ namespace Presentación
             if (_paginaActual < _totalPaginas) { _paginaActual++; CargarPagina(); }
         }
 
-        // ─────────────────────────────────────────────────────────────────
-        // SELECCIÓN EN DATAGRID
-        // ─────────────────────────────────────────────────────────────────
         private void DgLogs_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (DgLogs.SelectedItem is not AuditLogVM vm)
@@ -215,7 +181,6 @@ namespace Presentación
                 return;
             }
 
-            // Panel lateral
             TxtPanelTabla.Text = vm.TablaAfectada;
             TxtPanelUsuario.Text = vm.UsuarioBD;
             TxtPanelFecha.Text = vm.FechaAccion != DateTime.MinValue
@@ -232,7 +197,6 @@ namespace Presentación
                 _ => new SolidColorBrush(Color.FromRgb(0xA0, 0xC4, 0xE0))
             };
 
-            // Panel diff (expandible)
             bool tieneDiff = !string.IsNullOrWhiteSpace(vm.DetalleAnterior)
                           || !string.IsNullOrWhiteSpace(vm.DetalleNuevo);
 
@@ -250,18 +214,11 @@ namespace Presentación
             }
         }
 
-        // ─────────────────────────────────────────────────────────────────
-        // EXPORTAR
-        // ─────────────────────────────────────────────────────────────────
         private void BtnExportarExcel_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Función de exportación a Excel pendiente de implementar.",
-                "Exportar", MessageBoxButton.OK, MessageBoxImage.Information);
+            NotificacionService.Info("Función de exportación a Excel pendiente de implementar.", "Exportar");
         }
 
-        // ─────────────────────────────────────────────────────────────────
-        // HELPERS
-        // ─────────────────────────────────────────────────────────────────
         private void LimpiarPanelDetalle()
         {
             TxtPanelTabla.Text = "—";
@@ -273,9 +230,6 @@ namespace Presentación
             PanelDiffBorder.Visibility = Visibility.Collapsed;
         }
 
-        // ─────────────────────────────────────────────────────────────────
-        // TEMA CLARO / OSCURO
-        // ─────────────────────────────────────────────────────────────────
         public void AplicarTema(bool modoClaro)
         {
             var bc = new BrushConverter();
@@ -313,9 +267,6 @@ namespace Presentación
         }
     }
 
-    // ─────────────────────────────────────────────────────────────────────
-    // VIEW MODEL — fila del DataGrid de auditoría
-    // ─────────────────────────────────────────────────────────────────────
     public class AuditLogVM
     {
         public int LogID { get; set; }
