@@ -488,7 +488,7 @@
 
     </UserControl.Resources>
 
-    <Grid Background="Transparent">
+    <Grid x:Name="RootGrid" Background="Transparent">
         <Grid Margin="15,10,15,10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>

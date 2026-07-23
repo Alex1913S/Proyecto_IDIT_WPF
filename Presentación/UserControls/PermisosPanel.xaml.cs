@@ -23,7 +23,7 @@ namespace Presentación
     public class GrupoPermisos
     {
         public string Nombre { get; set; } = "";
-        public string Icono { get; set; } = "";        // Ruta de Path data para el ícono decorativo
+        public string Icono { get; set; } = "";
         public List<PermisoItem> Permisos { get; set; } = new();
     }
 
@@ -35,14 +35,11 @@ namespace Presentación
     }
 
     // ═══════════════════════════════════════════════════════════════════
-    // SERVICIO DE PERMISOS — Singleton para el ciclo de vida del proceso
-    // En producción: persistir en SQL tabla Seguridad.PermisosRol
+    // SERVICIO DE PERMISOS
     // ═══════════════════════════════════════════════════════════════════
     public static class PermisosService
     {
         private static readonly PermisosDominio _dominio = new();
-
-        // Caché en memoria por sesión de aplicación (evita ir a BD en cada .Tiene())
         private static readonly Dictionary<string, Dictionary<string, bool>> _cache = new();
 
         public static bool Tiene(string rol, string permisoId)
@@ -55,7 +52,6 @@ namespace Presentación
         {
             AsegurarCargado(rol);
             _cache[rol][permisoId] = valor;
-            // Nota: esto solo cambia la copia en memoria; persistir se hace con CargarDesdeDict (Guardar)
         }
 
         public static Dictionary<string, bool> ObtenerTodos(string rol)
@@ -64,9 +60,6 @@ namespace Presentación
             return new Dictionary<string, bool>(_cache[rol]);
         }
 
-        /// <summary>
-        /// Persiste la copia de trabajo en BD y actualiza la caché.
-        /// </summary>
         public static void CargarDesdeDict(string rol, Dictionary<string, bool> mapa)
         {
             try
@@ -74,11 +67,7 @@ namespace Presentación
                 _dominio.Guardar(rol, mapa);
                 _cache[rol] = new Dictionary<string, bool>(mapa);
             }
-            catch
-            {
-                // Re-lanzar para que la UI (BtnGuardar_Click) muestre el error al usuario
-                throw;
-            }
+            catch { throw; }
         }
 
         private static void AsegurarCargado(string rol)
@@ -93,7 +82,6 @@ namespace Presentación
                 }
                 else
                 {
-                    // Primera vez que se usa este rol: sembrar defaults y guardarlos
                     var defaults = rol == "Operador" ? DefaultsOperador() : DefaultsEmpleado();
                     _dominio.Guardar(rol, defaults);
                     _cache[rol] = defaults;
@@ -101,7 +89,6 @@ namespace Presentación
             }
             catch
             {
-                // Si falla la BD (ej. sin conexión), usar defaults solo en memoria para no romper la app
                 _cache[rol] = rol == "Operador" ? DefaultsOperador() : DefaultsEmpleado();
             }
         }
@@ -173,27 +160,22 @@ namespace Presentación
     }
 
     // ═══════════════════════════════════════════════════════════════════
-    // USER CONTROL — Panel de permisos superpuesto
+    // USER CONTROL
     // ═══════════════════════════════════════════════════════════════════
-    public partial class PermisosPanel : UserControl
+    public partial class PermisosPanel : UserControl, IThemeable
     {
-        // ── Estado interno ────────────────────────────────────────────
         private string _rolActual = "Operador";
         private ModuloPermisos? _moduloActual;
         private GrupoPermisos? _grupoActual;
         private int _moduloIndex = 0;
 
-        // Copia de trabajo (se confirma al Guardar)
         private Dictionary<string, bool> _copiaTrabajo = new();
         private Dictionary<string, bool> _copiaTrabajoCopiaOriginal = new();
 
-        // ── Catálogo de módulos ───────────────────────────────────────
         private readonly List<ModuloPermisos> _modulos = ConstruirModulos();
 
-        // ─────────────────────────────────────────────────────────────
-        // CONSTRUCTOR
-        // ─────────────────────────────────────────────────────────────
         private bool _inicializado = false;
+        private bool _modoClaroActual = false;
 
         public PermisosPanel()
         {
@@ -206,9 +188,6 @@ namespace Presentación
             Abrir();
         }
 
-        // ─────────────────────────────────────────────────────────────
-        // APERTURA DEL PANEL
-        // ─────────────────────────────────────────────────────────────
         public void Abrir()
         {
             if (!_inicializado) return;
@@ -235,9 +214,6 @@ namespace Presentación
             ActualizarContadores();
         }
 
-        // ─────────────────────────────────────────────────────────────
-        // EVENTOS DE ROL Y TAB
-        // ─────────────────────────────────────────────────────────────
         private void RolChanged(object sender, RoutedEventArgs e)
         {
             if (!_inicializado || RbOperador == null) return;
@@ -260,7 +236,7 @@ namespace Presentación
                     "TabColaboradores" => 1,
                     "TabAsignaciones" => 2,
                     "TabContrasenas" => 3,
-                    "TabAuditoria" => 5, // Asegúrate de que el índice coincida con ConstruirModulos
+                    "TabAuditoria" => 5,
                     "TabCategorias" => 4,
                     "TabDashboard" => 6,
                     _ => 0
@@ -271,11 +247,18 @@ namespace Presentación
         }
 
         // ─────────────────────────────────────────────────────────────
-        // RENDERIZAR GRUPOS (panel izquierdo)
+        // RENDERIZAR GRUPOS (panel izquierdo) — respeta el tema actual
         // ─────────────────────────────────────────────────────────────
         private void RenderizarGrupos()
         {
             if (!_inicializado || PnlGrupos == null) return;
+
+            bool claro = _modoClaroActual;
+            var bg = claro ? ThemeColors.LightPanel : (SolidColorBrush)new BrushConverter().ConvertFromString("#0d3a5c");
+            var bgSel = claro ? ThemeColors.LightRowSelected : (SolidColorBrush)new BrushConverter().ConvertFromString("#0d3a5c");
+            var fgSel = ThemeColors.TextPrimary(claro);
+            var fgUnsel = ThemeColors.TextSecond(claro);
+            var border = ThemeColors.PanelBorder(claro);
 
             PnlGrupos.Children.Clear();
             PnlPermisos.Children.Clear();
@@ -285,7 +268,7 @@ namespace Presentación
 
             foreach (var grupo in _moduloActual.Grupos)
             {
-                var g = grupo; // captura
+                var g = grupo;
                 int activos = g.Permisos.Count(p => ObtenerPermiso(p.Id));
                 int total = g.Permisos.Count;
                 bool seleccionado = _grupoActual?.Nombre == g.Nombre;
@@ -293,11 +276,9 @@ namespace Presentación
                 var btn = new Button
                 {
                     Height = 52,
-                    Background = seleccionado
-                        ? new SolidColorBrush(Color.FromRgb(0x0d, 0x3a, 0x5c))
-                        : Brushes.Transparent,
+                    Background = seleccionado ? bgSel : Brushes.Transparent,
                     BorderThickness = new Thickness(0, 0, 0, 1),
-                    BorderBrush = new SolidColorBrush(Color.FromRgb(0x0d, 0x3a, 0x5c)),
+                    BorderBrush = border,
                     Cursor = System.Windows.Input.Cursors.Hand,
                     Margin = new Thickness(0, 0, 0, 2),
                     HorizontalContentAlignment = HorizontalAlignment.Stretch,
@@ -312,9 +293,7 @@ namespace Presentación
                     Text = g.Nombre,
                     FontSize = 12,
                     FontWeight = seleccionado ? FontWeights.SemiBold : FontWeights.Normal,
-                    Foreground = seleccionado
-                        ? new SolidColorBrush(Colors.White)
-                        : new SolidColorBrush(Color.FromRgb(0xA0, 0xC4, 0xE0)),
+                    Foreground = seleccionado ? fgSel : fgUnsel,
                     TextWrapping = TextWrapping.Wrap,
                     VerticalAlignment = VerticalAlignment.Center,
                 };
@@ -322,9 +301,7 @@ namespace Presentación
 
                 var badge = new Border
                 {
-                    Background = activos == total
-                        ? new SolidColorBrush(Color.FromRgb(0x0d, 0x3a, 0x5c))
-                        : new SolidColorBrush(Color.FromRgb(0x15, 0x15, 0x38)),
+                    Background = activos == total ? bg : new SolidColorBrush(Color.FromRgb(0x15, 0x15, 0x38)),
                     CornerRadius = new CornerRadius(8),
                     Padding = new Thickness(6, 2, 6, 2),
                     VerticalAlignment = VerticalAlignment.Center,
@@ -375,29 +352,32 @@ namespace Presentación
             }
         }
 
-        // RENDERIZAR PERMISOS (panel derecho)
+        // RENDERIZAR PERMISOS (panel derecho) — respeta el tema actual
         private void RenderizarPermisos()
         {
             PnlPermisos.Children.Clear();
             if (_grupoActual == null) return;
 
+            bool claro = _modoClaroActual;
+
             TxtGrupoNombre.Text = _grupoActual.Nombre;
             TxtGrupoDesc.Text = $"{_grupoActual.Permisos.Count} permisos en este grupo — "
                               + $"{_grupoActual.Permisos.Count(p => ObtenerPermiso(p.Id))} activos";
 
+            var filaActivaBg = claro ? ThemeColors.LightInput : (SolidColorBrush)new BrushConverter().ConvertFromString("#071d34");
+            var filaActivaBorder = ThemeColors.InputBorder(claro);
+            var txtActivo = ThemeColors.TextSecond(claro);
+            var txtInactivo = claro ? (SolidColorBrush)new BrushConverter().ConvertFromString("#8895A8") : (SolidColorBrush)new BrushConverter().ConvertFromString("#5a8ab0");
+
             foreach (var permiso in _grupoActual.Permisos)
             {
-                var p = permiso; // captura
+                var p = permiso;
                 bool activo = ObtenerPermiso(p.Id);
 
                 var fila = new Border
                 {
-                    Background = activo
-                        ? new SolidColorBrush(Color.FromRgb(0x07, 0x1d, 0x34))
-                        : Brushes.Transparent,
-                    BorderBrush = activo
-                        ? new SolidColorBrush(Color.FromRgb(0x1a, 0x4a, 0x7a))
-                        : new SolidColorBrush(Color.FromArgb(40, 0x1a, 0x4a, 0x7a)),
+                    Background = activo ? filaActivaBg : Brushes.Transparent,
+                    BorderBrush = activo ? filaActivaBorder : new SolidColorBrush(Color.FromArgb(40, 0x1a, 0x4a, 0x7a)),
                     BorderThickness = new Thickness(1),
                     CornerRadius = new CornerRadius(6),
                     Padding = new Thickness(12, 10, 12, 10),
@@ -410,7 +390,6 @@ namespace Presentación
                 grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
                 grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(8) });
 
-                // Checkbox visual
                 var check = new Border
                 {
                     Width = 18,
@@ -418,7 +397,7 @@ namespace Presentación
                     CornerRadius = new CornerRadius(4),
                     BorderBrush = activo
                         ? new SolidColorBrush(Color.FromRgb(0x2F, 0x80, 0xED))
-                        : new SolidColorBrush(Color.FromRgb(0x1a, 0x4a, 0x7a)),
+                        : ThemeColors.InputBorder(claro),
                     BorderThickness = new Thickness(1.5),
                     Background = activo
                         ? new SolidColorBrush(Color.FromRgb(0x2F, 0x80, 0xED))
@@ -444,9 +423,7 @@ namespace Presentación
                 {
                     Text = p.Descripcion,
                     FontSize = 12,
-                    Foreground = activo
-                        ? new SolidColorBrush(Color.FromRgb(0xA0, 0xC4, 0xE0))
-                        : new SolidColorBrush(Color.FromRgb(0x5a, 0x8a, 0xb0)),
+                    Foreground = activo ? txtActivo : txtInactivo,
                     TextWrapping = TextWrapping.Wrap,
                     VerticalAlignment = VerticalAlignment.Center,
                     Margin = new Thickness(8, 0, 0, 0),
@@ -596,13 +573,59 @@ namespace Presentación
         }
 
         // ═══════════════════════════════════════════════════════════════
-        // CATÁLOGO DE MÓDULOS Y PERMISOS (COMPLETO)
+        // TEMA — IThemeable
+        // ═══════════════════════════════════════════════════════════════
+        public void AplicarTema(bool modoClaro)
+        {
+            _modoClaroActual = modoClaro;
+
+            OverlayRect.Fill = modoClaro
+                ? new SolidColorBrush(Color.FromArgb(0x99, 0x00, 0x00, 0x00))
+                : (SolidColorBrush)new BrushConverter().ConvertFromString("#113359");
+
+            PanelCentral.Background = ThemeColors.Panel(modoClaro);
+            PanelCentral.BorderBrush = ThemeColors.PanelBorder(modoClaro);
+
+            HeaderBorder.Background = ThemeColors.Panel(modoClaro);
+            TxtHeaderTitulo.Foreground = ThemeColors.TextPrimary(modoClaro);
+            TxtHeaderSubtitulo.Foreground = ThemeColors.TextSecond(modoClaro);
+            TxtRolLabel.Foreground = ThemeColors.TextSecond(modoClaro);
+
+            var fondoAlterno = modoClaro ? ThemeColors.LightBg : (SolidColorBrush)new BrushConverter().ConvertFromString("#071d34");
+
+            TabsBorder.Background = fondoAlterno;
+            TabsBorder.BorderBrush = ThemeColors.PanelBorder(modoClaro);
+
+            PanelGruposBorder.Background = fondoAlterno;
+            DividerRect.Fill = ThemeColors.PanelBorder(modoClaro);
+            PanelDerechoGrid.Background = ThemeColors.Panel(modoClaro);
+
+            SubheaderBorder.Background = ThemeColors.Panel(modoClaro);
+            SubheaderBorder.BorderBrush = ThemeColors.PanelBorder(modoClaro);
+            TxtGrupoNombre.Foreground = ThemeColors.TextPrimary(modoClaro);
+            TxtGrupoDesc.Foreground = ThemeColors.TextSecond(modoClaro);
+
+            FooterBorder.Background = ThemeColors.Panel(modoClaro);
+            FooterBorder.BorderBrush = ThemeColors.PanelBorder(modoClaro);
+            BadgeActivosBorder.Background = fondoAlterno;
+            BadgeCambiosBorder.Background = fondoAlterno;
+            TxtPermisosActivosLabel.Foreground = ThemeColors.TextSecond(modoClaro);
+            TxtSlashLabel.Foreground = ThemeColors.TextSecond(modoClaro);
+            TxtContadorTotal.Foreground = ThemeColors.TextSecond(modoClaro);
+
+            // Refresca grupos/permisos ya renderizados dinámicamente con la nueva paleta
+            RenderizarGrupos();
+            if (_grupoActual != null) RenderizarPermisos();
+            ActualizarContadores();
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // CATÁLOGO DE MÓDULOS Y PERMISOS
         // ═══════════════════════════════════════════════════════════════
         private static List<ModuloPermisos> ConstruirModulos()
         {
             return new List<ModuloPermisos>
             {
-                // ── ACTIVOS ──────────────────────────────────────────────
                 new() {
                     Id = "activos", Nombre = "Inventario de Activos",
                     Grupos = new() {
@@ -633,8 +656,6 @@ namespace Presentación
                         }},
                     }
                 },
-
-                // ── COLABORADORES ────────────────────────────────────────
                 new() {
                     Id = "colaboradores", Nombre = "Gestión de Colaboradores",
                     Grupos = new() {
@@ -658,8 +679,6 @@ namespace Presentación
                         }},
                     }
                 },
-
-                // ── ASIGNACIONES ─────────────────────────────────────────
                 new() {
                     Id = "asignaciones", Nombre = "Asignación de Equipos",
                     Grupos = new() {
@@ -681,8 +700,6 @@ namespace Presentación
                         }},
                     }
                 },
-
-                // ── CREDENCIALES Y CONTRASEÑAS ───────────────────────────
                 new() {
                     Id = "credenciales", Nombre = "Bóveda de Credenciales",
                     Grupos = new() {
@@ -707,8 +724,6 @@ namespace Presentación
                         }},
                     }
                 },
-
-                // ── CATEGORÍAS ───────────────────────────────────────────
                 new() {
                     Id = "categorias", Nombre = "Gestión de Categorías",
                     Grupos = new() {
@@ -720,8 +735,6 @@ namespace Presentación
                         }},
                     }
                 },
-
-                // ── AUDITORÍA Y LOGS ─────────────────────────────────────
                 new() {
                     Id = "auditoria", Nombre = "Auditoría del Sistema",
                     Grupos = new() {
@@ -738,8 +751,6 @@ namespace Presentación
                         }},
                     }
                 },
-
-                // ── DASHBOARD Y GENERAL ──────────────────────────────────
                 new() {
                     Id = "dashboard", Nombre = "Dashboard y Configuración",
                     Grupos = new() {

@@ -176,10 +176,11 @@
 
     <!-- Fondo semitransparente de overlay -->
     <Grid>
-        <Rectangle Fill="#113359" MouseLeftButtonDown="Overlay_Click"/>
+        <Rectangle x:Name="OverlayRect" Fill="#113359" MouseLeftButtonDown="Overlay_Click"/>
 
         <!-- Panel central -->
-        <Border Background="#08213a"
+        <Border x:Name="PanelCentral"
+                Background="#08213a"
                 BorderBrush="#1a4a7a"
                 BorderThickness="1"
                 CornerRadius="14"
@@ -201,7 +202,7 @@
                 </Grid.RowDefinitions>
 
                 <!-- ══ CABECERA ══ -->
-                <Border Grid.Row="0" Background="#09274c" CornerRadius="14,14,0,0" Padding="20,0">
+                <Border x:Name="HeaderBorder" Grid.Row="0" Background="#09274c" CornerRadius="14,14,0,0" Padding="20,0">
                     <Grid>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <Border Width="40" Height="40" CornerRadius="20" Background="#1a4a7a">
@@ -210,9 +211,9 @@
                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
                             <StackPanel Margin="14,0,0,0" VerticalAlignment="Center">
-                                <TextBlock Text="Control de Permisos SGSI"
+                                <TextBlock x:Name="TxtHeaderTitulo" Text="Control de Permisos SGSI"
                                            FontSize="15" FontWeight="SemiBold" Foreground="White"/>
-                                <TextBlock Text="Gestión granular por módulo, función y rol"
+                                <TextBlock x:Name="TxtHeaderSubtitulo" Text="Gestión granular por módulo, función y rol"
                                            FontSize="11" Foreground="#A0C4E0" Margin="0,1,0,0"/>
                             </StackPanel>
                         </StackPanel>
@@ -220,7 +221,7 @@
                         <!-- Selector de rol + acciones rápidas -->
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center"
                                     HorizontalAlignment="Right">
-                            <TextBlock Text="Rol:" FontSize="11" Foreground="#5a8ab0"
+                            <TextBlock x:Name="TxtRolLabel" Text="Rol:" FontSize="11" Foreground="#5a8ab0"
                                        VerticalAlignment="Center" Margin="0,0,8,0"/>
                             <RadioButton x:Name="RbOperador" Content="Operador"
                                          Style="{StaticResource RolButtonStyle}"
@@ -253,7 +254,7 @@
                 </Border>
 
                 <!-- ══ TABS DE MÓDULOS ══ -->
-                <Border Grid.Row="1" Background="#071d34" BorderBrush="#0d3a5c"
+                <Border x:Name="TabsBorder" Grid.Row="1" Background="#071d34" BorderBrush="#0d3a5c"
                         BorderThickness="0,1,0,1">
                     <StackPanel Orientation="Horizontal">
                         <RadioButton x:Name="TabActivos" Content="Activos"
@@ -292,24 +293,24 @@
                     </Grid.ColumnDefinitions>
 
                     <!-- Panel izquierdo: grupos de permisos del módulo -->
-                    <Border Grid.Column="0" Background="#071d34">
+                    <Border x:Name="PanelGruposBorder" Grid.Column="0" Background="#071d34">
                         <ScrollViewer VerticalScrollBarVisibility="Auto">
                             <StackPanel x:Name="PnlGrupos" Margin="10,10,10,10"/>
                         </ScrollViewer>
                     </Border>
 
                     <!-- Separador vertical -->
-                    <Rectangle Grid.Column="1" Fill="#0d3a5c"/>
+                    <Rectangle x:Name="DividerRect" Grid.Column="1" Fill="#0d3a5c"/>
 
                     <!-- Panel derecho: checkboxes de permisos del grupo seleccionado -->
-                    <Grid Grid.Column="2" Background="#08213a">
+                    <Grid x:Name="PanelDerechoGrid" Grid.Column="2" Background="#08213a">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
                         <!-- Subencabezado del grupo -->
-                        <Border Grid.Row="0" Background="#09274c"
+                        <Border x:Name="SubheaderBorder" Grid.Row="0" Background="#09274c"
                                 Padding="18,10" BorderBrush="#0d3a5c" BorderThickness="0,0,0,1">
                             <Grid>
                                 <StackPanel VerticalAlignment="Center">
@@ -345,25 +346,25 @@
                 </Grid>
 
                 <!-- ══ PIE ══ -->
-                <Border Grid.Row="3" Background="#09274c"
+                <Border x:Name="FooterBorder" Grid.Row="3" Background="#09274c"
                         CornerRadius="0,0,14,14"
                         Padding="20,0"
                         BorderBrush="#0d3a5c" BorderThickness="0,1,0,0">
                     <Grid>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <Border Background="#071d34" CornerRadius="6" Padding="10,4" Margin="0,0,12,0">
+                            <Border x:Name="BadgeActivosBorder" Background="#071d34" CornerRadius="6" Padding="10,4" Margin="0,0,12,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="Permisos activos: "
+                                    <TextBlock x:Name="TxtPermisosActivosLabel" Text="Permisos activos: "
                                                FontSize="11" Foreground="#5a8ab0"/>
                                     <TextBlock x:Name="TxtContadorActivos"
                                                Text="0" FontSize="11" FontWeight="Bold" Foreground="#2F80ED"/>
-                                    <TextBlock Text=" / "
+                                    <TextBlock x:Name="TxtSlashLabel" Text=" / "
                                                FontSize="11" Foreground="#5a8ab0"/>
                                     <TextBlock x:Name="TxtContadorTotal"
                                                Text="0" FontSize="11" Foreground="#5a8ab0"/>
                                 </StackPanel>
                             </Border>
-                            <Border Background="#071d34" CornerRadius="6" Padding="10,4">
+                            <Border x:Name="BadgeCambiosBorder" Background="#071d34" CornerRadius="6" Padding="10,4">
                                 <TextBlock x:Name="TxtEstadoCambios"
                                            Text="Sin cambios pendientes"
                                            FontSize="11" Foreground="#5a8ab0"/>

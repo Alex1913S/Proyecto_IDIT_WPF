@@ -68,13 +68,11 @@ namespace Presentación
             var culturaEspanol = new System.Globalization.CultureInfo("es-ES");
             string fechaFormateada = DateTime.Now.ToString("dddd, dd 'de' MMMM 'de' yyyy", culturaEspanol);
             LblDate.Text = char.ToUpper(fechaFormateada[0]) + fechaFormateada.Substring(1);
-            BtnThemeToggle.IsEnabled = false;
-            BtnThemeToggle.Visibility = Visibility.Collapsed;
+            BtnThemeToggle.IsEnabled = true;
+            BtnThemeToggle.Visibility = Visibility;
 
             CargarFotoPerfil();
 
-            // 🔥 Como este método (Dashboard_Loaded) ya es 'async void', 
-            // ahora sí te dejará usar el 'await' aquí sin ningún error de compilación.
             await CargarKPIsAsync();
 
             ConfigurarInterfazPorPerfil();
@@ -97,7 +95,6 @@ namespace Presentación
                 decimal pctGarantias = await Task.Run(() => activos.ObtenerPorcentajeGarantiasVigentes());
                 DataTable dtCategorias = await Task.Run(() => activos.ObtenerTop5CategoriasPorCantidad());
 
-                // 🔥 NUEVO: ingresos por período para el gráfico
                 _dtIngresosDia = await Task.Run(() => activos.ObtenerIngresosPorDia());
                 _dtIngresosMes = await Task.Run(() => activos.ObtenerIngresosPorMes());
                 _dtIngresosAnio = await Task.Run(() => activos.ObtenerIngresosPorAnio());
@@ -108,7 +105,7 @@ namespace Presentación
                 NumC4.Text = $"{pctGarantias}%";
 
                 RenderizarDistribucionCategorias(dtCategorias);
-                RenderizarGraficoIngresos(_filtroGraficoActual); // 🔥 pinta el gráfico con datos reales
+                RenderizarGraficoIngresos(_filtroGraficoActual);
             }
             catch (Exception)
             {
@@ -193,7 +190,6 @@ namespace Presentación
                 bars[i].ToolTip = $"{etiquetas[i]}: {valores[i]} activo(s) ingresado(s)";
             }
 
-            // El año en curso solo refleja datos reales hasta el mes presente
             AxisL6.ToolTip = filtro == "Año"
                 ? "* Año en curso: cifra parcial hasta el mes actual"
                 : null;
@@ -226,17 +222,12 @@ namespace Presentación
         private string CapitalizarPrimera(string s)
             => string.IsNullOrEmpty(s) ? s : char.ToUpper(s[0]) + s.Substring(1).TrimEnd('.');
 
-        /// <summary>
-        /// Centraliza la visibilidad de los componentes usando búsquedas dinámicas seguras por palabras clave.
-        /// Evita errores si los botones no tienen un x:Name directo en el XAML.
-        /// </summary>
         private void ConfigurarInterfazPorPerfil()
         {
             if (string.IsNullOrWhiteSpace(_rol)) return;
 
             string rolFormateado = _rol.Trim().ToUpper();
 
-            // El Administrador SIEMPRE tiene acceso total; no pasa por el motor de permisos.
             if (rolFormateado == "ADMINISTRADOR")
             {
                 EstablecerVisibilidadBoton("Nuevo", Visibility.Visible);
@@ -249,8 +240,6 @@ namespace Presentación
                 return;
             }
 
-            // Operador y Empleado: la visibilidad depende EXCLUSIVAMENTE
-            // de lo configurado en el Panel de Permisos (PermisosService).
             string rolPermiso = NormalizarRolPermiso(_rol);
 
             bool puedeNuevoActivo = PermisosService.Tiene(rolPermiso, "act_crear_acceso");
@@ -270,9 +259,6 @@ namespace Presentación
                 SubmenuActivos.Visibility = Visibility.Collapsed;
         }
 
-        /// <summary>
-        /// Busca botones en el árbol visual del menú lateral y aplica visibilidad por coincidencias.
-        /// </summary>
         private void EstablecerVisibilidadBoton(string palabraClave, Visibility visibilidad)
         {
             if (MenuStackPanel != null)
@@ -316,9 +302,6 @@ namespace Presentación
             return rol.Trim();
         }
 
-        /// <summary>
-        /// Compara el x:Name o el contenido de texto interno de un control con la palabra clave.
-        /// </summary>
         private bool VerificarYAplicarBoton(object element, string palabraClave, Visibility visibilidad)
         {
             if (element is Button btn)
@@ -381,6 +364,8 @@ namespace Presentación
 
         /// <summary>
         /// Control de Navegación con capa de Seguridad Perimetral integrada.
+        /// Al asignar el control, se le aplica automáticamente el tema actual
+        /// del Dashboard si dicho control implementa IThemeable.
         /// </summary>
         private void NavegaA(UserControl control, string tituloSeccion = "Panel de Control")
         {
@@ -388,7 +373,6 @@ namespace Presentación
             {
                 string rolFormateado = (!string.IsNullOrEmpty(_rol)) ? _rol.Trim().ToUpper() : "EMPLEADO";
 
-                // El Panel de Permisos es EXCLUSIVO del Administrador, sin excepción.
                 if (control is PermisosPanel && rolFormateado != "ADMINISTRADOR")
                 {
                     MessageBox.Show("Acceso denegado. Este módulo está reservado exclusivamente para perfiles de nivel Administrador.",
@@ -396,7 +380,6 @@ namespace Presentación
                     return;
                 }
 
-                // Administrador tiene acceso total y no pasa por el motor de permisos.
                 if (rolFormateado != "ADMINISTRADOR" && control is not PermisosPanel)
                 {
                     string rolPermiso = NormalizarRolPermiso(_rol);
@@ -434,6 +417,9 @@ namespace Presentación
                 PanelInicioView.Visibility = Visibility.Collapsed;
                 NavWorkspaceContent.Content = control;
                 NavWorkspaceContent.Visibility = Visibility.Visible;
+
+                // Aplica el tema vigente al control recién cargado, si lo soporta.
+                (control as IThemeable)?.AplicarTema(!isDarkMode);
             }
         }
 
@@ -654,7 +640,6 @@ namespace Presentación
 
                 SolidColorBrush darkText = (SolidColorBrush)bc.ConvertFromString("#1E3A5F");
                 SolidColorBrush greyText = (SolidColorBrush)bc.ConvertFromString("#4A6080");
-                SolidColorBrush darkGreyBars = (SolidColorBrush)bc.ConvertFromString("#4B93FF");
 
                 LblMainTitle.Foreground = darkText;
                 LblDate.Foreground = greyText;
@@ -682,8 +667,8 @@ namespace Presentación
                 if (txtSel != null) txtSel.Foreground = darkText;
                 if (txtSelSub != null) txtSelSub.Foreground = greyText;
 
-                if (NavWorkspaceContent.Content is Employee_Viewer ev)
-                    ev.AplicarTema(true);
+                // Aplica tema claro a cualquier vista actualmente cargada que lo soporte
+                (NavWorkspaceContent.Content as IThemeable)?.AplicarTema(true);
 
                 isDarkMode = false;
             }
@@ -766,8 +751,8 @@ namespace Presentación
                 if (txtSel != null) txtSel.Foreground = Brushes.White;
                 if (txtSelSub != null) txtSelSub.Foreground = (SolidColorBrush)bc.ConvertFromString("#A0A0B8");
 
-                if (NavWorkspaceContent.Content is Employee_Viewer ev)
-                    ev.AplicarTema(false);
+                // Aplica tema oscuro a cualquier vista actualmente cargada que lo soporte
+                (NavWorkspaceContent.Content as IThemeable)?.AplicarTema(false);
 
                 isDarkMode = true;
             }
@@ -896,7 +881,6 @@ namespace Presentación
 
         private DispatcherTimer _timerNotificaciones;
 
-        // Llamar dentro de Dashboard_Loaded, después de configurar NotificacionService
         private void IniciarPollingNotificaciones()
         {
             ActualizarBadgeNotificaciones();

@@ -9,7 +9,7 @@ using static Dominio.UsuarioDominio;
 
 namespace Presentación
 {
-    public partial class See_Assets : UserControl
+    public partial class See_Assets : UserControl, IThemeable
     {
         // ── Estado y llaves de selección de datos ──────────────────────────
         private object _activoSeleccionadoId = null;
@@ -835,6 +835,46 @@ namespace Presentación
             catch (Exception ex)
             {
                 MessageBox.Show($"Error al restaurar el activo:\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        public void AplicarTema(bool modoClaro)
+        {
+            RootGrid.Background = modoClaro
+                ? ThemeColors.LightBg
+                : Brushes.Transparent;
+
+            // Header / búsqueda
+            if (TxtBuscarActivo.Parent is Border buscarBorder)
+            {
+                buscarBorder.Background = ThemeColors.Panel(modoClaro);
+                buscarBorder.BorderBrush = ThemeColors.PanelBorder(modoClaro);
+            }
+            TxtBuscarActivo.Foreground = ThemeColors.TextPrimary(modoClaro);
+
+            // Panel principal del DataGrid
+            // (GridContainerBorder es el Border que envuelve DgActivos en el XAML)
+            var gridBorder = (Border)this.FindName("GridContainerBorder");
+            if (gridBorder != null)
+            {
+                gridBorder.Background = ThemeColors.Panel(modoClaro);
+                gridBorder.BorderBrush = ThemeColors.PanelBorder(modoClaro);
+            }
+
+            DgActivos.Background = modoClaro ? ThemeColors.Panel(true) : Brushes.Transparent;
+            DgActivos.Foreground = ThemeColors.TextPrimary(modoClaro);
+            DgActivos.RowStyle = ThemeColors.GridRowStyle(modoClaro);
+            DgActivos.ColumnHeaderStyle = ThemeColors.GridHeaderStyle(modoClaro);
+
+            // Textos de paginación
+            TxtInfoPagina.Foreground = ThemeColors.TextSecond(modoClaro);
+            TxtContadorRegistros.Foreground = ThemeColors.TextSecond(modoClaro);
+
+            // Overlay de edición
+            if (PanelEdicionOverlay != null)
+            {
+                var overlayBorder = System.Windows.Media.VisualTreeHelper.GetChild(PanelEdicionOverlay, 1) as Border;
+                // Si tienes referencia directa por x:Name a ese Border interior, úsala en vez de VisualTreeHelper.
             }
         }
 
