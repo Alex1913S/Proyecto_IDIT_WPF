@@ -177,7 +177,7 @@
                                 </Button.ContentTemplate>
                             </Button>
 
-                            <Button x:Name="BtnActivosParent" Content="Activos Tecnológicos" Style="{StaticResource SidebarButtonStyle}" Click="BtnActivosParent_Click">
+                            <Button x:Name="BtnActivosParent" Content="Gestión de Activos" Style="{StaticResource SidebarButtonStyle}" Click="BtnActivosParent_Click">
 
                                 <Button.ContentTemplate>
                                     <DataTemplate>
@@ -190,8 +190,9 @@
                             <Border x:Name="SubmenuActivos" Visibility="Collapsed" Background="#09274c" BorderBrush="#09274c" BorderThickness="1" CornerRadius="10" Margin="10,4,10,8">
                                 <StackPanel Background="Transparent">
 
-                                    <Button Content="• Ver Todos" Style="{StaticResource SubmenuButtonStyle}" Click="BtnVerTodosActivos_Click"/>
                                     <Button Content="• Nuevo Activo" Style="{StaticResource SubmenuButtonStyle}" Click="BtnNuevoActivo_Click"/>
+                                    <Button Content="• Inventario Tecnológicos" Style="{StaticResource SubmenuButtonStyle}" Click="BtnVerTodosActivos_Click"/>
+                                    <Button Content="• Inventario de Enseres" Style="{StaticResource SubmenuButtonStyle}" Click="BtnEnseres_Click"/>
                                     <Button Content="• Categoría Activos" Style="{StaticResource SubmenuButtonStyle}"/>
                                     <Button Content="• Actas de Entrega" Style="{StaticResource SubmenuButtonStyle}" Click="BtnActaEntrega_Click"/>
                                     <Button Content="• Licencias" Style="{StaticResource SubmenuButtonStyle}"/>

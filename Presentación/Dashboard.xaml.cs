@@ -933,6 +933,9 @@ namespace Presentación
             public string FechaTexto { get; set; }
             public Visibility VisibilidadNoLeida { get; set; }
         }
+        private void BtnEnseres_Click(object sender, RoutedEventArgs e)
+    => NavegaA(new Presentación.UserControls.Enseres(), "Inventario de Enseres");
+
     }
 
 
